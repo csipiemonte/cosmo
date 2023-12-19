@@ -1,0 +1,69 @@
+publiccodeYmlVersion: '0.2'
+
+name: Cosmo
+url: "https://github.com/csipiemonte/cosmo"
+softwareVersion: "2.0.0"
+releaseDate: "2024-01-01" # Mandatory
+logo: "/cosmowcl/src/assets/cwwcl/i/favicon.png"
+developmentStatus: development
+softwareType: web application
+
+platforms:
+    - web
+
+categories:
+    - common-workspace
+    - digital-citizenship
+    - enterprise-content-management
+    - case-management-model-and-notation
+
+usedBy:
+    - Comune di Torino
+    - Regione Piemonte
+    - Città metropolitana di Torino
+    - Consiglio regionale del Piemonte
+    - Csi Piemonte
+
+description:
+    it:
+        genericName: Common Workspace
+        shortDescription: >
+            Cosmo è una scrivania digitale per gestire iter amministrativi, documenti, pratiche amministrative, mettendo in relazione anche fruitori diversi
+        longDescription: >
+            Cosmo è un applicativo web che consente di svolgere varie azioni:
+            - Comunica con sistemi esterni sia in entrata che in uscita.
+            - Gestisce eventi, notifiche, commenti e l'invio di email.
+            - Gestisce documenti, aggiungendoli da filesystem, creandoli tramite l'editor dell'applicativo stesso oppure ricevendoli da sistemi esterni. I documenti poi possono essere  protocollati, firmati digitalmente...
+            - Si possono creare pratiche da interfaccia grafica o da servizi esterni per poi gestirle all'interno dell'applicativo.
+            - Prevede l'uso di un motore di processi per lo svolgimento di iter amministrativi anche complessi.
+            - Per velocizzare alcune operazioni quali firme e approvazioni, dà la possibilità di eseguirle massivamente su più pratiche.
+        features:
+            - Gestione di processi
+            - Gestione documentale
+            - Gestione di pratiche
+            - Notifiche ed eventi
+
+legal:
+    license: GPL-3.0-or-later
+    mainCopyrightOwner: CSI-Piemonte
+    authorsFile: AUTHORS.txt
+
+maintenance: 
+    type: internal
+    contacts: 
+        - name: Domenico Lucà
+          email: domenico.luca@csi.it
+        - name: Eugenio Vota
+          email: eugenio.vota@csi.it
+
+localisation:
+    localisationReady: yes 
+    availableLanguages: 
+        - en
+        - it
+
+it: 
+    countryExtensionVersion: '0.2'
+
+    riuso: 
+        codiceIPA: csi_piem
