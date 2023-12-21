@@ -27,11 +27,6 @@ Ogni componente esporrà dei servizi REST che verranno fruiti dagli orchestrator
 Per la parte di frontend esiste un unico componente [CosmoWcl](/cosmowcl). Questa componente comunica unicamente con [Cosmo](/cosmo). CosmoWcl usa il software development kit pubblicato da AgID attraverso “Designers Italia” (Designers Italia 2020).
 
 # Configurazioni iniziali
-
-Per effettuare la build delle componenti di backend è necessario avere la cartella con tutte le librerie. La cartella si trova sotto il [path](/path_da_definire).
-
-Nel file di opensource.properties di ciascun progetto, configurare il parametro opensource.basedir con il path della cartella con le librerie sopra indicata. Di default è stato usato un path relativo assumendo che tutti i progetti siano all'interno di una stessa root folder
-
 Lanciare il file build.xml per buildare ciascuna componente, utilizzando come target opensource -Dtarget=opensource.
 
 Una volta che la build è terminata, nella cartella build del componente è presente un file .ear con il nome della componente, deployabile su un application server.

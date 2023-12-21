@@ -1,0 +1,482 @@
+{
+"GET-http://localhost:8080/cosmocmmn/case/cmmn-runtime/case-instances?businessKey=1": {
+    "data": [
+        {
+            "id": "42cb4c79-cbff-11ea-b273-04ed33f69717",
+            "name": null,
+            "url": "http://localhost:8080/cosmocmmn/case/cmmn-runtime/case-instances/42cb4c79-cbff-11ea-b273-04ed33f69717",
+            "businessKey": "1",
+            "startTime": "2020-07-22T11:39:38.593+02:00",
+            "startUserId": "COSMOCMMN",
+            "state": "active",
+            "ended": false,
+            "caseDefinitionId": "3f23e146-cbfa-11ea-8bb2-04ed33f69717",
+            "caseDefinitionUrl": "http://localhost:8080/cosmocmmn/case/cmmn-repository/case-definitions/3f23e146-cbfa-11ea-8bb2-04ed33f69717",
+            "caseDefinitionName": "Test",
+            "caseDefinitionDescription": null,
+            "parentId": null,
+            "callbackId": null,
+            "callbackType": null,
+            "referenceId": null,
+            "referenceType": null,
+            "variables": [],
+            "tenantId": "",
+            "completed": false
+        }
+    ],
+    "total": 1,
+    "start": 0,
+    "sort": "id",
+    "order": "asc",
+    "size": 1
+},
+
+"POST-http://localhost:8080/cosmocmmn/case/cmmn-runtime/case-instances":{
+    "id": "ca1fc834-ccec-11ea-82ce-04ed33f69717",
+    "name": null,
+    "url": "http://localhost:8080/cosmocmmn/case/cmmn-runtime/case-instances/ca1fc834-ccec-11ea-82ce-04ed33f69717",
+    "businessKey": "200000",
+    "startTime": "2020-07-23T15:59:56.365+02:00",
+    "startUserId": "COSMOCMMN",
+    "state": "active",
+    "ended": false,
+    "caseDefinitionId": "dca80b4b-cc03-11ea-adc7-04ed33f69717",
+    "caseDefinitionUrl": "http://localhost:8080/cosmocmmn/case/cmmn-repository/case-definitions/dca80b4b-cc03-11ea-adc7-04ed33f69717",
+    "caseDefinitionName": "Test",
+    "caseDefinitionDescription": null,
+    "parentId": null,
+    "callbackId": null,
+    "callbackType": null,
+    "referenceId": null,
+    "referenceType": null,
+    "variables": [
+        {
+            "name": "initiator",
+            "type": "string",
+            "value": "COSMOCMMN",
+            "scope": "local"
+        },
+        {
+            "name": "idPratica",
+            "type": "string",
+            "value": "200000",
+            "scope": "local"
+        }
+    ],
+    "tenantId": "r_piemon",
+    "completed": false
+},
+
+"GET-http://localhost:8080/cosmopratiche/api/practices/1":{
+    "id": 1,
+    "metadati": {
+        "demo": "metadati postman"
+    },
+    "tipo": {
+        "id": 100,
+        "valore": {
+            "demo": "demo"
+        },
+        "nome": "test",
+        "descrizione": "Demo tipo"
+    }
+},
+"POST-http://localhost:8080/cosmocmmn/process/query/tasks":{
+    "data": [
+        {
+            "id": "15001",
+            "url": "http://localhost:8080/cosmocmmn/process/runtime/tasks/15001",
+            "owner": null,
+            "assignee": "demosa",
+            "delegationState": null,
+            "name": "fai qualcosa",
+            "description": "descrizione 11",
+            "createTime": "2020-07-20T15:21:31.292+02:00",
+            "dueDate": "2020-10-17T13:06:02.438+02:00",
+            "priority": 50,
+            "suspended": false,
+            "claimTime": null,
+            "taskDefinitionKey": null,
+            "scopeDefinitionId": null,
+            "scopeId": null,
+            "scopeType": null,
+            "tenantId": "demoEnte",
+            "category": null,
+            "formKey": null,
+            "parentTaskId": null,
+            "parentTaskUrl": null,
+            "executionId": null,
+            "executionUrl": null,
+            "processInstanceId": null,
+            "processInstanceUrl": null,
+            "processDefinitionId": null,
+            "processDefinitionUrl": null,
+            "variables": []
+        }
+    ],
+    "total": 1,
+    "start": 0,
+    "sort": "id",
+    "order": "asc",
+    "size": 1
+},
+"GET-http://localhost:8080/cosmocmmn/process/runtime/tasks/15001" :{
+    "id": "15001",
+    "url": "http://localhost:8080/cosmocmmn/process/runtime/tasks/15001",
+    "owner": null,
+    "assignee": "demosa",
+    "delegationState": null,
+    "name": "fai qualcosa",
+    "description": "descrizione 11",
+    "createTime": "2020-07-20T15:21:31.292+02:00",
+    "dueDate": "2020-10-17T13:06:02.438+02:00",
+    "priority": 50,
+    "suspended": false,
+    "claimTime": null,
+    "taskDefinitionKey": null,
+    "scopeDefinitionId": null,
+    "scopeId": null,
+    "scopeType": null,
+    "tenantId": "demoEnte",
+    "category": null,
+    "formKey": null,
+    "parentTaskId": null,
+    "parentTaskUrl": null,
+    "executionId": null,
+    "executionUrl": null,
+    "processInstanceId": null,
+    "processInstanceUrl": null,
+    "processDefinitionId": null,
+    "processDefinitionUrl": null,
+    "variables": []
+},
+"POST-http://localhost:8080/cosmocmmn/process/runtime/tasks" :{
+    "id": "27503",
+    "url": "http://localhost:8080/cosmocmmn/process/runtime/tasks/27503",
+    "owner": null,
+    "assignee": "demo",
+    "delegationState": null,
+    "name": "EvJUnit",
+    "description": "Evento junit",
+    "createTime": "2020-07-23T17:08:08.304+02:00",
+    "dueDate": "2020-10-17T13:06:02.438+02:00",
+    "priority": 50,
+    "suspended": false,
+    "claimTime": null,
+    "taskDefinitionKey": null,
+    "scopeDefinitionId": null,
+    "scopeId": null,
+    "scopeType": null,
+    "tenantId": "r_piemon",
+    "category": null,
+    "formKey": null,
+    "parentTaskId": null,
+    "parentTaskUrl": null,
+    "executionId": null,
+    "executionUrl": null,
+    "processInstanceId": null,
+    "processInstanceUrl": null,
+    "processDefinitionId": null,
+    "processDefinitionUrl": null,
+    "variables": []
+},
+"POST-http://localhost:8080/cosmopratiche/api/practices":{
+    "id": 1,
+    "fruitore": {
+        "id": 1,
+        "nomeApp": "cosmocmmn",
+        "url": "https://google.com"
+    },
+    "codiceIpaEnte": "r_pieomn",
+    "tipoPratica": "approvazione",
+    "oggetto": "partica prova",
+    "stato": "iniziato",
+    "riassunto": "dati interassanti",
+    "idPraticaExt": "21",
+    "linkPratica": "/1",
+    "uuidNodo": "98098832",
+    "utenteCreazionePratica": "fsssad8943sed",
+    "dataCreazionePratica": "2020-09-09T12:51:05.291Z",
+    "dataCambioStato": "2020-09-09T12:51:13.435Z"
+},
+"PUT-http://localhost:8080/cosmopratiche/api/practices/6":{
+    "id": 6,
+    "metadati": {
+        "demo": "metadati postman modificati pratiche"
+    },
+    "tipo": {
+        "id": 101,
+        "valore": {
+            "demo": "demo"
+        },
+        "nome": "test2",
+        "descrizione": "Demo tipo 2"
+    }
+},
+"DELETE-http://localhost:8080/cosmopratiche/api/practices/2":{
+},
+"GET-http://localhost:8080/cosmopratiche/api/practices?filter={\"id\":{\"in\":[ 1,2 ]}}&offset=0&limit=30":{
+
+    "items": [
+        {
+            "id": 1,
+            "tipo": {
+                "id": 1,
+                "nome": "TIPO PRATICA 1",
+                "descrizione": "TIPO PRATICA 1"
+            },
+            "data": "2020-08-03T14:50:01.896299Z",
+            "preferita": false
+        },
+        {
+            "id": 2,
+            "tipo": {
+                "id": 1,
+                "nome": "TIPO PRATICA 1",
+                "descrizione": "TIPO PRATICA 1"
+            },
+            "preferita": false
+        }
+    ],
+    "page": 0,
+    "pageSize": 30,
+    "totalElements": 2,
+    "totalPages": 1
+},
+"GET-http://localhost:8080/cosmocmmn/api/process/pratiche/users/1/todo":{
+    "90014": [
+        {
+            "descrizione": null,
+            "nome": null,
+            "id": "6a06b5aa-d7d2-11ea-8bb9-04ed33f69717"
+        }
+    ]
+},
+"GET-http://localhost:8080/cosmopratiche/api/practices?filter={filter}&offset={offset}&limit={limit}":{
+    "items": [
+        {
+            "id": 90014,
+            "metadati": {
+                "demo": "metadati postman"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "documents": [],
+            "oggetto": "pratica 1234",
+            "preferita": false,
+            "tasks": []
+        }
+    ],
+    "page": 0,
+    "pageSize": 10,
+    "totalElements": 1,
+    "totalPages": 1
+},
+"GET-http://localhost:8080/cosmopratiche/api/users/1/favorites?offset={offset}&limit={limit}":{
+
+    "items": [
+        {
+            "id": 90000,
+            "metadati": {
+                "demo": "metadati postman modificati pratiche"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "oggetto": "PRATICA 90000",
+            "data": "2020-08-04T15:05:00.738Z",
+            "preferita": true
+        },
+        {
+            "id": 90009,
+            "metadati": {
+                "demo": "metadati postman"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "preferita": true
+        },
+        {
+            "id": 90010,
+            "metadati": {
+                "demo": "metadati postman"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "preferita": true
+        },
+        {
+            "id": 90012,
+            "metadati": {
+                "demo": "metadati postman"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "oggetto": "demo pratica",
+            "stato": {
+                "id": "1",
+                "codice": "PARTITO"
+            },
+            "preferita": true
+        }
+    ],
+    "page": 0,
+    "pageSize": 10,
+    "totalElements": 4,
+    "totalPages": 1
+},
+"GET-http://localhost:8080/cosmocmmn/api/process/pratiche/users/1/shared":{
+    "90015": [
+        {
+            "descrizione": null,
+            "nome": null,
+            "id": "bb069738-d7f2-11ea-9f1b-04ed33f69717"
+        }
+    ]
+},
+"POST-http://localhost:8080/cosmocmmn/api/case/cmmn-runtime/case-instances":{
+},
+"GET-http://localhost:8080/cosmocmmn/api/process/runtime/tasks/2508":{
+    "id": "2508",
+    "url": "http://localhost:8080/cosmocmmn/api/process/runtime/tasks/2508",
+    "owner": null,
+    "assignee": "userAcquisizioneDocumenti",
+    "delegationState": null,
+    "name": "Acquisizione Documenti",
+    "description": null,
+    "createTime": "2020-07-03T15:10:57.067+02:00",
+    "dueDate": null,
+    "priority": 50,
+    "suspended": false,
+    "claimTime": null,
+    "taskDefinitionKey": "sid-491F3414-BF52-4931-99EC-51B3EB7730F0",
+    "scopeDefinitionId": null,
+    "scopeId": null,
+    "scopeType": null,
+    "tenantId": "",
+    "category": null,
+    "formKey": "acquisizione-documenti-form",
+    "parentTaskId": null,
+    "parentTaskUrl": null,
+    "executionId": "2504",
+    "executionUrl": "http://localhost:8080/cosmocmmn/api/process/runtime/executions/2504",
+    "processInstanceId": "2501",
+    "processInstanceUrl": "http://localhost:8080/cosmocmmn/api/process/runtime/process-instances/2501",
+    "processDefinitionId": "approvazione-firma-documenti-process:1:17",
+    "processDefinitionUrl": "http://localhost:8080/cosmocmmn/api/process/repository/process-definitions/approvazione-firma-documenti-process:1:17",
+    "variables": []
+},
+"POST-http://localhost:8080/cosmocmmn/api/process/runtime/tasks":{
+    "id": "87501",
+    "url": "http://localhost:8080/cosmocmmn/api/process/runtime/tasks/87501",
+    "owner": null,
+    "assignee": "COSMOCMMN2",
+    "delegationState": null,
+    "name": "EvJUnit",
+    "description": "Evento junit",
+    "createTime": "2020-08-11T10:11:35.988+02:00",
+    "dueDate": "2020-10-17T13:06:02.438+02:00",
+    "priority": 50,
+    "suspended": false,
+    "claimTime": null,
+    "taskDefinitionKey": null,
+    "scopeDefinitionId": null,
+    "scopeId": null,
+    "scopeType": null,
+    "tenantId": "r_piemon",
+    "category": null,
+    "formKey": null,
+    "parentTaskId": null,
+    "parentTaskUrl": null,
+    "executionId": null,
+    "executionUrl": null,
+    "processInstanceId": null,
+    "processInstanceUrl": null,
+    "processDefinitionId": null,
+    "processDefinitionUrl": null,
+    "variables": []
+},
+"POST-http://localhost:8080/cosmocmmn/api/process/query/tasks":{
+    "data": [
+        {
+            "id": "77501",
+            "url": "http://localhost:8080/cosmocmmn/api/process/runtime/tasks/77501",
+            "owner": null,
+            "assignee": "COSMOCMMN",
+            "delegationState": null,
+            "name": "EvJUnit",
+            "description": "Evento junit",
+            "createTime": "2020-08-05T11:06:14.036+02:00",
+            "dueDate": "2020-10-17T13:06:02.438+02:00",
+            "priority": 50,
+            "suspended": false,
+            "claimTime": null,
+            "taskDefinitionKey": null,
+            "scopeDefinitionId": null,
+            "scopeId": null,
+            "scopeType": null,
+            "tenantId": "r_piemon",
+            "category": null,
+            "formKey": null,
+            "parentTaskId": null,
+            "parentTaskUrl": null,
+            "executionId": null,
+            "executionUrl": null,
+            "processInstanceId": null,
+            "processInstanceUrl": null,
+            "processDefinitionId": null,
+            "processDefinitionUrl": null,
+            "variables": []
+        }
+    ],
+    "total": 1,
+    "start": 0,
+    "sort": "id",
+    "order": "asc",
+    "size": 1
+
+},
+"GET-http://localhost:8080/cosmocmmn/api/process/pratiche/users/1/candidate":{
+    "items": [
+        {
+            "id": 90019,
+            "metadati": {
+                "demo": "Pratica del 11-08"
+            },
+            "tipo": {
+                "id": 1,
+                "nome": "test",
+                "descrizione": "test"
+            },
+            "documents": [],
+            "oggetto": "pratica 1156",
+            "preferita": false,
+            "tasks": []
+        }
+    ],
+    "page": 0,
+    "pageSize": 10,
+    "totalElements": 1,
+    "totalPages": 1
+},
+"POST-http://localhost:8080/cosmocmmn/api/process/runtime/process-instances":{
+    "id": "117501"
+},
+"POST-http://161.27.213.158:18080/cosmoecm/api/pratiche":{
+	"uuid": "1"
+}
+}
