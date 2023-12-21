@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+<!-- 
+	<listener>
+		<listener-class>it.csi.cosmo.cosmocmmn.util.listener.AppServletContextListener</listener-class>
+   	</listener>
+   	- -->
+   	 <!-- 
+   	<servlet>
+        <servlet-name>cosmo</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cosmo</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+   	  -->
+   	  
+   	 <servlet>
+        <servlet-name>process</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param><param-name>publishContext</param-name><param-value>false</param-value></init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>process</servlet-name>
+        <url-pattern>/api/process/*</url-pattern>
+    </servlet-mapping>
+  
+   	<servlet>
+        <servlet-name>case</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>case</servlet-name>
+        <url-pattern>/api/case/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>form</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param><param-name>publishContext</param-name><param-value>false</param-value></init-param>
+        <load-on-startup>1</load-on-startup>        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>form</servlet-name>
+        <url-pattern>/api/form/*</url-pattern>
+    </servlet-mapping>
+ 
+ 
+   	<listener>
+    <listener-class>
+        org.springframework.web.context.request.RequestContextListener
+    </listener-class>
+   </listener>
+ 
+<!-- 
+   <listener>
+      <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+   </listener>
+   
+	<listener>
+      <listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+   </listener>
+	 -->
+</web-app>

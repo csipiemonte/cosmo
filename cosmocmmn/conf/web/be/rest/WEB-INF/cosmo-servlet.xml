@@ -1,0 +1,138 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	   http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<cache:annotation-driven />
+	<!-- Spring cache setup -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager">
+			<ref bean="ehcache" />
+		</property>
+	</bean>
+	
+
+	<!-- EHCache configuration -->
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="WEB-INF/ehcache.xml" />
+	</bean>
+
+	<task:annotation-driven executor="asyncExecutor" />
+	<task:executor id="asyncExecutor" pool-size="10"
+		queue-capacity="100" />
+
+	<!-- AOP ANNOTATION BASED -->
+	<aop:aspectj-autoproxy proxy-target-class="true">
+	</aop:aspectj-autoproxy>
+
+
+	<import resource="dao-beans.xml" />
+
+	<context:component-scan base-package="it.csi" />
+	
+	<context:component-scan
+		base-package="org.flowable.rest" />
+	<context:component-scan
+		base-package="org.flowable.common" />
+		
+	<context:component-scan
+		base-package="org.flowable.cmmn" >
+		<!-- 
+		<context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.*" />
+		 -->
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.JobResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.TimerJobCollectionResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.SuspendedJobCollectionResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.DeadLetterJobCollectionResource" />		 
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.JobCollectionResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.management.JobExceptionStacktraceResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskQueryResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableDataResource" />		 
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskCollectionResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskSubTaskCollectionResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkFamilyResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableCollectionResource" />
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkCollectionResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.runtime.task.TaskResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceQueryResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceCollectionResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceIdentityLinkCollectionResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceVariableDataResource"/>
+		 <context:exclude-filter type="regex" expression="org.flowable.cmmn.rest.service.api.history.variable.HistoricVariableInstanceQueryResource"/>
+	</context:component-scan>		
+
+	<bean id="cmmnHistoricVariableInstanceQueryResource" class="org.flowable.cmmn.rest.service.api.history.variable.HistoricVariableInstanceQueryResource"></bean>
+	<bean id="cmmnHistoricTaskInstanceVariableDataResource" class="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceVariableDataResource"></bean>
+	<bean id="cmmnHistoricTaskInstanceIdentityLinkCollectionResource" class="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceIdentityLinkCollectionResource"></bean>
+	<bean id="cmmnHistoricTaskInstanceCollectionResource" class="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceCollectionResource"></bean>
+	<bean id="cmmnHistoricTaskInstanceQueryResource" class="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceQueryResource"></bean>
+	<bean id="cmmnHistoricTaskInstanceResource" class="org.flowable.cmmn.rest.service.api.history.task.HistoricTaskInstanceResource"></bean>
+	<bean id="cmmnTaskResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskResource"></bean>
+	<bean id="cmmnTaskIdentityLinkCollectionResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkCollectionResource"></bean>
+	<bean id="cmmnTaskVariableCollectionResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableCollectionResource"></bean>
+	<bean id="cmmnTaskIdentityLinkFamilyResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkFamilyResource"></bean>	
+	<bean id="cmmnTaskSubTaskCollectionResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskSubTaskCollectionResource"></bean>
+	<bean id="cmmnTaskCollectionResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskCollectionResource"></bean>
+	<bean id="cmmnTaskVariableResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableResource"></bean>
+	<bean id="cmmnTaskVariableDataResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskVariableDataResource"></bean>
+	<bean id="cmmnTaskQueryResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskQueryResource"> </bean>
+	<bean id="cmmnTaskIdentityLinkResource" class="org.flowable.cmmn.rest.service.api.runtime.task.TaskIdentityLinkResource"> </bean>
+	<bean id="cmmnJobResource" class="org.flowable.cmmn.rest.service.api.management.JobResource"> </bean>
+	<bean id="cmmnTimerJobCollectionResource" class="org.flowable.cmmn.rest.service.api.management.TimerJobCollectionResource"> </bean>
+	<bean id="cmmnSuspendedJobCollectionResource" class="org.flowable.cmmn.rest.service.api.management.SuspendedJobCollectionResource"> </bean>
+	<bean id="cmmnDeadLetterJobCollectionResource" class="org.flowable.cmmn.rest.service.api.management.DeadLetterJobCollectionResource"> </bean>
+	<bean id="cmmnJobCollectionResource" class="org.flowable.cmmn.rest.service.api.management.JobCollectionResource"> </bean>
+	<bean id="cmmnJobExceptionStacktraceResource" class="org.flowable.cmmn.rest.service.api.management.JobExceptionStacktraceResource"> </bean>
+	
+	<bean id="processEngine"
+		class="org.flowable.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration"
+			ref="processEngineConfiguration" />		
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+	<bean id="runtimeService" factory-bean="processEngine"
+		factory-method="getRuntimeService" />
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+	<bean id="managementService" factory-bean="processEngine"
+		factory-method="getManagementService" />
+	<bean id="formService" factory-bean="processEngine"
+		factory-method="getFormService" />
+	<bean id="identityService" factory-bean="processEngine"
+		factory-method="getIdentityService" />
+	<bean id="processMigrationService" factory-bean="processEngine"
+		factory-method="getProcessMigrationService" />
+	<bean id="dynamicBpmnService" factory-bean="processEngine"
+		factory-method="getDynamicBpmnService" />
+		
+			
+		
+  <bean id="cmmnEngine" class="org.flowable.cmmn.spring.CmmnEngineFactoryBean">
+    <property name="cmmnEngineConfiguration" ref="cmmnEngineConfiguration" />
+  </bean>
+
+  <bean id="cmmnRepositoryService" factory-bean="cmmnEngine" factory-method="getCmmnRepositoryService" />
+  <bean id="cmmnRuntimeService" factory-bean="cmmnEngine" factory-method="getCmmnRuntimeService" />
+  <bean id="cmmnTaskService" factory-bean="cmmnEngine" factory-method="getCmmnTaskService" />
+  <bean id="cmmnHistoryService" factory-bean="cmmnEngine" factory-method="getCmmnHistoryService" />
+  <bean id="cmmnManagementService" factory-bean="cmmnEngine" factory-method="getCmmnManagementService" />
+
+</beans>

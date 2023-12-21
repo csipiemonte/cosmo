@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	   http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<cache:annotation-driven />
+	<!-- Spring cache setup -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager">
+			<ref bean="ehcache" />
+		</property>
+	</bean>
+	
+
+	<!-- EHCache configuration -->
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="WEB-INF/ehcache.xml" />
+	</bean>
+
+	<task:annotation-driven executor="asyncExecutor" />
+	<task:executor id="asyncExecutor" pool-size="10"
+		queue-capacity="100" />
+
+	<!-- AOP ANNOTATION BASED -->
+	<aop:aspectj-autoproxy proxy-target-class="true">
+	</aop:aspectj-autoproxy>
+
+
+	<import resource="dao-beans.xml" />
+
+	<context:component-scan base-package="it.csi" >
+	  <context:exclude-filter type="regex" expression="it.csi.cosmo.cosmocmmn.business.service.impl.DiscoveryClientServiceImpl"></context:exclude-filter>
+	</context:component-scan>
+		
+	<context:component-scan
+		base-package="org.flowable.common" />
+	<context:component-scan
+		base-package="org.flowable.cmmn" />
+				
+		
+  <bean id="cmmnEngine" class="org.flowable.cmmn.spring.CmmnEngineFactoryBean">
+    <property name="cmmnEngineConfiguration" ref="cmmnEngineConfiguration" />
+  </bean>
+
+  <bean id="cmmnRepositoryService" factory-bean="cmmnEngine" factory-method="getCmmnRepositoryService" />
+  <bean id="cmmnRuntimeService" factory-bean="cmmnEngine" factory-method="getCmmnRuntimeService" />
+  <bean id="cmmnTaskService" factory-bean="cmmnEngine" factory-method="getCmmnTaskService" />
+  <bean id="cmmnHistoryService" factory-bean="cmmnEngine" factory-method="getCmmnHistoryService" />
+  <bean id="cmmnManagementService" factory-bean="cmmnEngine" factory-method="getCmmnManagementService" />
+
+</beans>
