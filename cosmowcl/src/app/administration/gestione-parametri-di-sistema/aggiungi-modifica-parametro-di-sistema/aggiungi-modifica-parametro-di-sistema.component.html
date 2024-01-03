@@ -1,0 +1,82 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+      <span class="breadcrumb-divider"> / </span>
+      <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+        {{ "gestione_parametri_di_sistema.header" | translate }}
+      </button>
+    </div>
+  
+    <h2 class="mt-3 mb-5">{{"gestione_parametri_di_sistema.header" | translate}}</h2>
+  
+    <form [formGroup]="psForm" (ngSubmit)="onSubmit()" *ngIf="psForm">
+         <!--Sezione Chiave e Valore-->
+         <div class="row justify-content-between pt-5">
+            <div class="col-lg-5 col-sm-12 form-group">
+                <label [ngClass]="{'active': hasValue('chiave'), 'is-invalid': displayInvalid('chiave')}" for="chiave">
+                  {{"gestione_parametri_di_sistema.chiave" | translate}}
+                </label>
+                <input [ngClass]="{ 'is-invalid': displayInvalid('chiave') }" type="text" id="chiave" name="chiave"
+                  formControlName="chiave" class="form-control" />
+                  <div class="input-icon-container" *ngIf="displayValidating('chiave')">
+                    <span class="fas fa-circle-notch fa-spin"></span>
+                  </div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('chiave')">
+                <p *ngIf="hasError('chiave', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('chiave', 'maxlength')">Troppi caratteri</p>
+                <p *ngIf="hasError('chiave', 'pattern')">Formato non valido</p>
+                <p *ngIf="hasError('chiave', 'conflict')">
+                  La chiave utilizzata &egrave; gi&agrave; presente nel sistema!
+                </p>
+              </div>
+            </div>
+  
+            <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('valore'), 'is-invalid': displayInvalid('valore')}" for="valore">
+                {{"gestione_parametri_di_sistema.valore" | translate}}
+              </label>
+              <input [ngClass]="{ 'is-invalid': displayInvalid('valore') }" type="text" id="valore" name="valore"
+                formControlName="valore" class="form-control" />
+  
+              <div class="input-icon-container" *ngIf="displayValidating('valore')">
+                <span class="fas fa-circle-notch fa-spin"></span>
+              </div>
+            </div>
+          </div>
+      <div class="row justify-content-between">
+        <div class="col-lg-12 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+            {{"gestione_parametri_di_sistema.descrizione" | translate}}
+          </label>
+          <input
+          [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+          type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+        />
+        </div>
+      </div>
+  
+  
+      <hr />
+  
+      <div class="row pt-4">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!psForm?.valid">
+            {{"common.salva" | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+</div>
+  

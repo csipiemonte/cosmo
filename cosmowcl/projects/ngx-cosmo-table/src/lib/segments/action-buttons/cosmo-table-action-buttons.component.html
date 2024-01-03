@@ -1,0 +1,56 @@
+<!-- AZIONI HEADER -->
+<ng-container *ngIf="render">
+  <div *ngIf="!displayAsDropdown" class="btn-action-container">
+    <ng-container *ngFor="let action of actions">
+      <button type="button" 
+        *ngIf="isActionVisible(action)"
+        class="d-none d-lg-inline btn-action btn btn-{{ action.displayClass || 'outline-primary' }} {{ action.additionalClasses || '' }} mr-1"
+        (click)="clickOnAction(action)" 
+        [disabled]="!isActionAllowed(action)"
+      >
+        <span *ngIf="action.icon" class="{{action.iconClass}} action-icon">
+          <span class="{{action.icon}}"></span>
+        </span>
+        <span class="action-label">
+          {{ resolveLabel(action) }}
+        </span>
+      </button>
+    </ng-container>
+  </div>
+
+  <!-- fallback per schermi piccoli: menu dropdown -->
+  <div [class.d-lg-none]="!displayAsDropdown" 
+    class="btn-action-container"
+    ngbDropdown 
+    [container]="'body'">
+    <button 
+      [class.btn-block]="!displayAsDropdown"
+      class="btn btn-outline-primary dropdown-toggle btn-action" 
+      [disabled]="!anyActionsAllowed" 
+      [hidden]="!anyActionsVisible"
+      ngbDropdownToggle
+    >
+      {{ 'table.common.messages.actions_button' | translate }}
+    </button>
+    <div ngbDropdownMenu>
+      <div ngbDropdownItem>
+        <h6 class="dropdown-header">{{ 'table.common.messages.pick_action' | translate }}</h6>
+      </div>
+      <ng-container *ngFor="let action of actions">
+        <button ngbDropdownItem 
+          class="btn-action-dropdown-item"
+          *ngIf="isActionVisible(action)" 
+          (click)="clickOnAction(action)" 
+          [disabled]="!isActionAllowed(action)"
+        >
+          <span *ngIf="action.icon" class="{{action.iconClass}} action-icon">
+            <span class="{{action.icon}}"></span>
+          </span>
+          <span class="action-label">
+            {{ resolveLabel(action) }}
+          </span>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

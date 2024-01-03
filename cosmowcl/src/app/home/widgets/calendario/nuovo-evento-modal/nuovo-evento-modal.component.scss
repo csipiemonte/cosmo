@@ -1,0 +1,56 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+ @import 'variables';
+@import 'typography';
+@media screen and (max-width: 700px) {
+
+  .mobile-first{
+      padding-right: 10px !important;
+      padding-left: 10px !important;
+  }
+
+}
+
+.btn-block {
+  display: block;
+  width: 92%;
+}
+.date { padding-bottom:0; margin-bottom:0; color:$rp_lightblue; font-size:0.8rem; }
+
+.day.highlight { color:$rp_lightblue !important; font-weight:bold; border-bottom:1px solid $rp_darkblue; }
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 100%;
+}
+.custom-day.focused {
+  background-color: $rp_darkblue;
+  color:$rp_extralight;
+  font-weight: bold;
+
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+       animation: fadein 1s;
+}
+.custom-day.selected {
+  background-color: $rp_darkblue;
+  color:$rp_extralight;
+  font-weight: bold;
+
+}
+.custom-day.today {
+  border: 2px solid $rp_darkblue;
+}
+.custom-day.range, .custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+

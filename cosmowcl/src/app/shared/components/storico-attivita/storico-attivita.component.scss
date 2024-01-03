@@ -1,0 +1,120 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+$ident_for_level: 2em;
+
+.card:after {
+  content: "";
+  display: block;
+  margin-top: 4px;
+  margin-left: 24px;
+}
+
+.storico {
+  .evento {
+    width: fit-content;
+    min-width: 30em;
+    padding: 0.5em;
+    margin-bottom: 0.25em;
+    border-radius: 0.75em;
+
+    .icon {
+      opacity: 0.90;
+      font-size: 0.65em;
+      margin-left: 0.33em;
+      margin-right: 0.33em;
+    }
+
+    .icon-entity {
+    }
+
+    .icon-action {
+      margin-left: 0.45em;
+      margin-top: 0.95em;
+      font-size: 0.75em;
+    }
+
+    .tipo {
+      margin-left: 0.33em;
+      margin-right: 0.33em;
+      font-size: 1.0em;
+    }
+
+    .utente {
+      margin-left: 0.33em;
+      margin-right: 0.50em;
+      font-size: 0.80em;
+    }
+
+    .fruitore {
+      margin-left: 0.33em;
+      margin-right: 0.50em;
+      font-size: 0.80em;
+    }
+
+    .utente-coinvolto {
+      margin-left: 0.33em;
+      margin-right: 0.50em;
+      font-size: 0.80em;
+    }
+
+    .gruppo-coinvolto {
+      margin-left: 0.33em;
+      margin-right: 0.50em;
+      font-size: 0.80em;
+    }
+
+    .content-row {
+      margin-top: 0.90em;
+      margin-bottom: 0.40em;
+    }
+
+    .descrizione {
+      margin-left: 0.50em;
+      margin-right: 0.33em;
+      font-size: 1.0em;
+    }
+
+    .timestamp {
+      font-size: 0.8em;
+      margin-right: 0.33em;
+    }
+  }
+
+  .event-footer {
+    border-top: 1px #cccccccc solid;
+    margin-top: 0.75em;
+    padding-top: 0.25em;
+  }
+
+  .evento-utente {
+    background-color: #ebedfd;
+    margin-left: 4em;
+  }
+  
+  .evento-sistema {
+    background-color: #f3f3f3;
+  }
+
+  .evento-fruitore {
+    background-color: #ebe1fc;
+  }
+
+  .level-0 {
+    margin-left: 0em;
+  }
+  
+  .level-1 {
+    margin-left: $ident_for_level*1;
+  }
+  
+  .level-2 {
+    margin-left: $ident_for_level*2;
+  }
+
+  .level-3 {
+    margin-left: $ident_for_level*3;
+  }
+  
+}

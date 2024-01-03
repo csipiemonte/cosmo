@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with specific formatting options per column.</p>
+      <p>The column 'ID' demonstrates custom CSS classes.</p>
+      <p>The column 'First name' demonstrates simple formatting with uppercase pipe.</p>
+      <p>The column 'Last updated' demonstrates date and time formatting with specific format options.</p>
+      <p>The column 'Last name' demonstrates arbitraty formatting with lambda transform function.</p>
+      <p>The column 'Email' demonstrates multiple chained formatters.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+      ></cosmo-table>
+    </div>
+  </div>
+</div>

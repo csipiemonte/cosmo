@@ -1,0 +1,16 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="!formReady">
+  <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+</ng-container>
+<ng-container *ngIf="formReady">
+  <formio #formioComponent
+      [form]="formJson"
+      [submission]="submission"
+      (change)="onChange($event)"
+      [renderOptions]="renderOptions"
+  ></formio>
+</ng-container>
+

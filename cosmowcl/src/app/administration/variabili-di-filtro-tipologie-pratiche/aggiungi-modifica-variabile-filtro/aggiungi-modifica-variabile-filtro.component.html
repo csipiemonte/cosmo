@@ -1,0 +1,206 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+      <span class="breadcrumb-divider"> / </span>
+      <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+        {{"variabili_filtro.header" | translate}}
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">{{"variabili_filtro.header" | translate}}</h2>
+      </div>
+    </div>
+
+    <ng-container *ngIf="loadingError">
+        <div class="px-4 py-4">
+          <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && !loadingError">
+        <br>
+        <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+
+            <div class="row justify-content-between">
+                <div class="col-lg-5 col-sm-12 form-group">
+                    <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('ente') }">
+                      <label [ngClass]="{'is-invalid': displayInvalid('ente')}" for="ente" class="active">
+                        {{"variabili_filtro.ente" | translate}}
+                      </label>
+                      <app-ricerca-ente
+                        [disabled]="isConfiguratore || !isNuovo"
+                        [ngClass]="{ 'is-invalid': displayInvalid('ente') }"
+                        [minChars]="0"
+                        id="ente" name="ente" formControlName="ente"
+                        class="w-100"
+                      ></app-ricerca-ente>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="displayInvalid('ente')">
+                      <p *ngIf="hasError('ente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                    </div>
+                    <div class="input-icon-container" *ngIf="displayValidating('ente')">
+                      <span class="fas fa-circle-notch fa-spin"></span>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-12 form-group">
+                    <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('tipoPratica') || !entePresente }">
+                        <label [ngClass]="{'is-invalid': displayInvalid('tipoPratica') || !entePresente}" for="tipoPratica" class="active">
+                          {{"variabili_filtro.tipo_pratica" | translate}}
+                        </label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <span class=" fas fa-search"></span>
+                            </span>
+                        </div>
+                        <input [ngClass]="{'is-invalid': displayInvalid('tipoPratica')}" id="tipoPratica" type="text" name="tipoPratica" class="form-control"
+                        placeholder="Cerca tipologia di pratica ..." #elemRef
+                        formControlName="tipoPratica" [ngbTypeahead]="searchTipiPratiche"
+                        [resultFormatter]="formatterTipoPratica" [inputFormatter]="formatterTipoPratica"
+                        (focus)="focusTipoPratiche$.next($any($event).target.value)"
+                        (click)="clickTipoPratiche$.next($any($event).target.value)" #instanceTipoPratiche="ngbTypeahead"
+                        [editable]="false" />
+                    </div>
+                      <div class="invalid-feedback" *ngIf="displayInvalid('tipoPratica')">
+                        <p *ngIf="hasError('tipoPratica', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                      </div>
+                      <div class="input-icon-container" *ngIf="displayValidating('tipoPratica') || validating">
+                        <span class="fas fa-circle-notch fa-spin"></span>
+                      </div>
+                </div>
+            </div>
+
+            <br>
+
+
+            <div class="row justify-content-between">
+                <div class="col-lg-5 col-sm-12 form-group">
+                    <label [ngClass]="{'active': hasValue('label'), 'is-invalid': displayInvalid('label')}"
+                      for="label">{{"variabili_filtro.label_filtro" | translate}}</label>
+                    <input
+                      [ngClass]="{ 'is-invalid': displayInvalid('label') }"
+                      type="text" id="label" name="label" formControlName="label" class="form-control"
+                    />
+                    <div class="input-icon-container" *ngIf="displayValidating('label')">
+                      <span class="fas fa-circle-notch fa-spin"></span>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="displayInvalid('label')">
+                      <p *ngIf="hasError('label', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                      <p *ngIf="hasError('label', 'conflict')">Label già associata con questa tipologia di pratica</p>
+                      <p *ngIf="hasError('label', 'maxlength')">Troppi caratteri</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-12 form-group">
+                    <label [ngClass]="{'active': hasValue('nome'), 'is-invalid': displayInvalid('nome')}"
+                      for="nome">Nome</label>
+                    <input
+                      [ngClass]="{ 'is-invalid': displayInvalid('nome') }"
+                      type="text" id="nome" name="nome" formControlName="nome" class="form-control"
+                    />
+                    <div class="input-icon-container" *ngIf="displayValidating('nome')">
+                      <span class="fas fa-circle-notch fa-spin"></span>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="displayInvalid('nome')">
+                      <p *ngIf="hasError('nome', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                      <p *ngIf="hasError('nome', 'conflict')">Nome già associato con questa tipologia di pratica</p>
+                      <p *ngIf="hasError('nome', 'maxlength')">Troppi caratteri</p>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row justify-content-between">
+                <div class="col-lg-5 col-sm-12 form-group">
+                  <label [ngClass]="{'is-invalid': displayInvalid('formatoVariabile')}"
+                    for="label" class="active"><span>{{"variabili_filtro.formato_variabile" | translate}}</span>
+                    <!-- <span data-toggle="tooltip" class="pl-1 text-info"
+                    title="{{'variabili_filtro.formato_variabile_non_disponibile' | translate}}"><i class="fas fa-info-circle" ></i></span> -->
+                  </label>
+                    <select
+                      [ngClass]="{ 'is-invalid': displayInvalid('formatoVariabile') }"
+                      formControlName="formatoVariabile" name="formatoVariabile" id="formatoVariabile"
+                      class="form-control"
+                      [attr.disabled]="null"
+                    >
+
+                    <option [ngValue]="null" disabled selected>
+                      {{ 'common.seleziona' | translate }} ...
+                    </option>
+                      <option *ngFor="let option of formatiDisponibili;  let i = index" [ngValue]="option">
+                        {{option.descrizione}}
+                      </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="displayInvalid('formatoVariabile')">
+                      <p *ngIf="hasError('formatoVariabile', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-12 form-group">
+                      <div class="form-check">
+                        <div class="row">
+                          <div class="col-12 col-lg-3">
+                            <p>{{"variabili_filtro.tipo_di_filtro" | translate}}</p>
+                          </div>
+                          <div class="col-12 col-lg-9">
+                            <div class="row" *ngFor="let filtro of tipiFiltro ;  let i = index">
+                              <input type="radio" formControlName="tipoFiltro" id="{{filtro.codice}}" [value]="filtro">
+                            <label class="inline-label mr-3" for="{{filtro.codice}}">
+                              <span class="a-bit-smaller">{{filtro.descrizione}}</span>
+                            </label>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="invalid-feedback" *ngIf="displayInvalid('tipoFiltro')">
+                        <p *ngIf="hasError('nome', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                      </div>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-between">
+              <div class="col-lg-5 col-sm-12 form-group">
+                <div class="form-check form-check-inline">
+                  <input id="aggiungiARisultatoRicerca" formControlName="aggiungiARisultatoRicerca" type="checkbox">
+                  <label class="inline-label mr-4" for="aggiungiARisultatoRicerca" >{{"variabili_filtro.aggiungere_a_risultato_ricerca" | translate}}</label>
+                </div>
+              </div>
+          </div>
+
+
+            <br>
+            <div class="row">
+              <div class="col-2 text-left">
+                <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+                  {{"common.indietro" | translate}}
+                </button>
+              </div>
+              <div class="col-10 text-right">
+                <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+                  {{"common.salva" | translate}}
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-sm btn-danger btn-action" (click)="annullaModifiche()">
+                  {{"common.annulla_modifiche" | translate}}
+                </button>
+              </div>
+            </div>
+            <br>
+        </form>
+    </ng-container>
+
+
+  </div>

@@ -1,0 +1,41 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="contenuto && anteprimaCorrente">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">{{ 'documenti.modals.anteprima.title' | translate }} {{ contenuto.nomeFile || 'Anteprima documento' }}</h5>
+        <button type="button" class="close" aria-label="chiudi il modale" aria-describedby="modal-title"
+            (click)="activeModal.dismiss({ crossClick: true })"
+            #crossButton
+        >
+        <span aria-hidden="true">&times;</span>
+        </button>&nbsp; &nbsp;
+        <div *ngIf="helper">
+          <app-helper
+            [helper] = "helper"
+            [type] = "'MODAL'">
+          </app-helper>
+        </div>
+    </div>
+    <div class="modal-body text-center">
+        <div class="anteprima-buttons" *ngIf="loaded">
+            <button type="button" class="btn" *ngIf="supportaPreview" (click)="preview()">
+                <span class="fas fa-eye"></span>
+            </button>
+            <button type="button" class="btn" *ngIf="supportaDownload" (click)="download()">
+                <span class="fas fa-download"></span>
+            </button>
+        </div>
+        <div class="anteprima-page-container">
+            <div class="anteprima-page {{ loaded ? 'loaded' : 'loading' }} {{ isImage ? 'image' : 'not-image' }}">
+                <app-immagine-wrapper [src]="anteprimaCorrente.shareUrl" class="ms-90pc" (loaded)="hasLoaded()"></app-immagine-wrapper>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button  ngbAutoFocus class="btn btn-primary btn-sm" type="button" (click)="activeModal.close('close')">
+            {{ 'common.chiudi' | translate }}
+        </button>
+    </div>
+</ng-container>

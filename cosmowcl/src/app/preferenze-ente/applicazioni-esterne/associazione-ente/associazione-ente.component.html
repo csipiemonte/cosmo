@@ -1,0 +1,92 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+    <span class="breadcrumb-divider">/</span>
+    <button type="button" class="btn btn-link btn-xs clickable" [routerLink]="'/preferenze-ente'">
+      {{ "header.preferenze_ente" | translate }}
+    </button>
+  </div>
+  <div style="margin: 50px 0px;">
+
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso></app-caricamento-in-corso>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row">
+      <div class="col-sm-6 col-md-6">
+        <button class="btn btn-primary btn-sm" [disabled]="applicazioniNonAssociate.length===0" (click)="aggiungiApplicazione()">
+          <span class="fas fa-plus-circle"></span> {{ "app_esterne.aggiungi_applicazione" | translate }}
+        </button>
+      </div>
+        <div class="col-sm-6 col-md-6">
+          <cosmo-table-search-filter [table]="table" [enableSearchIn]="false">
+          </cosmo-table-search-filter>
+        </div>
+    </div>
+    <br>
+     <div class="row">
+      <div class="col-sm-12 text-right pr-3">
+        <cosmo-table-page-size
+          [table]="table"
+        ></cosmo-table-page-size>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+
+        <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="applicazioni"
+          [columns]="columns" [enableSorting]="true" [enablePagination]="true" [paginationMode]="'CLIENT'"
+          [defaultPageSize]="10" [possiblePageSize]="[10,20,50,100]" [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'descrizione'">
+
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+            <div *ngIf="column.name === 'icona'">
+              <img [src]="getLogo(row.icona)" height="35" width="35"/>
+            </div>
+
+            <div style="text-align: center !important;" *ngIf="column.name === 'azioni'">
+              <button class="btn btn-action-icon btn-link" (click)="modificaAssociazioneApplicazione(row)">
+                <i class="fas fa-pen"></i>
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button class="btn btn-action-icon btn-link text-danger" (click)="eliminaAssociazioneApplicazione(row)"><span
+                  class="fas fa-trash-alt"></span></button>
+            </div>
+
+
+
+          </ng-template>
+
+        </cosmo-table>
+
+
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<router-outlet></router-outlet>

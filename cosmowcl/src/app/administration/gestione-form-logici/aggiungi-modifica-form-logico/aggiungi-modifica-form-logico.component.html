@@ -1,0 +1,308 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" (click)="goBack()">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "form_logici.header" | translate }}
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "form_logici.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row pt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          {{ "common.anagrafica" | translate }}
+        </h3>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+      <div class="row justify-content-between pt-5">
+        <div class="col-lg-5 col-sm-12 form-group">
+
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codice') }">
+            <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+              {{"common.codice" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('codice') }"
+              type="text" id="codice" name="codice" formControlName="codice" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo">
+              <span class="input-group-text pointer" (click)="copyCodice()">
+                <span class="{{ codiceCopied ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+            <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codice', 'pattern')">Formato non valido</p>
+            
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codice')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ codiceCopied ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}"
+            for="descrizione">{{"common.descrizione" | translate}}</label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+          />
+          <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+            <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('descrizione', 'maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('ente') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('ente')}" for="ente" class="active">
+              {{ "common.ente" | translate }}
+             </label>
+                <app-ricerca-ente
+                  [ngClass]="{ 'is-invalid': displayInvalid('ente') }"
+                  [minChars]="0"
+                  [disabled]="isConfiguratore"
+                  id="ente" name="ente" formControlName="ente"
+                  class="w-100"
+                ></app-ricerca-ente>
+            </div>
+            <div>
+              <p class="errore" *ngIf="hasError('ente', 'conflict') && getError('ente', 'conflict')?.hasEnte">
+                Questo ente &egrave; gi&agrave; assegnato al form {{ getError('ente', 'conflict')?.other?.codice }}
+              </p>
+              <p class="errore" *ngIf="hasError('ente', 'conflict') && !getError('ente', 'conflict')?.hasEnte">
+                E' già presente un form {{ getError('ente', 'conflict')?.other?.codice }} senza alcun ente associato
+              </p>
+            
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="form-check form-check-inline">
+            <input id="eseguibileMassivamente" formControlName="eseguibileMassivamente"
+              type="checkbox"
+              [ngClass]="{ 'is-invalid': displayInvalid('eseguibileMassivamente') }"
+            >
+            <label class="inline-label mr-4" [ngClass]="{'active': hasValue('eseguibileMassivamente'), 'is-invalid': (displayInvalid('eseguibileMassivamente') || displayInvalid('')) }"
+              for="eseguibileMassivamente"
+            >
+              Abilita esecuzione multipla
+            </label>
+          </div>
+
+          <div class="errore" *ngIf="displayInvalid('eseguibileMassivamente') || displayInvalid('')">
+            <p *ngIf="hasError('eseguibileMassivamente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError(null, 'piuEsecuzioniMassive')">Sono presenti più attività eseguibili massivamente</p>
+            <p *ngIf="hasError(null, 'almenoUnaEsecuzioneMassiva')">E' necessario individuare una funzionalità da eseguire massivamente</p>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="form-check form-check-inline">
+            <input id="wizard" formControlName="wizard"
+              type="checkbox"
+              [ngClass]="{ 'is-invalid': displayInvalid('wizard') }"
+            >
+            <label class="inline-label mr-4" [ngClass]="{'active': hasValue('wizard'), 'is-invalid': displayInvalid('wizard')}"
+              for="wizard">
+              Wizard
+            </label>
+          </div>
+
+          <div class="invalid-feedback" *ngIf="displayInvalid('wizard')">
+            <p *ngIf="hasError('wizard', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+        </div>
+
+        
+      </div>
+
+      <hr class="pb-2 pt-1" />
+
+      <div class="row pt-3">
+        <div class="col">
+          <h3 class="form-section-header">
+            {{ "form_logici.funzionalita" | translate }}
+          </h3>
+        </div>
+      </div>
+
+      <div class="row pt-4">
+        <div class="col" formArrayName="istanze">
+          <table class="table example-list" cdkDropList (cdkDropListDropped)="drop($event)">
+            <tbody cdkDrag class="example-box"
+              *ngFor="let istanza of istanze; let i = index;"
+              [formGroupName]="i"
+            >
+              <div *cdkDragPreview class="example-custom-preview">
+                {{ getDescrizioneIstanza(istanza) }}
+              </div>
+              <tr *cdkDragPlaceholder class="example-custom-placeholder">
+                <td colspan="3">
+                  &nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="drag-handle" cdkDragHandle>
+                    <span class="fas fa-grip-lines"></span>
+                  </span>
+                </td>
+                <td>
+                  <select
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': displayInvalid('istanze[' + i + '].codice') }"
+                    formControlName="codice"
+                  >
+                    <option *ngFor="let tipologiaFunzionalita of tipologieFunzionalita" [ngValue]="tipologiaFunzionalita.codice">
+                      {{ tipologiaFunzionalita.descrizione }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="displayInvalid('istanze[' + i + '].codice')">
+                    <p *ngIf="hasError('istanze[' + i + '].codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                  </div>
+
+                  <div class="parametri-container mt-3" formGroupName="parametri">
+                    <!-- PARAMETRI -->
+                    <div class="row-parametro mt-3 mb-2" *ngFor="let parametro of istanza.anagraficaParametri" [formGroupName]="parametro.codice">
+                      <ng-container *ngIf="getControl('istanze[' + i + '].parametri.' + parametro.codice)">
+                        <label class="w-100" [title]="parametro.descrizione" for="{{ 'istanze_' + i + '_parametri_' + parametro.codice }}"
+                          [ngClass]="{'required': parametro.obbligatorio}"
+                        >
+                          {{ parametro.descrizione || parametro.codice }}
+
+                          <!-- actions -->
+                          <button class="float-right btn btn-link btn-xs btn-action-icon text-danger" type="button"
+                            *ngIf="!parametro.obbligatorio"
+                            (click)="eliminaParametroIstanza(istanza, i, parametro)">
+                            <i class="fas fa-trash-alt" title="elimina parametro"></i>
+                          </button>
+                        </label>
+                        <app-dynamic-input
+                          [type]="parametro.tipo || 'text'"
+                          [formControlName]="'valore'"
+                          [ngClass]="{ 'is-invalid': displayInvalid('istanze[' + i + '].parametri.' + parametro.codice + '.valore') }"
+                        ></app-dynamic-input>
+                        <div class="invalid-feedback" *ngIf="displayInvalid('istanze[' + i + '].parametri.' + parametro.codice + '.valore')">
+                          <p *ngIf="hasError('istanze[' + i + '].parametri.' + parametro.codice + '.valore', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                          <p *ngIf="hasError('istanze[' + i + '].parametri.' + parametro.codice + '.valore', 'maxlength')">{{"errori.troppi_caratteri" | translate}}</p>
+                          <p *ngIf="hasError('istanze[' + i + '].parametri.' + parametro.codice + '.valore', 'json')">
+                            Deve essere un JSON valido.
+                          </p>
+                          <p *ngIf="hasError('istanze[' + i + '].parametri.' + parametro.codice + '.valore', 'jsonSchema')">
+                            Formato JSON non valido:
+                            <br/>
+                            {{ getError('istanze[' + i + '].parametri.' + parametro.codice + '.valore', 'jsonSchema')?.message }}
+                          </p>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  
+                <div class="row">
+                  <div class="form-check form-check-inline mt-4 mb-4" *ngIf="abilitaEsecuzioneMultipla(i)">
+                    <input id="istanzaMassiva{{i}}"
+                      type="checkbox" formControlName="eseguiMassivamente"
+                    >
+                    <label class="inline-label mr-4"
+                      for="istanzaMassiva{{i}}"
+                    >
+                      Esegui massivamente
+                    </label>
+                  </div>
+                </div>
+                </td>
+                <td>
+                  <!-- actions -->
+                  <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="eliminaIstanza(istanza, i)">
+                    <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <!-- riga di aggiunta -->
+            <tr>
+              <td>
+                {{ istanze.length + 1 }}
+              </td>
+              <td>
+                <app-ricerca-funzionalita-form-logico
+                  [ngClass]="{ 'is-invalid': selezioneNuovaIstanza?.entity?.codice && istanzaGiaPresente(selezioneNuovaIstanza?.entity) }"
+                  [(ngModel)]="selezioneNuovaIstanza"
+                  [ngModelOptions]="{standalone: true}"
+                  [icons]="false"
+                  (selectItem)="istanzaSelezionataChanged($event)"
+                  [postSearchFilter]="funzionalitaNonAncoraAssociate"
+                ></app-ricerca-funzionalita-form-logico>
+                <div class="invalid-feedback" *ngIf="selezioneNuovaIstanza?.entity?.codice && istanzaGiaPresente(selezioneNuovaIstanza?.entity)">
+                  Questa funzionalit&agrave; &egrave; gi&agrave; associata.
+                </div>
+              </td>
+              <td>
+                <!-- empty -->
+              </td>
+              <td colspan="3" class="text-right">
+                <!-- empty -->
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </form>
+
+    <div class="row mt-5">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!--
+  <ng-container *ngIf="!loading && !loadingError">
+    <app-debug [value]="loadedData" title="loaded data"></app-debug>
+    <app-debug [value]="getPayload()" title="payload"></app-debug>
+  </ng-container>
+  -->
+</div>

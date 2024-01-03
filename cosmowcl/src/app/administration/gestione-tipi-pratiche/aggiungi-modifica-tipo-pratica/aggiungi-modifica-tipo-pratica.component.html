@@ -1,0 +1,725 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "tipi_pratiche.header" | translate }}
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "tipi_pratiche.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row pt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          {{ "common.anagrafica" | translate }}
+        </h3>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+      <div class="row justify-content-between pt-5">
+        <div class="col-lg-5 col-sm-12 form-group">
+
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codice') }">
+            <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+              {{"common.codice" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('codice') }"
+              type="text" id="codice" name="codice" formControlName="codice" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('codice')">
+              <span class="input-group-text pointer" (click)="copy('codice')">
+                <span class="{{ copied('codice') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+            <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codice', 'pattern')">Formato non valido</p>
+            <p *ngIf="hasError('codice', 'conflict')">
+              Questo codice &egrave; gi&agrave; assegnato al tipo {{ getError('codice', 'conflict')?.other?.descrizione }}
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codice')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('codice') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('ente') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('ente')}" for="ente" class="active">
+              {{"tipi_pratiche.ente" | translate}}
+            </label>
+            <app-ricerca-ente
+              [disabled]="isConfiguratore"
+              [ngClass]="{ 'is-invalid': displayInvalid('ente') }"
+              [minChars]="0"
+              id="ente" name="ente" formControlName="ente"
+              class="w-100"
+            ></app-ricerca-ente>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('ente')">
+            <p *ngIf="hasError('ente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('ente')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}"
+            for="descrizione">{{"common.descrizione" | translate}}</label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+          />
+          <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+            <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('descrizione', 'maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceApplicazioneStardas') }">
+            <label [ngClass]="{'active': hasValue('codiceApplicazioneStardas'), 'is-invalid': displayInvalid('codiceApplicazioneStardas')}" for="codiceApplicazioneStardas">
+              {{"tipi_pratiche.codice_applicazione_stardas" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('codiceApplicazioneStardas') }"
+              type="text" id="codiceApplicazioneStardas" name="codiceApplicazioneStardas" formControlName="codiceApplicazioneStardas" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('codiceApplicazioneStardas')">
+              <span class="input-group-text pointer" (click)="copy('codiceApplicazioneStardas')">
+                <span class="{{ copied('codiceApplicazioneStardas') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('codiceApplicazioneStardas')">
+            <p *ngIf="hasError('codiceApplicazioneStardas', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codiceApplicazioneStardas', 'pattern')">Formato non valido</p>
+            <p *ngIf="hasError('codiceApplicazioneStardas', 'conflict')">
+              Questo codice &egrave; gi&agrave; assegnato al tipo {{ getError('codice', 'conflict')?.other?.descrizione }}
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codiceApplicazioneStardas')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('codiceApplicazioneStardas') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('processDefinitionKey') }">
+            <label [ngClass]="{'active': hasValue('processDefinitionKey'), 'is-invalid': displayInvalid('processDefinitionKey')}" for="processDefinitionKey">
+              {{"tipi_pratiche.process_definition_key" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('processDefinitionKey') }"
+              type="text" id="processDefinitionKey" name="processDefinitionKey" formControlName="processDefinitionKey" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('processDefinitionKey')">
+              <span class="input-group-text pointer" (click)="copy('processDefinitionKey')">
+                <span class="{{ copied('processDefinitionKey') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('processDefinitionKey')">
+            <p *ngIf="hasError('processDefinitionKey', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('processDefinitionKey', 'pattern')">Formato non valido</p>
+            <p *ngIf="hasError('processDefinitionKey', 'requireOneOf')">
+              Devi valorizzare in alternativa questo campo oppure 'Case definition key'
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('processDefinitionKey')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('processDefinitionKey') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('caseDefinitionKey') }">
+            <label [ngClass]="{'active': hasValue('caseDefinitionKey'), 'is-invalid': displayInvalid('caseDefinitionKey')}" for="caseDefinitionKey">
+              {{"tipi_pratiche.case_definition_key" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('caseDefinitionKey') }"
+              type="text" id="caseDefinitionKey" name="caseDefinitionKey" formControlName="caseDefinitionKey" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('caseDefinitionKey')">
+              <span class="input-group-text pointer" (click)="copy('caseDefinitionKey')">
+                <span class="{{ copied('caseDefinitionKey') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('caseDefinitionKey')">
+            <p *ngIf="hasError('caseDefinitionKey', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('caseDefinitionKey', 'pattern')">Formato non valido</p>
+            <p *ngIf="hasError('caseDefinitionKey', 'requireOneOf')">
+              Devi valorizzare in alternativa questo campo oppure 'Process definition key'
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('caseDefinitionKey')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('caseDefinitionKey') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('responsabileTrattamentoStardas') }">
+            <label [ngClass]="{'active': hasValue('responsabileTrattamentoStardas'), 'is-invalid': displayInvalid('responsabileTrattamentoStardas')}" for="responsabileTrattamentoStardas">
+              {{"tipi_pratiche.responsabile_trattamento_stardas" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('responsabileTrattamentoStardas') }"
+              type="text" id="responsabileTrattamentoStardas" name="responsabileTrattamentoStardas" formControlName="responsabileTrattamentoStardas" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('responsabileTrattamentoStardas')">
+              <span class="input-group-text pointer" (click)="copy('responsabileTrattamentoStardas')">
+                <span class="{{ copied('responsabileTrattamentoStardas') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('responsabileTrattamentoStardas')">
+            <p *ngIf="hasError('responsabileTrattamentoStardas', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('responsabileTrattamentoStardas', 'pattern')">Formato non valido</p>
+            <p *ngIf="hasError('responsabileTrattamentoStardas', 'secondValidIfFirstHasValue')">
+              Per valorizzare questo campo devi valorizzare 'Codice applicazione Stardas'
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('responsabileTrattamentoStardas')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('responsabileTrattamentoStardas') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceFruitoreStardas') }">
+            <label [ngClass]="{'active': hasValue('codiceFruitoreStardas'), 'is-invalid': displayInvalid('codiceFruitoreStardas')}" for="codiceFruitoreStardas">
+              {{"tipi_pratiche.codice_fruitore_stardas" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('codiceFruitoreStardas') }"
+              type="text" id="codiceFruitoreStardas" name="codiceFruitoreStardas" formControlName="codiceFruitoreStardas" class="form-control"
+            />
+            <div class="input-group-append" *ngIf="!isNuovo && hasValue('codiceFruitoreStardas')">
+              <span class="input-group-text pointer" (click)="copy('codiceFruitoreStardas')">
+                <span class="{{ copied('codiceFruitoreStardas') ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+              </span>
+            </div>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('codiceFruitoreStardas')">
+            <p *ngIf="hasError('codiceFruitoreStardas', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codiceFruitoreStardas', 'secondValidIfFirstHasValue')">
+              Per valorizzare questo campo devi valorizzare 'codice fruitore Stardas'
+            </p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codiceFruitoreStardas')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ copied('codiceFruitoreStardas') ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('registrazioneStilo') }">
+            <label [ngClass]="{'active': hasValue('registrazioneStilo'), 'is-invalid': displayInvalid('registrazioneStilo')}" for="registrazioneStilo">
+              {{"tipi_pratiche.registrazione_stilo" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('registrazioneStilo') }"
+              type="text" id="registrazioneStilo" name="registrazioneStilo" formControlName="registrazioneStilo" class="form-control"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('registrazioneStilo')">
+            <p *ngIf="hasError('registrazioneStilo', 'maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('tipoUnitaDocumentariaStilo') }">
+            <label [ngClass]="{'active': hasValue('tipoUnitaDocumentariaStilo'), 'is-invalid': displayInvalid('tipoUnitaDocumentariaStilo')}" for="tipoUnitaDocumentariaStilo">
+              {{"tipi_pratiche.tipologia_unita_documentaria_stilo" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('tipoUnitaDocumentariaStilo') }"
+              type="text" id="tipoUnitaDocumentariaStilo" name="tipoUnitaDocumentariaStilo" formControlName="tipoUnitaDocumentariaStilo" class="form-control"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('tipoUnitaDocumentariaStilo')">
+            <p *ngIf="hasError('tipoUnitaDocumentariaStilo', 'maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="form-check form-check-inline">
+            <input id="overrideResponsabileTrattamento" formControlName="overrideResponsabileTrattamento" type="checkbox">
+            <label class="inline-label mr-4" for="overrideResponsabileTrattamento" [ngbPopover]="popContentOverrideResponsabileTrattamento" triggers="mouseenter:mouseleave">{{"tipi_pratiche.override_responsabile_trattamento" | translate}}</label>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="form-check form-check-inline">
+            <input id="overrideFruitoreDefault" formControlName="overrideFruitoreDefault" type="checkbox">
+            <label class="inline-label mr-4" for="overrideFruitoreDefault" [ngbPopover]="popContentOverrideFruitoreDefault" triggers="mouseenter:mouseleave">{{"tipi_pratiche.override_fruitore_default" | translate}}</label>
+          </div>
+        </div>
+
+        <ng-template #popContentOverrideResponsabileTrattamento>
+          <p>{{"tipi_pratiche.override_help" | translate}}</p>
+        </ng-template>
+
+        <ng-template #popContentOverrideFruitoreDefault>
+          <p>{{"tipi_pratiche.override_fruitore_help" | translate}}</p>
+        </ng-template>
+
+      </div>
+
+
+
+
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('customForm') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('customForm')}" for="customForm" class="active">
+              {{"tipi_pratiche.form_visualizzazione_dati_pratica" | translate}}
+            </label>
+
+            <app-ricerca-custom-form id="customForm" name="customForm"
+             formControlName="customForm" class="w-100" [senzaAssociazioneConTipoPratica]="true"
+          ></app-ricerca-custom-form>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('customForm')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="row">
+        <div class="form-check form-check-inline" [ngClass]="{ 'is-invalid': displayInvalid('creabileDaServizio') }">
+          <input id="creabileDaServizio" formControlName="creabileDaServizio" type="checkbox"
+          [ngClass]="{ 'is-invalid': displayInvalid('creabileDaServizio') }" >
+          <label class="inline-label mr-4" style="font-weight: 600;"for="creabileDaServizio">
+          {{"tipi_pratiche.creabile_da_servizio" | translate}}</label>
+        </div>
+        <div class="invalid-feedback mr-4" *ngIf="displayInvalid('creabileDaServizio')">
+          <p *ngIf="hasError('creabileDaServizio', 'requireOneOfCheckbox')" class="mb-0">
+            Devi valorizzare o 'Creabile da interfaccia' o 'Creabile da servizio' o entrambe
+          </p>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="column col-md-7 col-sm-7 mb-4">
+          <div class="row mb-4">
+            <div class="form-check form-check-inline mb-4" [ngClass]="{ 'is-invalid': displayInvalid('creabileDaInterfaccia') }">
+              <input id="creabileDaInterfaccia" formControlName="creabileDaInterfaccia" type="checkbox" (click)="aggiornaCreatore()"
+              [ngClass]="{ 'is-invalid': displayInvalid('creabileDaInterfaccia') }">
+              <label class="inline-label mr-4" for="creabileDaInterfaccia">
+                {{"tipi_pratiche.creabile_da_interfaccia" | translate}}
+              </label>
+            </div>
+            <div class="invalid-feedback mr-4" style="margin-top: 0px; " *ngIf="displayInvalid('creabileDaInterfaccia')">
+              <p *ngIf="hasError('creabileDaInterfaccia', 'requireOneOfCheckbox')" class="mb-0">
+                Devi valorizzare o 'Creabile da interfaccia' o 'Creabile da servizio' o entrambe
+              </p>
+            </div>
+          </div>
+          <!-- select selezione gruppo per creazione pratica associata al tipo di pratica in creazione/modifica -->
+
+          <div class="row mb-4" *ngIf="!hiddenCreazioneGruppo()">
+            <div class="input-group col-md-10 col-sm-10 mb-4" [ngClass]="{ 'is-invalid': displayInvalid('gruppoCreatore') }">
+              <label [ngClass]="{'is-invalid': displayInvalid('gruppoCreatore')}" for="gruppoCreatore" class="active">
+                {{"tipi_pratiche.gruppo_creatore" | translate}}
+              </label>
+
+              <app-ricerca-gruppo
+                [ngClass]="{ 'is-invalid': displayInvalid('gruppoCreatore') }"
+                id="gruppoCreatore" name="gruppoCreatore"
+                formControlName="gruppoCreatore"
+                class="w-100"
+                [idEnte]="idEnte"
+              ></app-ricerca-gruppo>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('gruppoCreatore')">
+              <p *ngIf="hasError('gruppoCreatore', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('gruppoCreatore')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+
+
+          <div class="row form-group" *ngIf="!hiddenCreazioneGruppoSupervisore()">
+            <div class="input-group col-md-10 col-sm-10" [ngClass]="{ 'is-invalid': displayInvalid('gruppoSupervisore') }">
+              <label [ngClass]="{'is-invalid': displayInvalid('gruppoSupervisore')}" for="gruppoSupervisore" class="active">
+                {{"tipi_pratiche.gruppo_supervisore" | translate}}
+              </label>
+              <app-ricerca-gruppo
+                [ngClass]="{ 'is-invalid': displayInvalid('gruppoSupervisore') }"
+                id="gruppoSupervisore" name="gruppoSupervisore"
+                formControlName="gruppoSupervisore"
+                class="w-100"
+                [idEnte]="idEnte"
+              ></app-ricerca-gruppo>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('gruppoSupervisore')">
+              <p *ngIf="hasError('gruppoSupervisore', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('gruppoSupervisore')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="column col-md-5 col-sm-5 mb-4">
+          <div class="row justify-content-between">
+            <div class="form-check form-check-inline">
+              <input id="annullabile" formControlName="annullabile" type="checkbox">
+              <label class="inline-label mr-4" for="annullabile">{{"tipi_pratiche.annullabile" | translate}}</label>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="form-check form-check-inline">
+              <input id="condivisibile" formControlName="condivisibile" type="checkbox">
+              <label class="inline-label mr-4" for="condivisibile">{{"tipi_pratiche.condivisibile" | translate}}</label>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="form-check form-check-inline">
+              <input id="assegnabile" formControlName="assegnabile" type="checkbox">
+              <label class="inline-label mr-4" for="assegnabile">{{"tipi_pratiche.assegnabile" | translate}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-lg-11 col-sm-12 form-group">
+ 
+                <button type="button" (click)="inputImmagine.click()" class="file-upload btn btn-outline-primary mb-3">
+                  <span>{{ "tipi_pratiche.carica_immagine" | translate }}</span>
+                  <input type="file" accept="image/*" class="upload" #inputImmagine (click)="inputImmagine.value = null" id="immagine" name="immagine"
+                    (change)="onChange($event)">
+                </button>
+                
+                <div class="imageDiv">                
+                    <div class="imageDiv ml-3" *ngIf="imgURL">
+                      <img [src]="imgURL" alt="" height="100" >
+                    </div>
+                    <div class="imageDiv overlap" *ngIf="imgURL">
+                      <i class="fas fa-times-circle remove-image ml-3" aria-hidden="true" (click)="eliminaImmagine()"></i>
+                    </div>
+                </div>
+              <input
+              [ngClass]="{ 'is-invalid': displayInvalid('immagine')}"type="text" hidden>
+
+
+            <div class="invalid-feedback" *ngIf="displayInvalid('immagine')">
+              <p *ngIf="hasError('immagine', 'dimensioniMassime')">{{"errori.grandezza_upload_file_superata" | translate:{v1: maxSize / 1000} }}</p>
+              <p *ngIf="hasError('immagine', 'numeroPixel')">{{"errori.grandezza_pixel_upload_file_superata" | translate:{v1: maxNumOfPixels} }}</p>
+            </div>
+          </div>
+  
+      </div>
+
+    </form>
+
+    <hr class="pb-2 pt-1" />
+
+    <div class="row pt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          Stati associati
+        </h3>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="col">
+        <table class="table table-striped table-sm">
+          <tr *ngFor="let stato of stati">
+            <td style="width: 5em;" class="pr-3"><span class="badge badge-{{ stato.classe || 'primary' }}">{{ stato.codice }}</span></td>
+            <td>{{ stato.descrizione }}</td>
+            <td class="text-right">
+              <button class="btn btn-link btn-sm btn-action-icon mr-3" type="button" (click)="modificaStato(stato)">
+                <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+              </button>
+              <button class="btn btn-link btn-sm btn-action-icon text-danger" type="button" (click)="eliminaStato(stato)">
+                <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="1" class="text-right">
+              <app-ricerca-stato-pratica class=""
+                #ricercaStatoPraticaInput
+                [nuovo]="true"
+                [statiPratica] = "stati"
+                [filter]="ricercaStatoPraticaFilter"
+                (selectItem)="statoPraticaSelezionato($event.item)"
+              ></app-ricerca-stato-pratica>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="row  pt-3 mt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          Tipologie di documenti associati
+        </h3>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="col">
+        <table class="table table-striped table-sm">
+          <ng-container *ngFor="let tipo of tipiDocumento">
+            <tr>
+              <td style="width: 5em;" class="pr-3"><span class="badge badge-primary">{{ tipo.codice }}</span></td>
+              <td>
+                {{ tipo.descrizione }}
+                <div *ngIf="tipo?.allegati?.length" class="mt-3" style="font-size: 0.90em;">
+                  <span *ngIf="tipo.allegati.length > 1">
+                    Sono presenti {{ tipo.allegati.length }} allegati.
+                  </span>
+                  <span *ngIf="tipo.allegati.length === 1">
+                    &Egrave; presente un allegato.
+                  </span>
+
+                  <table class="table table-striped table-sm mt-3">
+                    <ng-container *ngFor="let tipoAllegato of tipo.allegati">
+                      <tr>
+                        <td style="width: 5em;" class="pr-3"><span class="badge badge-primary">{{ tipoAllegato.codice }}</span></td>
+                        <td>{{ tipoAllegato.descrizione }}</td>
+                      </tr>
+                    </ng-container>
+                  </table>
+                </div>
+              </td>
+              <td class="text-right">
+                <button class="btn btn-link btn-sm btn-action-icon mr-3" type="button" (click)="modificaTipoDocumento(tipo)">
+                  <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                </button>
+                <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="eliminaTipoDocumento(tipo)">
+                  <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr>
+            <td></td>
+            <td colspan="1" class="text-right">
+              <app-ricerca-tipo-documento class=""
+                #ricercaTipoDocumentoInput
+                [nuovo]="true"
+                [tipiDocumenti] = "tipiDocumento"
+                [filter]="ricercaTipoDocumentoFilter"
+                (selectItem)="tipoDocumentoSelezionato($event.item)"
+                [codiceTipoPratica]="form?.getRawValue().codice"
+              ></app-ricerca-tipo-documento>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <hr class="pb-3 pt-3 mt-5" />
+    
+    <div class="row pt-3 mt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          {{ "tipi_pratiche.preferenze_firma" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="row pt-4 mt-3 ">
+      <div class="col">
+        <app-impostazioni-firma #impostazioniFirma [obbligatorietaCampi]="false" [abilitaSelezioneNulla]="true"></app-impostazioni-firma>
+      </div>
+    </div>
+    <hr class="pb-2 pt-1" />
+
+
+   <div class="row  pt-3 mt-3">
+    <div class="col">
+      <h3 class="form-section-header">
+        Gestione dei tabs del dettaglio pratica
+      </h3>
+    </div>
+  </div>
+
+<div class="row pt-4">
+  <div class="col">
+    <table class="table example-list" cdkDropList (cdkDropListDropped)="drop($event)">
+      <ng-container *ngFor="let dTabs of dettTabs; let i = index;">
+      <tbody cdkDrag class="example-box" >
+        <div *cdkDragPreview class="example-custom-preview">
+          {{ getDescrizioneTab(dTabs) }}
+        </div>
+        <tr *cdkDragPlaceholder class="example-custom-placeholder">
+          <td colspan="3">
+            &nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>
+           <span class="drag-handle" cdkDragHandle>
+              <span class="fas fa-grip-lines"></span>
+            </span>
+          </td>
+          <td>
+            <p> {{ dettTabs[i].descrizione }}</p>
+          </td>
+          <td>
+            <!-- actions -->
+            <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="eliminaDettTabs(i)">
+              <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </ng-container>
+      <!-- riga di aggiunta -->
+      <tr>
+        <td>
+          {{ dettTabs.length + 1 }}
+        </td>
+        <td>
+        <app-ricerca-dettaglio-tabs
+          #ricercaDettaglioTabs
+          [(ngModel)]="selezioneNuovoTab"
+          [ngModelOptions]="{standalone: true}"
+          [dettTab] = "dettTabs"
+          (selectItem)="tabSelezionatoChanged($event)"
+          [postSearchFilter]="tabNonAncoraAssociati"
+          >
+        </app-ricerca-dettaglio-tabs>
+        <div class="invalid-feedback" *ngIf="selezioneNuovoTab?.entity?.codice && tabGiaPresente(selezioneNuovoTab?.entity)">
+          Questo tab &egrave; gi&agrave; stato scelto.
+        </div>
+        </td>
+        <td>
+
+       </td>
+        <td colspan="3" class="text-right">
+           <!--empty -->
+        </td>
+      </tr>
+    </table>
+    </div>
+    </div>
+
+  
+    
+
+
+    <div class="row pt-3 mt-3">
+      <div class="col">
+        <h3 class="form-section-header">
+          Trasformazioni di dati
+        </h3>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="col">
+        <table class="table table-striped table-sm">
+          <ng-container *ngFor="let trasformazione of trasformazioni">
+            <tr>
+              <td style="width: 5em;" class="pr-3"><span class="badge badge-primary">{{ trasformazione.codiceFase }}</span></td>
+              <td>
+                {{ trasformazione.descrizione }}
+              </td>
+              <td class="text-right">
+                <button class="btn btn-link btn-sm btn-action-icon mr-3" type="button" (click)="modificaTrasformazione(trasformazione)">
+                  <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                </button>
+                <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="eliminaTrasformazione(trasformazione)">
+                  <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr>
+            <td></td>
+            <td colspan="1" class="text-left">
+              <button class="btn btn-link btn-xs btn-action-icon text-success" type="button" (click)="nuovaTrasformazione()">
+                <i class=" fas fa-plus" title="aggiungi"></i> aggiungi una trasformazione
+              </button>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="row mt-5">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!isValid()">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

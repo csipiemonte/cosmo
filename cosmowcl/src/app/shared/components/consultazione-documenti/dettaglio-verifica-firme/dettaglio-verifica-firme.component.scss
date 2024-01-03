@@ -1,0 +1,23 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.icon-tipo-firma {
+  width: 2em;
+  display: inline;
+  padding-right: 0.5em;
+  color: #185aa6;
+}
+
+.icon-esito-verifica-firma {
+  width: 2em;
+  display: inline;
+  padding-right: 0.5em;
+
+}
+
+tr:hover { 
+  background-color: inherit !important;
+  opacity: 1.0  !important;
+}

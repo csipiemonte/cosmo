@@ -1,0 +1,79 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+
+    <div class="modal-body">
+        <p class="alert alert-{{ relockSuccess ? 'success' : 'danger' }} mt-3 mb-3">
+            <strong role="status" *ngIf="!relockSuccess">Hai perso la priorit&agrave; di lavorazione sul task. </strong>
+            <strong role="status" *ngIf="relockSuccess">Hai riacquisito la priorit&agrave; di lavorazione sul task. </strong>
+            <span class="mt-3" *ngIf="!relockSuccess">
+                <br/>
+                <br/>
+                A causa di prolungata inattivit&agrave; hai perso la priorit&agrave; di lavorazione sul task.
+            </span>
+            <span class="mt-3" *ngIf="!reattempted">
+                <br/>
+                <br/>
+                Puoi provare a riprendere la lavorazione, nel caso nessun altro utente abbia preso in carico il task nel frattempo, premendo sul tasto qui sotto.
+            </span>
+            <span class="mt-3" *ngIf="attemptingRelock">
+                <br/>
+                <br/>
+                <i class="fas fa-circle-notch fa-spin mr-2"></i> Sto verificando se qualche altro utente ha preso in carico il task ...
+            </span>
+            <span class="mt-3" *ngIf="!attemptingRelock && relockFailed">
+                <br/>
+                <br/>
+                <i class="fas fa-user-slash mr-2"></i>
+                <span *ngIf="relockError">
+                    Non &egrave; stato possibile riacquisire la priorit&agrave; di lavorazione sul task: {{ relockError }}
+                </span>
+                <span *ngIf="otherLock && otherLock.utente?.codiceFiscale === principalCF">
+                    Non &egrave; stato possibile riprendere la lavorazione perch&egrave;
+                    stai lavorando su questo task in un'altra sessione.
+                </span>
+                <span *ngIf="otherLock && !(otherLock.utente?.codiceFiscale === principalCF)">
+                    <ng-container *ngIf="otherLock?.utente?.nome">
+                        {{ otherLock?.utente?.nome }} {{ otherLock?.utente?.cognome }}
+                    </ng-container>
+                    <ng-container *ngIf="!(otherLock?.utente?.nome)">
+                        Un altro utente
+                    </ng-container>
+                    ha acquisito la priorit&agrave; e sta lavorando su questo task.
+                </span>
+            </span>
+            <span class="mt-3" *ngIf="!attemptingRelock && relockSuccess">
+                <br/><br/>
+                Nessun altro utente ha preso in carico il task mentre eri inattivo.
+                <br/><br/>
+                Puoi continuare a lavorarci.
+            </span>
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary"
+            [disabled]="attemptingRelock || retryCooldown || !checksumModifica"
+            (click)="reattempt()"
+            *ngIf="!relockSuccess && !relockFailedUnrecoverable"
+        >
+            <span *ngIf="!relockFailed">
+                Riprendi la lavorazione
+            </span>
+            <span *ngIf="relockFailed">
+                Riprova a riprendere la lavorazione
+            </span>
+            <span *ngIf="retryCooldown > 0" class="ml-2">
+                ({{ retryCooldown }})
+            </span>
+        </button>
+        <button type="button" class="btn btn-outline-danger" [disabled]="attemptingRelock || gotoHomepageCooldown" (click)="goHome()" *ngIf="!relockSuccess">
+            Torna alla homepage
+            <span *ngIf="gotoHomepageCooldown > 0" class="ml-2">
+                ({{ gotoHomepageCooldown }})
+            </span>
+        </button>
+    </div>
+</div>

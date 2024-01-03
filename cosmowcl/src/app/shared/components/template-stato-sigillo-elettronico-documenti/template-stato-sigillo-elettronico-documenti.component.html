@@ -1,0 +1,56 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && hasFirma(documento)" class="d-inline ml-3">
+    <span class="icon-esito-verifica-firma "
+      title="{{ getEsitoVerificaFirma(documento)?.descrizione || 'Documento non firmato' }}">
+      <span *ngIf="hasFirma(documento)">
+        <ng-container *ngIf="esitoVerificaFirma(documento); else verificaFirmaFallita">
+          <span class="text-success pointer" (click)="apriModaleDettaglioFirma(documento)">
+            <i class="fas fa-stamp"></i>
+          </span>
+        </ng-container>
+        <ng-template #verificaFirmaFallita>
+          <span class="text-danger pointer" (click)="apriModaleDettaglioFirma(documento)">
+            <i class="fas fa-times"></i>
+          </span>
+        </ng-template>
+      </span>
+    </span>
+</div>
+  <span *ngIf="documento.sigillo" [ngSwitch]="getActualStatus()"
+      class="icon-esito-verifica-firma d-inline ml-3" title="Sigillo in errore">
+
+      <ng-container *ngSwitchCase="'ERR_SIGILLO'">
+        <span class="text-danger pointer" placement="left" [ngbPopover]="popContent"
+            popoverClass="very-large-popover" [popoverTitle]="popTitle"
+            [autoClose]="'outside'">
+            <ng-template #popContent>
+                <table>
+                    <colgroup>
+                        <col span="1" style="width: 55%;">
+                        <col span="1" style="width: 45%;">
+                    </colgroup>
+                    <tr *ngFor="let sigillo of documento.sigillo">
+                        <td>
+                            {{sigillo.descrizioneEsito}}
+                        </td>
+                        <td>
+                          {{sigillo.dtInserimento | date:'dd/MM/yyyy HH:mm:ss'}}
+                      </td>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #popTitle>Informazioni sigillo in errore</ng-template>
+            <i class="fas fa-file"></i>
+        </span>
+        <ng-template #noPopoverErroreSigillo>
+            <span class="text-success">
+                <i class="fas fa-file"></i>
+            </span>
+        </ng-template>
+      </ng-container>
+  </span>
+
+

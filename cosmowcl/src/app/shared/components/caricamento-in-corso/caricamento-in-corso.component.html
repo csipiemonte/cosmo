@@ -1,0 +1,17 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row w-100 mb-3" style="margin-top: {{ topMargin }}; padding-bottom: {{ bottomMargin }};">
+    <div class="col-12">
+        <div class="w-100 text-center">
+            <!--
+            <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+            -->
+            <i class="{{ icon }} fa-pulse fa-2x"></i>
+            <div *ngIf="loadingMessage" class="mt-5">
+                <small>{{ loadingMessage }}</small>
+            </div>
+        </div>
+    </div>
+</div>

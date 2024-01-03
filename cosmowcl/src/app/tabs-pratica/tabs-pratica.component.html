@@ -1,0 +1,190 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<section class="tabs-and-panel" [ngClass]="{'mt-5': !embedded}">
+  <div class="container mobile-first" >
+    <ng-container *ngIf="dettTab.length > 0">
+      <div class="row">
+        <div class="col-12">
+          <ul class="nav nav-tabs" id="tab-navigation" role="tablist" >
+            <div *ngFor="let tab of dettTab">
+              <ng-container [ngSwitch]="tab.codice">
+                <ng-container *ngSwitchCase="'docs'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [nomeTabAttivo]="'docs'"
+                  [id]="'docs-tab'"
+                  [ariaControls]="'docs'"
+                  [descrizioneTab] = "'pratica.documenti' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'summary'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!embedded"
+                  [nomeTabAttivo]="'summary'"
+                  [id]="'summary-tab'"
+                  [ariaControls]="'summary'"
+                  [descrizioneTab] = "'pratica.riassunto' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'comments'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!isEsterna"
+                  [nomeTabAttivo]="'comments'"
+                  [id]="'comments-tab'"
+                  [ariaControls]="'comments'"
+                  [descrizioneTab] = "'pratica.commenti.tab_title' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'associated-practices'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!embedded"
+                  [condizioneElemento] = "pratica?.associata"
+                  [nomeTabAttivo]="'associated-practices'"
+                  [id]="'associazioni-tab'"
+                  [ariaControls]="'associated-practices'"
+                  [descrizioneTab] = "'pratica.pratiche_associate.tab_title' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'history'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!embedded"
+                  [nomeTabAttivo]="'history'"
+                  [id]="'history-tab'"
+                  [ariaControls]="'history'"
+                  [descrizioneTab] = "'pratica.storico_attivita.tab_title' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'dati-pratica'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!embedded && codiceForm"
+                  [nomeTabAttivo]="'dati-pratica'"
+                  [id]="'dati-pratica-tab'"
+                  [ariaControls]="'dati-pratica'"
+                  [descrizioneTab] = "'pratica.dati_pratica.tab_title' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+                <ng-container *ngSwitchCase="'workflow'">
+                  <app-tab-singolo
+                  #tabSingolo
+                  [condizioneLista] = "!isEsterna"
+                  [condizioneElemento] = "!pratica?.dataFinePratica"
+                  [nomeTabAttivo]="'workflow'"
+                  [id]="'workflow-tab'"
+                  [ariaControls]="'workflow'"
+                  [descrizioneTab] = "'pratica.workflow.tab_title' | translate"
+                  [tabAttivo]="tabAttivo"
+                  (tabActivated)="tabActivatedEmitter($event)"
+                  (lazyLoadedEmitter)="setLazyLoaded($event)"
+                  ></app-tab-singolo>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ul>
+        </div>
+      </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="tab-content" id="tab-content" *ngIf="pratica">
+
+          <!-- CONTENT DOCUMENTI: Start -->
+          <div *ngIf="lazyLoaded['docs']" class="tab-pane fade show" id="docs" role="tabpanel"
+            aria-labelledby="docs-tab" [ngClass]="{'active show': tabAttivo === 'docs', 'px-4 py-5': !embedded}"
+          >
+            <app-consultazione-documenti
+              [idPratica]="pratica?.id"
+              [soloLettura]="true"
+              [embedded]="embedded"
+              [identificativo]="'dettaglio-pratica'"
+              [daFirmare]="false"
+              [codiceModaleAnteprima]="'anteprima-documento-dettaglio'"
+              [codiceModalePreview]="'preview-documento-dettaglio'"
+              [codiceModaleInfoSigillo]="'info-sigillo-dettaglio'"
+              [codiceModaleInfoFea]="'info-fea-dettaglio'"
+              [codiceModaleInfoFirma]="'info-firma-dettaglio'"
+              >
+            </app-consultazione-documenti>
+          </div>
+          <!-- CONTENT DOCUMENTI: End -->
+
+          <!-- CONTENT RIASSUNTO: Start -->
+          <div *ngIf="lazyLoaded['summary'] && !embedded" class="tab-pane fade" id="summary" role="tabpanel"
+            aria-labelledby="summary-tab" [ngClass]="{'active show': tabAttivo === 'summary', 'px-4 py-5': !embedded}">
+            <app-riassunto [riassunto]="pratica?.riassunto">
+            </app-riassunto>
+          </div>
+          <!-- CONTENT RIASSUNTO: End -->
+
+          <!-- CONTENT COMMENTI: Start -->
+          <div *ngIf="lazyLoaded['comments'] && !isEsterna" class="tab-pane fade" id="comments" role="tabpanel"
+            aria-labelledby="comments-tab" [ngClass]="{'active show': tabAttivo === 'comments', 'px-4 py-5': !embedded}">
+            <app-commenti [pratica]="pratica">
+            </app-commenti>
+          </div>
+          <!-- CONTENT COMMENTI: End -->
+
+          <!-- CONTENT ASSOCIAZIONE PRATICHE: Start -->
+          <div *ngIf="lazyLoaded['associated-practices'] && pratica?.associata && !embedded" class="tab-pane fade"
+            id="associated-practices" role="tabpanel"
+            aria-labelledby="associazioni-tab" [ngClass]="{'active show': tabAttivo === 'associated-practices', 'px-4 py-5': !embedded}">
+            <app-pratiche-associate [idPratica]="pratica.id" [isAssociazioneTask]="false">
+            </app-pratiche-associate>
+          </div>
+          <!-- CONTENT ASSOCIAZIONE PRATICHE: End -->
+
+          <!-- CONTENT STORICO ATTIVITÀ: Start -->
+          <div *ngIf="lazyLoaded['history'] && !embedded" class="tab-pane fade" id="history" role="tabpanel"
+            aria-labelledby="history-tab" [ngClass]="{'active show': tabAttivo === 'history', 'px-4 py-5': !embedded}">
+            <app-storico-attivita [pratica]="pratica">
+            </app-storico-attivita>
+          </div>
+          <!-- CONTENT STORICO ATTIVITÀ: End -->
+
+          <!-- CONTENT DATI PRATICA: Start -->
+          <div *ngIf="lazyLoaded['dati-pratica'] && codiceForm && !embedded" class="tab-pane fade" id="dati-pratica" role="tabpanel"
+            aria-labelledby="dati-pratica-tab" [ngClass]="{'active show': tabAttivo === 'dati-pratica', 'px-4 py-5': !embedded}">
+            <app-dati-pratica [pratica]="pratica" [formCodice]="codiceForm">
+            </app-dati-pratica>
+          </div>
+          <!-- CONTENT DATI PRATICA: End -->
+
+          <!-- CONTENT WORKFLOW: Start -->
+          <div *ngIf="lazyLoaded['workflow'] && !pratica?.dataFinePratica && !isEsterna" class="tab-pane fade"
+            id="workflow" role="tabpanel" aria-labelledby="workflow-tab"
+            [ngClass]="{'active show': tabAttivo === 'workflow', 'px-4 py-5': !embedded}">
+            <app-dettaglio-praticaworkflow [pratica]="pratica">
+            </app-dettaglio-praticaworkflow>
+          </div>
+
+          <!-- CONTENT WORKFLOW: End -->
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  </div>
+</section>

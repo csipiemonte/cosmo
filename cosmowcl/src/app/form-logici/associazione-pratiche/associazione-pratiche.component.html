@@ -1,0 +1,15 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row">
+    <button class="btn btn-sm btn-outline-primary ml-3" (click)="cercaPratiche()">
+      <i class="fas fa-search mr-2"></i>Cerca pratiche
+    </button>
+  </div>
+
+  <app-pratiche-associate [idPratica]="pratica.id" [isAssociazioneTask]="true" #praticheAssociate></app-pratiche-associate>
+
+</div>

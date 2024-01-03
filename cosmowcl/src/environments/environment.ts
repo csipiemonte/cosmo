@@ -1,0 +1,41 @@
+export const environment = {
+  production: false,
+  debug: true,
+  moreAccesses: false,
+  environmentName: 'local',
+  beServer: 'http://localhost:4200/',
+  internetHostname: 'localhost',
+  intranetHostname: 'localhost',
+  intracomHostname: 'localhost',
+  wsServer: 'ws://localhost:8080/',
+  alternativeWsServer: 'ws://localhost:8080/',
+  beServerContextRoot: 'cosmo',
+  api: 'api/',
+  apiAuthorization: 'api/proxy/authorization/',
+  apiCmmn: 'api/proxy/cmmn/',
+  apiPratiche: 'api/proxy/pratiche/',
+  apiEcm: 'api/proxy/ecm/',
+  apiBusiness: 'api/proxy/business/',
+  deployContextPath: '',
+  wsContext: 'websocket/',
+  shibbolethSSOLogoutURLInternet: 'https://intranet.it/',
+  shibbolethSSOLogoutURLIntranet: 'https://intranet.it/',
+  shibbolethSSOLogoutURLIntracom: 'https://intranet.it/',
+  httpMockDelay: 100,
+  enableWebSockets: true,
+  idle: {
+    beforeWarning: 60,
+    beforeTimeout: 30
+  },
+  firmaDigitale: {
+    mock: true
+  },
+  intranetInternet: 'https://intranet.it/',
+  intranetIntranet: 'https://intranet.it/',
+  intranetIntracom: 'https://intranet.it/',
+  formioServer: 'http://127.0.0.1:3001',
+  basicAuthUsername: 'COSMO_ANGULAR_UI',
+  basicAuthPassword: 'f3Tmnfk5hL3cHsK6',
+  enableSystemNotifications: true,
+  enableExceptionMessage: true
+};

@@ -1,0 +1,29 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+.admin-card {
+    border: 0.5px solid #5555;
+    min-width: 15em;
+    margin-right: 1em;
+    cursor: pointer;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    max-width: 30vw;
+}
+
+.admin-card .card-icon {
+    font-size: 1.50em;
+    padding-top: 0.25em;
+    padding-right: 0.50em;
+}
+
+.admin-card .card-title {
+    padding-bottom: 0.5em;
+}
+
+.admin-card:hover {
+    border: 1px solid;
+    min-width: 15em;
+    margin-right: 1em;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 50%) !important;
+}

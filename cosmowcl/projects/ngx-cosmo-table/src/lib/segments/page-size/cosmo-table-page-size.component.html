@@ -1,0 +1,17 @@
+<ng-container *ngIf="render">
+  <!-- PAGINATION -->
+  <ng-container *ngIf="currentResultNumber > 0 && currentEnablePagination">
+    <!-- PAGE SIZE -->
+    <div class="inline-block inline-block-bottom">
+      <span ngbDropdown [container]="'body'" *ngIf="shouldDisplayPageSizePicker">
+        <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" ngbDropdownToggle>{{ 'table.common.messages.page_size_button' | translate:{current: currentPageSize} }}</button>
+        <span ngbDropdownMenu>
+          <button type="button" ngbDropdownItem *ngFor="let pageSize of currentSelectablePageSizes" 
+            (click)="clickOnPageSize(pageSize)" [disabled]="pageSize === currentPageSize">
+            {{ pageSize }}
+          </button>
+        </span>
+      </span>
+    </div>
+  </ng-container>
+</ng-container>

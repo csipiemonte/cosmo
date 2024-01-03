@@ -1,0 +1,14 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="messaggiObbligatori && messaggiObbligatori.length > 0">
+  <span *ngFor="let messaggio of messaggiObbligatori">
+    <p *ngIf="messaggio.tipoMessaggio === 1" class="alert alert-danger">
+      {{messaggio.messaggio}}
+    </p>
+    <p *ngIf="messaggio.tipoMessaggio === 0" class="alert alert-warning">
+      {{messaggio.messaggio}}
+    </p>
+  </span>
+</div>

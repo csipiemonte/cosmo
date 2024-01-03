@@ -1,0 +1,59 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ckeditor
+    #nativeControl
+    [editor]="editor"
+    [config]="editorConfig"
+    [(ngModel)]="controlValue"
+    [disabled]="isDisabled"
+    [class.disabled]="isDisabled"
+    (change)="change($event)"
+></ckeditor>
+
+<ng-container *ngTemplateOutlet="progressBarCaratteri; context:{
+    $implicit: percentualeCaratteri()
+}"></ng-container>
+
+<ng-template #progressBarCaratteri let-percentuale>
+    <div class="progress-caratteri-container" *ngIf="percentuale > 0">
+      <div class="progress">
+        <div
+          role="progressbar"
+          class="progress-bar"
+          style="width: {{ percentuale }}%"
+          [attr.aria-valuenow]="percentuale"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [ngClass]="{
+            'bg-warning': percentuale >= 75 && !(percentuale >= 99),
+            'bg-danger': percentuale >= 99
+          }"
+        ></div>
+      </div>
+    </div>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="progressBarByte; context:{
+  $implicit: percentualeGrandezza()
+}"></ng-container>
+
+<ng-template #progressBarByte let-percentuale>
+  <div class="progress-byte-container" *ngIf="percentuale > 0">
+    <div class="progress">
+      <div
+        role="progressbar"
+        class="progress-bar"
+        style="width: {{ percentuale }}%"
+        [attr.aria-valuenow]="percentuale"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [ngClass]="{
+          'bg-warning': percentuale >= 75 && !(percentuale >= 99),
+          'bg-danger': percentuale >= 99
+        }"
+      ></div>
+    </div>
+  </div>
+</ng-template>

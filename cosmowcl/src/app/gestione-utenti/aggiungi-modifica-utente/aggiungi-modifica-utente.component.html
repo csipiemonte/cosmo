@@ -1,0 +1,199 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      gestione utenti
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">Gestione utenti</h2>
+    </div>
+  </div>
+   <br>
+  <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" *ngIf="utenteForm">
+    <h3>{{"utenti.anagrafica" | translate}}</h3>
+    <br>
+    <div class="row mt-3">
+      <div class="col-lg-5 col-sm-12 form-group">
+        <label [ngClass]="{'active': utenteForm?.controls['codiceFiscale'].value}" for="codiceFiscale">
+          {{"utenti.codice_fiscale" | translate}}
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': utenteForm?.controls['codiceFiscale'].touched && utenteForm?.controls['codiceFiscale'].invalid }"
+          type="text" id="codiceFiscale" name="codiceFiscale" formControlName="codiceFiscale" class="form-control"
+          maxlength="16">
+        <div class="invalid-feedback"
+          *ngIf="utenteForm?.controls['codiceFiscale'].touched && utenteForm?.controls['codiceFiscale'].invalid">
+          <p *ngIf="utenteForm?.controls['codiceFiscale']?.hasError('required')">
+            {{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="utenteForm?.controls['codiceFiscale']?.hasError('pattern')">
+            {{"errori.codice_fiscale_non_valido" | translate}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-between">
+      <div class="col-lg-5 col-sm-12 form-group">
+        <label [ngClass]="{'active': utenteForm?.controls['nome'].value}" for="nome">
+          {{"utenti.nome" | translate}}
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': utenteForm?.controls['nome'].touched && utenteForm?.controls['nome'].invalid }"
+          type="text" id="nome" name="nome" formControlName="nome" class="form-control" maxlength="100">
+        <div class="invalid-feedback"
+          *ngIf="utenteForm?.controls['nome'].touched && utenteForm?.controls['nome'].invalid">
+          <p *ngIf="utenteForm?.controls['nome']?.hasError('required')">{{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+      <div class="col-lg-5 col-sm-12 form-group">
+        <label [ngClass]="{'active': utenteForm?.controls['cognome'].value}"
+          for="cognome">{{"utenti.cognome" | translate}}</label>
+        <input
+          [ngClass]="{ 'is-invalid': utenteForm?.controls['cognome'].touched && utenteForm?.controls['cognome'].invalid }"
+          type="text" id="cognome" name="cognome" formControlName="cognome" class="form-control" maxlength="100">
+        <div class="invalid-feedback"
+          *ngIf="utenteForm?.controls['cognome'].touched && utenteForm?.controls['cognome'].invalid">
+          <p *ngIf="utenteForm?.controls['cognome']?.hasError('required')">{{"errori.campo_obbligatorio" | translate}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-between">
+      <div class="col-lg-5 col-sm-12  form-group">
+        <label [ngClass]="{'active': utenteForm?.controls['email'].value}" for="email">
+          {{"utenti.email" | translate}}
+        </label>
+        <input
+        [ngClass]="{ 'is-invalid': utenteForm?.controls['email'].touched && utenteForm?.controls['email'].invalid }"
+          type="email" id="email" name="email" formControlName="email" class="form-control" maxlength="50">
+        <div class="invalid-feedback" *ngIf="utenteForm?.controls['email'].touched && utenteForm?.controls['email'].invalid">
+          <p *ngIf="utenteForm?.controls['email']?.hasError('email')">{{"errori.email_non_valida" | translate}}</p> 
+          <p *ngIf="utenteForm?.controls['email']?.hasError('required')">{{"errori.campo_obbligatorio" | translate}}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12  form-group">
+        <label [ngClass]="{'active': utenteForm?.controls['telefono'].value}" for="telefono">{{"utenti.telefono" | translate}}</label>
+        <input type="tel" id="telefono" name="telefono" formControlName="telefono" class="form-control" maxlength="30">
+      </div>
+    </div>
+
+    <div class="row justify-content-between it-datepicker-wrapper">
+      <div class="col-lg-5 col-sm-12 form-group">
+        <input
+        [ngClass]="{ 'is-invalid': utenteForm?.controls['inizioValidita'].touched && utenteForm?.controls['inizioValidita'].invalid }"
+        class="form-control it-date-datepicker" id="inizioValidita" name="inizioValidita"
+          formControlName="inizioValidita" type="date" placeholder="gg/mm/aaaa">
+        <label for="inizioValidita">{{"utenti.inizio_validita" | translate}}</label>
+        <div class="invalid-feedback" *ngIf="utenteForm?.controls['inizioValidita'].touched && utenteForm?.controls['inizioValidita'].invalid">
+          <p *ngIf="utenteForm?.controls['inizioValidita']?.hasError('required')">
+            {{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12  form-group">
+        <input class="form-control it-date-datepicker" id="fineValidita" name="fineValidita"
+          formControlName="fineValidita" type="date" placeholder="gg/mm/aaaa">
+        <label for="fineValidita">{{"utenti.fine_validita" | translate}}</label>
+      </div>
+    </div>
+    <hr>
+    <br>
+
+    <h3>{{"utenti.profili" | translate}}</h3>
+
+    <div class="row justify-content-between mt-3">
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"utenti.profili_utente" | translate}}</span>
+        <div [ngStyle]="{'border-color': dragAndDropIsTouched && profili.length==0 ? '#d9364f' : '#5c6f82'}" cdkDropList
+          #profiliUtentiList="cdkDropList" [cdkDropListData]="profili" [cdkDropListConnectedTo]="[profiliSuDBList]"
+          class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box"
+            *ngFor="let profilo of profili"
+            cdkDrag
+            [cdkDragDisabled]="!canRemoveProfile(profilo)"
+          >
+            <div class="w-100">
+              <div class="row">
+                <div class="col-10">
+                  <p class="text">
+                    <span class="fas fa-user-lock mr-2"></span>
+                    {{profilo.descrizione}}
+                  </p>
+                </div>
+                <div class="col-2 text-right">
+                  <span *ngIf="!canRemoveProfile(profilo)">
+                    <span class="fas fa-ban text-warning" title="impossibile rimuovere i diritti di amministrazione per l'ente all'utente corrente"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="example-box empty-tip" *ngIf="!(profili?.length)">
+            <div>
+              <p class="text">
+                <span class="fas fa-times mr-2"></span>
+                <em>Nessun profilo associato.</em>
+                <br/>
+                <em class="a-bit-smaller">Trascina qui un profilo dall'elenco sulla destra per associarlo all'utente.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div style="color: #d9364f;font-size: 0.777rem;" *ngIf="dragAndDropIsTouched && profili.length==0">
+          <p>
+            {{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-1 text-center">
+        <span class="d-none d-lg-block pt-5">
+          <span class="fas fa-exchange-alt"></span>
+        </span>
+      </div>
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"utenti.profili_associabili" | translate}}</span>
+        <div cdkDropList #profiliSuDBList="cdkDropList" [cdkDropListData]="profiliDisponibili"
+          [cdkDropListConnectedTo]="[profiliUtentiList]" class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let profiloDisponibile of profiliDisponibili" cdkDrag>
+            <div>
+              <p class="text">
+                <span class="fas fa-user-lock mr-2"></span>
+                {{profiloDisponibile.descrizione}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!utenteForm?.valid || profili.length==0">
+          {{"common.salva" | translate}}
+        </button>
+        &nbsp;
+        <button type="button" class="btn btn-sm btn-danger btn-action" (click)="pulisciCampi()">
+          {{"common.annulla_modifiche" | translate}}
+        </button>
+      </div>
+    </div>
+    <br>
+  </form>
+</div>

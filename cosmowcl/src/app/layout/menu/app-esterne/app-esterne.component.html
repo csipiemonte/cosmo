@@ -1,0 +1,94 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div cdkDropList #appConfigurateList="cdkDropList" [cdkDropListData]="applicazioniConfigurate"
+  [cdkDropListConnectedTo]="appConfigurabiliList" class="app-list direction scroll" (cdkDropListDropped)="drop($event)">
+  <div *ngFor="let appConfigurata of applicazioniConfigurate" cdkDrag [cdkDragDisabled]="hiddenButton" cdkDragLockAxis="y">
+
+    <a class="container app-list-item-direction" style="cursor: default; padding: 0px; "
+      title="{{getAppTitle(appConfigurata, false)}}">
+
+      <div style="margin: 10px 5px;" [ngStyle]="{'padding-right': dropDownApp(appConfigurata) ? '12.5px' : '0px'}">
+        <div class="imageDiv">
+          <img style="cursor: pointer" [src]="getLogo(appConfigurata.icona)" height="30" width="30"
+            (click)="getAppLink(appConfigurata)" />
+        </div>
+        <div class="imageDiv overlap">
+          <i [hidden]="hiddenButton" class="fas fa-times-circle remove-image"
+            (click)="spostaConfigurate(appConfigurata)"></i>
+        </div>
+      </div>
+
+
+      <div [hidden]="dropDownApp(appConfigurata)">
+        <a style="margin-top: 12px; padding: 0px;" class="nav-link dropdown-toggle" id="funzionalita" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="span fas fa-angle-right ml-1"></span>
+        </a>
+        <div class="dropdown-menu app-menu" [ngClass]="{'shadow' : !hiddenButton}" aria-labelledby="funzionalita">
+          <div class="dnd-sortable-wrapper ">
+            <p>{{getAppTitle(appConfigurata, false) | uppercase}}</p>
+            <ul class="nav navbar-nav justify-content-end mt-3 mt-md-0">
+              <ng-container *ngFor="let funzionalita of appConfigurata.funzionalita">
+                <li *ngIf="!funzionalita.principale" class="nav-link nav-funzionalita">
+                  <span style="cursor: pointer" (click)="getFunzionalitaLink(funzionalita)">
+                    {{funzionalita.descrizione}}
+                  </span>
+                  <span>
+                    <i [hidden]="hiddenButton" class="fas fa-times-circle remove-image" style="cursor: pointer"
+                      (click)="spostaFunzionalitaConfigurate(appConfigurata, funzionalita)"></i>
+                  </span>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="nav-item d-inline dropup" style="cursor: default; bottom: 0px;
+    top: auto;
+    position: absolute;">
+
+  <a class="nav-link dropdown-toggle" style="padding-left: 15px; margin-top: 10px;" title="Impostazioni applicazioni"
+    role="button" (click)="showButton()" [attr.aria-expanded]="!hiddenButton" aria-controls="leftNavSettings">
+    <i class="fas fa-ellipsis-h" [ngStyle]="{'color': hiddenButton ? '#FFFFFF' : '#FF9700' }"></i>
+  </a>
+  <div id="leftNavSettings" class="dropdown-menu noborder" [ngbCollapse]="hiddenButton"
+    [hidden]="!applicazioniConfigurabili || applicazioniConfigurabili.length==0">
+    <div class="dnd-sortable-wrapper">
+
+      <section class="panel">
+        <div class="px-4">
+          <small>Trascina le applicazioni che desideri visualizzare nel menù di accesso rapido.</small>
+        </div>
+        <div class="panel-body" style="margin-top: 20px;">
+          <div cdkDropList #appConfigurabiliList="cdkDropList" [cdkDropListData]="applicazioniConfigurabili"
+            cdkDropListSortingDisabled [cdkDropListConnectedTo]="[appConfigurateList]" class="app-list scroll"
+            (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let appConfigurabile of applicazioniConfigurabili" cdkDrag style="margin-bottom: 15px;">
+              <div>
+                <img [src]="getLogo(appConfigurabile.icona)" height="35" width="35"
+                  style="padding: 5px;" />{{getAppTitle(appConfigurabile, true)}}
+
+                <div style="margin-left: 35px;" *ngIf="funzionalitaNonPrincipali(appConfigurabile)" cdkDropList
+                  id="{{appConfigurabile.id}}" [cdkDropListData]="appConfigurabile.funzionalita"
+                  cdkDropListSortingDisabled [cdkDropListConnectedTo]="[appConfigurateList]" class="app-list">
+                  <div *ngFor="let funzionalita of appConfigurabile.funzionalita" cdkDrag style="margin-bottom: 10px;">
+                    <span *ngIf="!funzionalita.principale">
+                      {{funzionalita.descrizione}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

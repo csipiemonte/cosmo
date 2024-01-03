@@ -1,0 +1,42 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="pratica">
+     <ng-container *ngIf="image; else noDiagram" >
+          <div *ngIf="!isImgLoaded" class="loading pt-5 pb-5 w-100 text-center">
+               <i class="fas fa-circle-notch fa-spin"></i>
+          </div>
+          <div *ngIf="isImgLoaded" class="form-check col-sm-4">
+               <div class="toggles">
+                 <label class="label" for="toggleAll">Ingrandimento automatico
+                   <input type="checkbox" id="toggleAll" [(ngModel)]="autoZoom">
+                   <span class="lever"></span>
+                 </label>
+               </div>
+             </div>
+          <img *ngIf="autoZoom; else noZoom" class="mobile-first"
+               [src]="image"
+               alt="Workflow"
+               loading="lazy"
+               (load)="hasLoaded()"
+               redZoom="{{image}}"
+               redZoomClass="red-zoom--style--custom">
+          <ng-template #noZoom>
+          <img class="mobile-first"
+               [src]="image"
+               alt="Workflow"
+               loading="lazy"
+               (load)="hasLoaded()">
+          </ng-template>
+     </ng-container>
+     <ng-template #noDiagram>
+          <div *ngIf="!loading">
+               {{'pratica.workflow.no_diagram' | translate}}
+          </div>
+          <div *ngIf="loading">
+               <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+          </div>
+     </ng-template>
+</ng-container>
+

@@ -1,0 +1,88 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+    <div class="row mt-3 mb-3">
+        <button type="button" class="btn btn-link btn-xs mr-2 clickable" (click)="goBack()">
+          <span class="fas fa-backspace pr-2"></span> Home
+        </button>
+    </div>
+
+    <h2 class="mt-3 mb-5">{{ "sigillo_elettronico.header" | translate }}</h2>
+    
+    <ng-container>
+
+      <div class="row mt-3" *ngIf="table">
+          <div class="col-12 col-lg-4 pt-1">
+            <button class="btn btn-primary btn-sm" (click)="aggiungi()">
+              <span class="fas fa-plus-circle mr-2"></span> {{ "sigillo_elettronico.actions.aggiungi" | translate }}
+            </button>
+          </div>
+          <div class="col-12 col-lg-4 text-center">
+              <!-- EMPTY -->
+          </div>
+          <div class="col-12 col-lg-4 text-right">
+            <cosmo-table-search-filter *ngIf="table" [table]="table" [enableSearchIn]="false">
+            </cosmo-table-search-filter>
+          </div>
+      </div>
+        
+      <div class="row mt-5">
+          <div class="col-12 table-container mobile-first">
+            <cosmo-table
+              #table
+              [tableDisplayClass]="'table-sm table-hover variant-centered'"
+              [columns]="columns"
+              [paginationMode]="'SERVER'"
+              [dataProvider]="dataProvider"
+              [enablePagination]="true"
+              [enableSorting]="true"
+              [enableRowExpansion]="false"
+              [enableMultipleRowExpansion]="false"
+              [defaultSortingDirection]="'ASC'"
+              [defaultSortingColumn]="'alias'"
+              [itemIdentifier]="'alias'"
+              [enableItemTracking]="true"
+              [storeAdapter]="storeAdapter"
+              [enableStorePersistence]="true"
+            >
+              <!-- celle custom -->
+              <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+    
+                <!-- cella ICONA DETTAGLIO -->
+                <div *ngIf="column.name === 'azioni'">
+                  <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button" (click)="modifica(row)">
+                    <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                  </button>
+                  <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="elimina(row)">
+                    <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                  </button>
+                </div>
+    
+              </ng-template>
+
+            </cosmo-table>
+          </div>
+      </div>
+    
+      <div class="row mt-3" *ngIf="table">
+          <div class="col-12 col-lg-3">
+            <!-- EMPTY -->
+          </div>
+          <div class="col-12 col-lg-6 text-center">
+            <cosmo-table-pagination *ngIf="table"
+              [table]="table"
+            ></cosmo-table-pagination>
+          </div>
+          <div class="col-12 col-lg-3 text-right pt-2">
+            <cosmo-table-page-size *ngIf="table"
+              [table]="table"
+            ></cosmo-table-page-size>
+          </div>
+      </div>
+    
+    </ng-container>
+
+</div>
+

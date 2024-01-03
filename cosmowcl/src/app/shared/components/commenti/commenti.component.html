@@ -1,0 +1,29 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+</ng-container>
+<ng-container *ngIf="loading">
+  <app-caricamento-in-corso></app-caricamento-in-corso>
+</ng-container>
+
+<ng-container *ngIf="!loading && !loadingError">
+
+  <p class="mt-3"><span role="status">{{commenti.length | i18nPlural: messageMapping}}</span></p>
+
+  <!-- Button trigger modal -->
+  <button class="btn btn-link text-none font-weight-bold px-0" type="button" data-toggle="modal"
+    data-target="#modalCenter" (click)="inserisciCommento()"
+    *ngIf="!readOnly"
+  >
+    {{'pratica.commenti.nuovo_commento' | translate}}
+  </button>
+
+  <ng-container *ngFor="let commento of commenti">
+    <app-commento [commento]="commento" [readOnly]="readOnly">
+    </app-commento>
+  </ng-container>
+
+</ng-container>

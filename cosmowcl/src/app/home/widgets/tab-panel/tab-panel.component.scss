@@ -1,0 +1,85 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+@import 'variables';
+@import 'typography';
+
+.card-monitoring { transition:all .5 ease; min-height:83px; border-left:5px solid #000; margin-bottom:1rem !important; }
+.card-stilo { border-color: $rp_stilo; }
+.card-pratica { border-color: $rp_pratica; }
+.card-pec { border-color: $rp_pec; }
+
+.card .dropdown-menu { min-width:250px; font-size:.8rem; }
+.card .dropdown-menu .link-list-wrapper ul li a span { color:$rp_text_color; }
+.card-monitoring .fas, .card-monitoring .far { color:$rp_lightblue; }
+.card-monitoring .card-body { padding:8px 10px; }
+.card-monitoring h2 { text-transform: uppercase; font-size:.9rem; height:28px;}
+.card-monitoring h2, .card-monitoring hr { margin:3px 0; }
+.monitoring-badge { font-weight: normal; margin-top:5px; font-size:.6rem; margin-bottom:1px;}
+.card-left-icon { color:$rp_darkblue; font-size:30px; line-height: 40px !important; text-align:center; padding:5px; border:1px solid $rp_darkblue; border-radius: 100%; width:50px; height:50px; }
+
+.card-monitoring .media button { width:14px; height:24px;}
+.card-monitoring .media button i { display:none; }
+.card-monitoring:hover .media button i, .card-monitoring .media button:focus i { display:inline-block; }
+.card-monitoring .media .btn-notifications i { display:inline-block; }
+.card-monitoring:hover .media .btn-notifications {  display:inline-block; margin-right:0; }
+.card-monitoring .expanded { display:none; padding-top:20px; }
+.card-monitoring.is-open .expanded { display: block; }
+
+.notifications { min-height:398px; max-height:398px; }
+.notifications ul { list-style: none; margin:0; padding:0; }
+.notifications ul li { position: relative; padding:10px 20px; border-bottom:1px solid $rp_darkblue; }
+.notifications ul li:last-child { border-bottom:0; }
+.notifications ul li.unread { background:$rp_extralightblue;  }
+.notifications ul li:hover a { color:$rp_text_color; }
+.notifications ul li p { margin:0 0 5px; }
+.notifications .badge {text-transform: uppercase; font-size:0.6rem; }
+.notifications .card-body { min-height:378px; max-height:378px; overflow:auto;}
+.notifications .time { font-size:0.7rem; margin-left:5px; }
+.notifications .toggle-read { position: absolute; color:#14233a; cursor:pointer; background:transparent; border:0;  top:10px; right:10px;  }
+
+.notifications ul li.unread .badge-stilo { color:$rp_stilo; background:#FFF; }
+.notifications ul li.unread .badge-pec { color:$rp_pec; background:#FFF; }
+.notifications ul li.unread .badge-pratica { color:$rp_pratica; background:#FFF; }
+
+@media screen and (min-width:992px) {
+    .notifications .toggle-read { display:none; }
+    .notifications .toggle-read.show-toggle { display:block; }
+    .notifications li:hover .toggle-read { display:block; }
+}
+
+#monitoringSettings { min-width:800px; padding:0; margin:0; }
+#leftNavSettings { border:0 !important; }
+.dnd-sortable-list { text-align:left; }
+.dnd-sortable-list .list-group-item { position: relative; cursor: grab; }
+.dnd-sortable-list .drag-icon, .sortable-list .drag-icon { width:2px; height:25px; background:$rp_lightblue; display: block; position: absolute; right:20px; top:1.2rem; }
+.dnd-sortable-list .drag-icon:after, .sortable-list .drag-icon:after { content:""; width:2px; height:25px; background:$rp_lightblue; display: block; position: absolute; right:7px; top:0; }
+#leftNavSettings .drag-icon { background:#FFF; }
+#leftNavSettings .drag-icon:after { background:#FFF; }
+#monitoringSettings .list-group-item { color:$rp_lightblue; }
+#monitoringSettings .card-header { padding:24px; border-bottom:0; }
+
+.table-sm td, .table-sm th { padding:.5rem; vertical-align: middle; }
+.table-sm td.icon, .table-sm th.icon { padding:.5rem; vertical-align: middle; text-align: center; width:32px; }
+.table-sm th { font-weight: normal;}
+.table-sm { font-size:.7rem; }
+.table .odd { background-color:#f6f7f9; }
+.card.no-after .table { margin-bottom:0; }
+.table-sm .fas, .table-sm .far { color:$rp_lightblue; }
+.btn-action-icon:hover .fas, .btn-action-icon:hover .far { color:$rp_orange; }
+
+
+.table-container { padding:10px; }
+
+
+@media screen and (max-width: 991px) {
+  .mobile-first  {padding: 0px !important;}
+}
+
+
+.expanded-row { display:none; }
+.expanded-row.is-open { display:table-row; }
+
+.nav-tabs {  border-bottom-color:#b1b1b3;  }
+.nav-tabs .nav-item { text-transform: uppercase;}

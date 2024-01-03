@@ -1,0 +1,92 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+        (click)="modal.dismiss('click_on_back_arrow')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      &nbsp; {{ "firma_digitale.titolo" | translate }}
+    </h5>
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+
+  </div>
+
+  <div class="modal-body">
+    <h3><span role="status">{{documenti.length | i18nPlural: messageMapping}}</span></h3>
+
+    <div class="table-container mb-3 ">
+
+      <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="documenti" [columns]="columns"
+        [enablePagination]="true" [paginationMode]="'CLIENT'" [defaultPageSize]="5" [enableSorting]="true">
+
+        <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+          <!-- TEMPLATE PER LA COLONNA CON IL FORMATO-->
+          <div *ngIf="column.name === 'formato'">
+            <app-template-formato-documenti [documento]="row" [codiceModale]="'anteprima-documento-firma-digitale'"></app-template-formato-documenti>
+          </div>
+
+          <!-- TEMPLATE PER L'ALERT-->
+          <div class="text-right" *ngIf="column.name === 'alert'">
+            <app-template-alert-documenti [documento]="row"></app-template-alert-documenti>
+          </div>
+        </ng-template>
+      </cosmo-table>
+
+      <div class="row text-center">
+        <div class="col-sm-12">
+          <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+        </div>
+      </div>
+    </div>
+
+    <app-certificati-firma #certificatiFirma [profiliFeqAbilitati]="profiliFeqAbilitati" [codiceTipoPratica]="codiceTipoPratica"></app-certificati-firma>
+
+
+    <div class="row" style="padding-top: 50px;">
+      <div class="col-auto">
+        <button class="btn btn-primary btn-sm btn-action" type="button"
+        [disabled]="disabilitaRichiediOTP" (click)="richiediOTP()">{{"firma_digitale.richiedi_otp" | translate}}</button>
+      </div>
+      <div class="form-group col-md-4">
+        <label class="active" for="inputTextModalFirmaOTP">{{"firma_digitale.inserisci_otp_ricevuto" | translate}}</label>
+        <input type="text" class="form-control border" id="inputTextModalFirmaOTP" placeholder=" " [(ngModel)]="otp" >
+      </div>
+    </div>
+
+    <div class="row" style="padding-bottom: 50px;" *ngIf="staFirmando || percentualeFirma===100">
+      <div class="col-12">
+        <h3><span role="status">{{"firma_digitale.completamento_firma" | translate}}</span></h3>
+      </div>
+      <div class="col-12">
+        <span>{{ 'firma_digitale.documenti_firmati' | translate:{ numeroDocumento: numeroDocumento, totaleDocumenti: totaleDocumenti } }}</span>
+      </div>
+      <div class="col-12">
+        <div class="progress custom-progress rounded">
+          <div class="progress-bar bg-success" role="progressbar" [ngStyle]="{'width': percentualeFirma + '%'}"></div>
+          <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{'width': 100-percentualeFirma + '%'}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div *ngIf="isMassivo && !mandareAvantiProcesso">
+      <p class="alert alert-info">
+        {{ "esecuzione_multipla.messaggio" | translate }}
+      </p>
+    </div>
+    <button class="btn btn-outline-primary btn-sm mr-auto js-reset-btn btn-action" type="button" data-dismiss="modal"
+      (click)="modal.dismiss('click_on_back')">{{"common.annulla" | translate}}</button>
+    <button class="btn btn-primary btn-sm js-hide-when-status js-firma-btn btn-action" type="button"
+      [disabled]="disabilitaFirma()" (click)="firma()">{{"common.firma" | translate}}</button>
+  </div>
+</div>

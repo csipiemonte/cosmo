@@ -1,0 +1,709 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <button class="btn btn-outline-primary border-0 shadow btn-block text-left" type="button" (click)="toggleCollapse()"
+    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+    <span class="fas {{ isCollapsed ? 'fa-plus-circle' : 'fa-minus-circle' }}"></span> FILTRA
+  </button>
+  <div [ngbCollapse]="isCollapsed" class="shadow" id="collapseExample">
+    <div class="card card-form w-100 mb-0">
+      <ng-container *ngIf="loadingFiltersError">
+        <div class="row mt-5 text-center">
+          <div class="col-12">
+            <app-caricamento-fallito [error]="loadingFiltersError" (retry)="refresh()"></app-caricamento-fallito>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="loadingFilters">
+        <div class="row mt-5 text-center">
+          <div class="col-12">
+            <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+          </div>
+        </div>
+      </ng-container>
+      <div class="card-body px-4 pb-0 filtersContainer" *ngIf="filtersReady && !loadingFilters && !loadingFiltersError">
+        <form [formGroup]="filterForm">
+          <!-- RIGA FILTRI OGGETTO / TIPOLOGIA / STATO -->
+          <div class="row mt-3 mb-4">
+            <div class="col-12 col-lg-6 form-group">
+              <label for="oggetto" [class.active]="hasValue('oggetto')">OGGETTO</label>
+              <input type="text" class="form-control border" formControlName="oggetto" placeholder=" "
+                [ngClass]="{ 'is-invalid': displayInvalid('oggetto') }" [maxLength]="255" [pattern]="oggettoRegexp"
+                [masking]=maskingRegexp>
+              <div class="invalid-feedback" *ngIf="displayInvalid('oggetto')">
+                <p *ngIf="hasError('oggetto', 'pattern')">alcuni dei caratteri inseriti non sono validi.</p>
+                <p *ngIf="hasError('oggetto', 'maxLength')">troppi caratteri</p>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 form-group bootstrap-select-wrapper">
+              <label>TIPOLOGIA</label>
+              <select title="Seleziona" class="form-control border" formControlName="tipologia">
+                <option [ngValue]="null">Seleziona</option>
+                <option *ngFor="let opt of tipologiePratica" [ngValue]="opt.codice">{{ opt.valore }}</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 form-group bootstrap-select-wrapper"
+              *ngIf="effectiveFiltraPerStatoPratica">
+              <label>STATO</label>
+              <select title="Seleziona" class="form-control border" formControlName="stato">
+                <option [ngValue]="null">Seleziona</option>
+                <option *ngFor="let opt of statiPratica" [ngValue]="opt.codice">{{ opt.valore }}</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 form-group bootstrap-select-wrapper required"
+              *ngIf="effectiveFiltraPerTaskMassivo">
+              <label>TASK</label>
+              <select title="Seleziona" class="form-control border" formControlName="taskMassivo"
+                [ngClass]="{ 'is-invalid': displayInvalid('taskMassivo') }">
+                <option [ngValue]="null">Seleziona</option>
+                <option *ngFor="let opt of taskMassivi" [ngValue]="opt.codice">{{ opt.valore }}</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="displayInvalid('taskMassivo')">
+                <p *ngIf="hasError('taskMassivo', 'required')">campo obbligatorio</p>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6 form-group">
+              <label for="riassunto" [class.active]="hasValue('riassunto')">RIASSUNTO</label>
+              <input type="text" class="form-control border" formControlName="riassunto" placeholder=" "
+                [ngClass]="{ 'is-invalid': displayInvalid('riassunto') }">
+              <div class="invalid-feedback" *ngIf="displayInvalid('riassunto')">
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+
+
+          <div formArrayName="variabili" *ngIf="variabiliFiltro.length && mostraVariabiliProcesso">
+            <div class="row mt-3 mb-4">
+              <div class="col-12 col-lg-4 form-group">
+                <button class="btn btn-primary btn-sm" (click)="aggiungiVariabile()" [disabled]="numeroCheckbox===0">
+                  <span class="fas fa-plus-circle mr-2"></span> AGGIUNGI VARIABILE
+                </button>
+              </div>
+              <div class="col-12 col-lg-8 form-group"></div>
+
+            </div>
+
+
+            <div class="row mt-3 mb-4 " *ngFor="let var of variabiliDiFiltroAssociate?.controls; let i = index;"
+              [formGroupName]="i">
+
+              <div class="col-12 col-lg-4 form-group">
+                <div class="row">
+                  <div class="col-sm-2 text-center">
+                    <button class="btn btn-link btn-lg btn-action-icon text-danger mt-2" type="button"
+                      *ngIf="getControl('variabili['+i+'].variabile')" (click)="eliminaVariabile(i)">
+                      <i class="fas fa-times fa-lg" title="{{ 'common.elimina' | translate }}"></i>
+                    </button>
+                  </div>
+                  <div class="col-sm-10">
+                    <select title="Seleziona" class="form-control border" formControlName="variabile">
+                      <option [ngValue]="null" disabled selected>Seleziona</option>
+                      <option *ngFor="let opt of variabiliDisponibili(i)" [ngValue]="opt">{{ opt.label }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div formGroupName="valore" class="col-12 col-lg-8 form-group">
+                <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='booleano'
+                    || getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='json-booleano'">
+                  <div class="col form-check">
+
+                    <input type="radio" id="{{i}}.true" value="true" formControlName="veroFalso">
+                    <label class="a-bit-smaller" for="{{i}}.true">
+                      <span>VERO</span>
+                    </label>
+
+                    <input type="radio" id="{{i}}.false" value="false" formControlName="veroFalso">
+                    <label class="a-bit-smaller" for="{{i}}.false">
+                      <span>FALSO</span>
+                    </label>
+
+                  </div>
+                  <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.veroFalso')">
+                    <p *ngIf="hasError('variabili['+i+'].valore.veroFalso', 'required')">Campo obbligatorio</p>
+                  </div>
+                </div>
+
+
+                <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='data'
+                    || getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='json-data'">
+                  <div class="it-datepicker-wrapper"
+                    *ngIf="getControl('variabili['+i+'].variabile')?.value?.tipoFiltro?.codice==='singolo'">
+                    <div class="row">
+                      <div class="col-12 col-lg-4 form-group">
+                        <select title="Seleziona" class="form-control border" formControlName="filtro">
+                          <option [ngValue]="null" disabled selected>Seleziona Filtro</option>
+                          <option *ngFor="let opt of filtersDateNumbers" [ngValue]="opt">{{ opt.descrizione }}</option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.filtro')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.filtro', 'required')">Campo obbligatorio</p>
+                        </div>
+                      </div>
+                      <div class=" col-12 col-lg-8 form-group" *ngIf="!isFiltroNull(i)">
+                        <label for="dataSingola" class="inline-label">Data</label>
+                        <input [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.dataSingola') }"
+                          class="form-control it-date-datepicker" formControlName="dataSingola" type="date"
+                          name="dataSingola" id="dataSingola" placeholder="gg/mm/aaaa">
+                        <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.dataSingola')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataSingola', 'required')">Campo obbligatorio</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataSingola', 'dateFormat')">inserisci una data
+                            nel formato gg/mm/aaaa.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="it-datepicker-wrapper"
+                    *ngIf="getControl('variabili['+i+'].variabile')?.value?.tipoFiltro?.codice==='range'">
+                    <div class="row">
+                      <div class="col form-group">
+                        <label class="inline-label" for="dataRangeDa">Da</label>
+                        <input
+                          [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.dataRangeDa') || displayInvalid('variabili['+i+'].valore')}"
+                          class="form-control it-date-datepicker" formControlName="dataRangeDa" name="dataRangeDa"
+                          id="dataRangeDa" type="date" placeholder="gg/mm/aaaa">
+                        <div class="invalid-feedback"
+                          *ngIf="displayInvalid('variabili['+i+'].valore.dataRangeDa') || displayInvalid('variabili['+i+'].valore')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataRangeDa', 'required')">Campo obbligatorio</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataRangeDa', 'dateFormat')">inserisci una data
+                            nel formato gg/mm/aaaa.</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'dateInvalide')">Data non valida</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'requiredOneOf')">Inserisci almeno una delle due
+                            date</p>
+                        </div>
+                      </div>
+
+                      <div class="col form-group">
+                        <label class="inline-label" for="dataRangeA">A</label>
+                        <input
+                          [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.dataRangeA') || displayInvalid('variabili['+i+'].valore')}"
+                          class="form-control it-date-datepicker" formControlName="dataRangeA" type="date"
+                          placeholder="gg/mm/aaaa">
+                        <div class="invalid-feedback"
+                          *ngIf="displayInvalid('variabili['+i+'].valore.dataRangeA') || displayInvalid('variabili['+i+'].valore')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataRangeA', 'required')">Campo obbligatorio</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore.dataRangeA', 'dateFormat')">inserisci una data nel
+                            formato gg/mm/aaaa.</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'dateInvalide')">Data non valida</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'requiredOneOf')">Inserisci almeno una delle due
+                            date</p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='stringa'
+                 || getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='json-stringa'">
+                  <div class="row">
+                    <div class="col-12 col-lg-4">
+                      <select title="Seleziona" class="form-control border" formControlName="filtro">
+                        <option [ngValue]="null" disabled selected>Seleziona Filtro</option>
+                        <option *ngFor="let opt of filtersString" [ngValue]="opt">{{ opt.descrizione }}</option>
+                      </select>
+                      <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.filtro')">
+                        <p *ngIf="hasError('variabili['+i+'].valore.filtro', 'required')">Campo obbligatorio</p>
+                      </div>
+                    </div>
+                    <div class="col-12 col-lg-8" *ngIf="!isFiltroNull(i)">
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.testo') }"
+                        class="form-control" formControlName="testo" placeholder="Valore" type="text">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.testo')">
+                        <p *ngIf="hasError('variabili['+i+'].valore.testo', 'required')">Campo obbligatorio</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='numerico'
+                  || getControl('variabili['+i+'].variabile')?.value?.formato?.codice==='json-numerico'">
+
+                  <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.tipoFiltro?.codice==='singolo'">
+                    <div class="row">
+                      <div class="col-12 col-lg-4 form-group">
+                        <select title="Seleziona" class="form-control border" formControlName="filtro">
+                          <option [ngValue]="null" disabled selected>Seleziona Filtro</option>
+                          <option *ngFor="let opt of filtersDateNumbers" [ngValue]="opt">{{ opt.descrizione }}</option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.filtro')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.filtro', 'required')">Campo obbligatorio</p>
+                        </div>
+                      </div>
+                      <div class="col-12 col-lg-8 form-group" *ngIf="!isFiltroNull(i)">
+                        <label for="numeroSingolo" class="inline-label">Numero</label>
+                        <input [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.numeroSingolo') }"
+                          class="form-control" formControlName="numeroSingolo" name="numeroSingolo" id="numeroSingolo"
+                          type="number" step="1">
+                        <div class="invalid-feedback" *ngIf="displayInvalid('variabili['+i+'].valore.numeroSingolo')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.numeroSingolo', 'required')">Campo obbligatorio
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="getControl('variabili['+i+'].variabile')?.value?.tipoFiltro?.codice==='range'">
+
+                    <div class="row">
+                      <div class="col form-group">
+                        <label for="numeroRangeDa">Da</label>
+                        <input
+                          [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.numeroRangeDa') || displayInvalid('variabili['+i+'].valore') }"
+                          class="form-control" formControlName="numeroRangeDa" type="number" step="1">
+                        <div class="invalid-feedback"
+                          *ngIf="displayInvalid('variabili['+i+'].valore.numeroRangeDa') || displayInvalid('variabili['+i+'].valore')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.numeroRangeDa','required')">Campo obbligatorio</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'numeriInvalidi')">Numero non valido</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'requiredOneOf')">Inserisci almeno uno dei due
+                            numeri</p>
+                        </div>
+                      </div>
+
+                      <div class="col form-group">
+                        <label for="numeroRangeA">A</label>
+                        <input
+                          [ngClass]="{ 'is-invalid': displayInvalid('variabili['+i+'].valore.numeroRangeA') || displayInvalid('variabili['+i+'].valore')}"
+                          class="form-control" formControlName="numeroRangeA" type="number" step="1">
+                        <div class="invalid-feedback"
+                          *ngIf="displayInvalid('variabili['+i+'].valore.numeroRangeA') || displayInvalid('variabili['+i+'].valore')">
+                          <p *ngIf="hasError('variabili['+i+'].valore.numeroRangeA','required')">Campo obbligatorio</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'numeriInvalidi')">Numero non valido</p>
+                          <p *ngIf="hasError('variabili['+i+'].valore', 'requiredOneOf')">Inserisci almeno uno dei due
+                            numeri</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- RIGA FILTRI DATE -->
+          <div class="row mt-3">
+            <div class="col-12 col-xl-4">
+              <label for="" style="margin-bottom: 2em;">APERTURA PRATICA</label>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataAperturaPraticaDa">dal</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataAperturaPraticaDa') }"
+                        class="form-control it-date-datepicker" formControlName="dataAperturaPraticaDa" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataAperturaPraticaDa')">
+                        <p *ngIf="hasError('dataAperturaPraticaDa', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataAperturaPraticaDa', 'before')">inserisci una data precedente al
+                          {{ hasError('dataAperturaPraticaDa', 'before').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataAperturaPraticaA">al</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataAperturaPraticaA') }"
+                        class="form-control it-date-datepicker" formControlName="dataAperturaPraticaA" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataAperturaPraticaA')">
+                        <p *ngIf="hasError('dataAperturaPraticaA', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataAperturaPraticaA', 'after')">inserisci una data successiva al
+                          {{ hasError('dataAperturaPraticaA', 'after').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+              <label for="" style="margin-bottom: 2em;">ULTIMA MODIFICA</label>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataUltimaModificaDa">dal</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataUltimaModificaDa') }"
+                        class="form-control it-date-datepicker" formControlName="dataUltimaModificaDa" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataUltimaModificaDa')">
+                        <p *ngIf="hasError('dataUltimaModificaDa', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataUltimaModificaDa', 'before')">inserisci una data precedente al
+                          {{ hasError('dataUltimaModificaDa', 'before').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataUltimaModificaA">al</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataUltimaModificaA') }"
+                        class="form-control it-date-datepicker" formControlName="dataUltimaModificaA" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataUltimaModificaA')">
+                        <p *ngIf="hasError('dataUltimaModificaA', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataUltimaModificaA', 'after')">inserisci una data successiva al
+                          {{ hasError('dataUltimaModificaA', 'after').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+              <label for="" style="margin-bottom: 2em;">ULTIMO CAMBIO DI STATO</label>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataUltimoCambioStatoDa">dal</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataUltimoCambioStatoDa') }"
+                        class="form-control it-date-datepicker" formControlName="dataUltimoCambioStatoDa" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataUltimoCambioStatoDa')">
+                        <p *ngIf="hasError('dataUltimoCambioStatoDa', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataUltimoCambioStatoDa', 'before')">inserisci una data precedente al
+                          {{ hasError('dataUltimoCambioStatoDa', 'before').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="it-datepicker-wrapper">
+                    <div class="form-group">
+                      <label for="dataUltimoCambioStatoA">al</label>
+                      <input [ngClass]="{ 'is-invalid': displayInvalid('dataUltimoCambioStatoA') }"
+                        class="form-control it-date-datepicker" formControlName="dataUltimoCambioStatoA" type="date"
+                        placeholder="gg/mm/aaaa">
+                      <div class="invalid-feedback" *ngIf="displayInvalid('dataUltimoCambioStatoA')">
+                        <p *ngIf="hasError('dataUltimoCambioStatoA', 'dateFormat')">inserisci una data nel formato
+                          gg/mm/aaaa.</p>
+                        <p *ngIf="hasError('dataUltimoCambioStatoA', 'after')">inserisci una data successiva al
+                          {{ hasError('dataUltimoCambioStatoA', 'after').otherDate | date:'dd/MM/yyyy' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGA TUTTE / PREFERITE / IN EVIDENZA / DA LAVORARE - IN CORSO / CONCLUSE / ANNULLATE -->
+          <div class="row" *ngIf="effectiveFiltraPerStatoAvanzamento">
+            <div class="col-12 col-lg-3">
+              <div class="form-check">
+                <input type="radio" formControlName="tutte" id="tutteTrue" [value]="true">
+                <label for="tutteTrue" class="a-bit-smaller">TUTTE</label>
+              </div>
+            </div>
+            <div class="col-12 col-lg-9">
+              <span class="d-none d-xl-inline" style="padding-left: 4.2em;"></span>
+              <span class="d-none d-lg-inline d-xl-none" style="padding-left: 3.3em;"></span>
+              <div class="form-check form-check-inline" formGroupName="tutteGroup">
+                <span class="d-block d-lg-none pr-3"></span>
+                <input id="tutteGroupInCorso" formControlName="inCorso" type="checkbox">
+                <label class="inline-label mr-4 a-bit-smaller" for="tutteGroupInCorso">In corso</label>
+                <input id="tutteGroupConcluse" formControlName="concluse" type="checkbox">
+                <label class="inline-label mr-4 a-bit-smaller" for="tutteGroupConcluse">Concluse</label>
+                <input id="tutteGroupAnnullate" formControlName="annullate" type="checkbox">
+                <label class="inline-label a-bit-smaller" for="tutteGroupAnnullate">Annullate</label>
+              </div>
+              <div [ngClass]="{ 'is-invalid': displayInvalid('tutteGroup') }"></div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('tutteGroup')" style="padding-left: 5em;">
+                <span *ngIf="hasError('tutteGroup', 'atLeastOne')">devi selezionare almeno una opzione</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGA NON TUTTE -->
+          <div class="row" *ngIf="effectiveFiltraPerStatoAvanzamento">
+            <div class="col-12 col-lg-1">
+              <div class="form-check">
+                <input type="radio" formControlName="tutte" id="tutteFalse" [value]="false">
+                <label class="inline-label mr-3" for="tutteFalse">
+                  <span class="d-block d-lg-none">{{ 'common.scegli' | translate | uppercase }}</span>
+                </label>
+              </div>
+            </div>
+            <!-- COLONNA CON TUTTO IL RESTO DEL FILTRO -->
+            <div class="col-12 col-lg-11" formGroupName="nonTutteGroup">
+              <!-- RIGA FILTRO PREFERITE -->
+              <div class="row">
+                <!-- CHECKBOX -->
+                <div class="col-12 col-lg-3">
+                  <span class="d-inline d-lg-none pr-3"></span>
+                  <div class="form-check form-check-inline">
+                    <input id="preferite" formControlName="preferite" type="checkbox">
+                    <label class="inline-label a-bit-smaller" for="preferite">PREFERITE</label>
+                  </div>
+                </div>
+                <!-- SUB-CHECKBOX -->
+                <div class="col-12 col-lg-9">
+                  <div class="form-check form-check-inline" formGroupName="preferiteGroup">
+                    <span class="d-block d-lg-none pr-5"></span>
+                    <input id="preferiteGroupInCorso" formControlName="inCorso" type="checkbox">
+                    <label class="inline-label mr-4 a-bit-smaller" for="preferiteGroupInCorso">In corso</label>
+                    <input id="preferiteGroupConcluse" formControlName="concluse" type="checkbox">
+                    <label class="inline-label mr-4 a-bit-smaller" for="preferiteGroupConcluse">Concluse</label>
+                    <input id="preferiteGroupAnnullate" formControlName="annullate" type="checkbox">
+                    <label class="inline-label a-bit-smaller" for="preferiteGroupAnnullate">Annullate</label>
+                  </div>
+                  <div [ngClass]="{ 'is-invalid': displayInvalid('nonTutteGroup.preferiteGroup') }"></div>
+                  <div class="invalid-feedback" *ngIf="displayInvalid('nonTutteGroup.preferiteGroup')"
+                    style="padding-left: 2em;">
+                    <span *ngIf="hasError('nonTutteGroup.preferiteGroup', 'atLeastOne')">devi selezionare almeno una
+                      opzione</span>
+                  </div>
+                </div>
+              </div>
+              <!-- RIGA FILTRO IN EVIDENZA -->
+              <div class="row">
+                <!-- CHECKBOX -->
+                <div class="col-12 col-lg-3">
+                  <span class="d-inline d-lg-none pr-3"></span>
+                  <div class="form-check form-check-inline">
+                    <input id="inEvidenza" formControlName="inEvidenza" type="checkbox">
+                    <label class="inline-label a-bit-smaller" for="inEvidenza">CONDIVISE CON ME</label>
+                  </div>
+                </div>
+                <!-- SUB-CHECKBOX -->
+                <div class="col-12 col-lg-9">
+                  <div class="form-check form-check-inline" formGroupName="inEvidenzaGroup">
+                    <span class="d-block d-lg-none pr-5"></span>
+                    <input id="inEvidenzaGroupInCorso" formControlName="inCorso" type="checkbox">
+                    <label class="inline-label mr-4 a-bit-smaller" for="inEvidenzaGroupInCorso">In corso</label>
+                    <input id="inEvidenzaGroupConcluse" formControlName="concluse" type="checkbox">
+                    <label class="inline-label mr-4 a-bit-smaller" for="inEvidenzaGroupConcluse">Concluse</label>
+                    <input id="inEvidenzaGroupAnnullate" formControlName="annullate" type="checkbox">
+                    <label class="inline-label a-bit-smaller" for="inEvidenzaGroupAnnullate">Annullate</label>
+                  </div>
+                  <div [ngClass]="{ 'is-invalid': displayInvalid('nonTutteGroup.inEvidenzaGroup') }"></div>
+                  <div class="invalid-feedback" *ngIf="displayInvalid('nonTutteGroup.inEvidenzaGroup')"
+                    style="padding-left: 2em;">
+                    <span *ngIf="hasError('nonTutteGroup.inEvidenzaGroup', 'atLeastOne')">devi selezionare almeno una
+                      opzione</span>
+                  </div>
+                </div>
+              </div>
+              <!-- RIGA FILTRO DA LAVORARE -->
+              <div class="row">
+                <!-- CHECKBOX -->
+                <div class="col-12 col-lg-3">
+                  <span class="d-inline d-lg-none pr-3"></span>
+                  <div class="form-check form-check-inline">
+                    <input id="daLavorare" formControlName="daLavorare" type="checkbox">
+                    <label class="inline-label a-bit-smaller" for="daLavorare">DA LAVORARE</label>
+                  </div>
+                </div>
+                <!-- SUB-CHECKBOX -->
+                <div class="col-12 col-lg-9">
+                  <div class="form-check form-check-inline" formGroupName="daLavorareGroup">
+                    <span class="d-block d-lg-none pr-5"></span>
+                    <input id="daLavorareGroupInCorso" formControlName="inCorso" type="checkbox">
+                    <label class="inline-label mr-4 a-bit-smaller" for="daLavorareGroupInCorso">In corso</label>
+                  </div>
+                </div>
+              </div>
+              <!-- RIGA ERRORE SE NESSUNA SELEZIONATA -->
+              <div class="row" *ngIf="displayInvalid('nonTutteGroup')">
+                <div class="col-12">
+
+                  <div class="is-invalid"></div>
+                  <div class="invalid-feedback" style="padding-left: 0em;">
+                    <span *ngIf="hasError('nonTutteGroup', 'atLeastOne')">devi selezionare almeno una opzione</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="card-footer text-right border-top-0 px-4">
+        <button type="button" class="btn btn-outline-primary mr-2" (click)="azzera()">AZZERA</button>
+        <button type="button" class="btn btn-primary" [disabled]="!enableFilterButton"
+          (click)="filtra()">FILTRA</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="loading">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="row mt-5" [hidden]="loading || loadingError" *ngIf="!!table">
+    <div class="col-sm-6">
+      <ng-container *ngIf="actions?.length">
+        <cosmo-table-action-buttons [table]="table" [actions]="actions" [statusProvider]="actionsStatusProvider"
+          (action)="onAction($event)"></cosmo-table-action-buttons>
+        <br />
+      </ng-container>
+      <cosmo-table-results-resume [table]="table"></cosmo-table-results-resume>
+    </div>
+    <div class="col-sm-6 text-right">
+      <cosmo-table-page-size [table]="table"></cosmo-table-page-size>
+    </div>
+  </div>
+
+
+  <div class="row mt-5" [hidden]="loading || loadingError">
+
+
+    <div class="col-12 table-container mobile-first">
+      <div class="card card-bg no-after" #filtri>
+        <cosmo-table *ngIf="filtersReady" #table [tableDisplayClass]="'table-sm table-hover variant-primary'"
+          [columns]="effectiveColumns" [paginationMode]="'SERVER'" [dataProvider]="dataProvider"
+          [enablePagination]="true" [enableSorting]="true" [enableRowExpansion]="false"
+          [enableMultipleRowExpansion]="false" [enableSelection]="allowSelection" [enableSelectAll]="multiSelection"
+          [enableMultiSelect]="multiSelection" (selectionChange)="selectionChangeHandler($event)"
+          [defaultSortingDirection]="'DESC'" [defaultSortingColumn]="'dataCreazionePratica'" [itemIdentifier]="'id'"
+          [enableItemTracking]="true" [storeAdapter]="internalStoreAdapter" [enableStorePersistence]="true"
+          [selectableStatusProvider]="selectableStatusProvider" (action)="onAction($event)" [enableExport]="true"
+          [maxRowExport]="exportRowMaxSize">
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella STATO (BADGE) -->
+            <div *ngIf="column.name === 'stato'">
+              <span class="badge badge-pill badge-{{ getBadgeClass(row) }}">{{ getStatusText(row) }}</span>
+            </div>
+
+            <!-- cella ICONA PREFERITA -->
+            <div *ngIf="column.name === 'favorite'">
+              <ng-container *ngIf="!row._togglingPreference">
+                <button class="btn btn-link btn-xs btn-action-icon" type="button" (click)="togglePreference(row)"
+                  title="Preferito">
+                  <i class="{{ row.preferita ? 'fas':'far'}} fa-star"></i>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="row._togglingPreference">
+                <button class="btn btn-link btn-xs btn-action-icon" type="button">
+                  <i class="fas fa-circle-notch fa-spin"></i>
+                </button>
+              </ng-container>
+            </div>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'dettaglio'">
+              <button class="btn btn-link btn-xs btn-action-icon" type="button" (click)="goToDettaglio(row)">
+                <i class=" fas fa-eye" title="Dettaglio"></i>
+              </button>
+            </div>
+
+            <!-- cella DROPDOWN AZIONI (MATITINA) -->
+            <div *ngIf="column.name === 'azioni_dropdown'">
+              <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'" *ngIf="!isConclusaOAnnullata(row)"
+                placement="bottom-right">
+                <button class="btn btn-link btn-xs btn-action-icon" type="button" ngbDropdownToggle
+                  [disabled]="!hasAttivitaAssegnate(row)" style="pointer-events: auto;"
+                  title="{{ isFromFruitoreEsterno(row) ? 'Fruitore esterno ' + row.fruitore?.nomeApp : 'Pratica interna' }}">
+                  <span class="fas fa-pen"></span>
+                  <span class="span-noexpanded fas fa-angle-down ml-1" *ngIf="hasAttivitaAssegnate(row)"></span>
+                  <span class="span-expanded fas fa-angle-up ml-1" *ngIf="hasAttivitaAssegnate(row)"></span>
+                </button>
+                <div ngbDropdownMenu class="dropdown-menu">
+                  <button ngbDropdownItem *ngFor="let a of row.attivita" (click)="doAttivita(a)">
+                    <span class="a-bit-smaller">{{a.nome}} {{a.gruppoAssegnatario ? '(' + a.gruppoAssegnatario + ')' :
+                      ''}}</span>
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="isConclusaOAnnullata(row)"
+                title="{{ isFromFruitoreEsterno(row) ? 'Fruitore esterno ' + row.fruitore?.nomeApp : 'Pratica interna' }}">
+                <button class="btn btn-link btn-xs btn-action-icon disabled" type="button">
+                  <span class="fas fa-circle"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- cella ALTRE AZIONI (PUNTINI) -->
+            <div *ngIf="column.name === 'azioni_menu'">
+              <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'" *ngIf="!isConclusaOAnnullata(row)">
+                <button class="btn btn-link btn-xs btn-action-icon" type="button" ngbDropdownToggle
+                  [disabled]="!canAssign(row) && !canShare(row) && !isAnnullabile(row)">
+                  <span class="fas fa-ellipsis-v"></span>
+                </button>
+                <div ngbDropdownMenu class="dropdown-menu">
+                  <button ngbDropdownItem *ngIf="canAssign(row)" (click)="assignPratica(row)">
+                    <a><span class="a-bit-smaller">Assegna attivit&agrave;</span></a>
+                  </button>
+                  <button ngbDropdownItem (click)="condividiPratica(row)" *ngIf="canShare(row)">
+                    <a><span class="a-bit-smaller">Condividi pratica</span></a>
+                  </button>
+                  <ng-container *ngIf="!isAnnullata(row) && isAnnullabile(row)">
+                    <button ngbDropdownItem *appHasUseCase="'ADMIN_PRAT'" (click)="annullaPratica(row)"
+                      class="text-danger">
+                      <a><span class="a-bit-smaller">Annulla pratica</span></a>
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div *ngIf="isConclusaOAnnullata(row)"
+                title="{{ isConclusa(row) ? 'Pratica CONCLUSA' : 'Pratica ANNULLATA' }}">
+                <button class="btn btn-link btn-xs btn-action-icon disabled" type="button" *ngIf="isConclusa(row)">
+                  <span class="fas fa-ban"></span>
+                </button>
+                <button class="btn btn-link btn-xs btn-action-icon text-danger disabled" type="button"
+                  *ngIf="isAnnullata(row)">
+                  <span class="fas fa-window-close"></span>
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- dettaglio riga espansa -->
+          <!--
+            <ng-template #rowDetailTemplate let-row="row">
+              <div class="text-center">
+                <img src="https://via.placeholder.com/300x150" alt="Placeholder Image" />
+              </div>
+            </ng-template>
+          -->
+        </cosmo-table>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5" [hidden]="loading || loadingError" *ngIf="!!table">
+    <div class="col-sm-12 text-center">
+      <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+    </div>
+  </div>
+</div>

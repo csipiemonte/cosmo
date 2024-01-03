@@ -1,0 +1,22 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="alert alert-danger" *ngIf="error">
+        <h3>{{ "errori.errore_fatale" | translate }}</h3>
+        <br/>
+        <p> {{ error.text }} </p>
+        <p>
+          <small>
+            {{ "errori.contattare_assistenza" | translate }}
+            <a href="mailto:{{ emailAssistenza }}?subject={{ subject }}&body={{ body }}">{{ emailAssistenza }}</a>
+            {{ "errori.comunicando_codice_errore" | translate }} <samp>{{ error.ray }}</samp>
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

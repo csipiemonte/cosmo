@@ -1,0 +1,204 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "stylings/variables";
+@import "stylings/typography";
+@import "../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss";
+@import '~ngx-red-zoom/styles/base.scss';
+@import '~ngx-red-zoom/styles/style-magnifier.scss';
+@import '~ngx-red-zoom/styles/style-window.scss';
+
+.red-zoom--style--custom {
+  @include red-zoom-style-magnifier(
+      $lens-size: 240px
+  );
+}
+
+.red-zoom__lens {
+  &after {
+    opacity: 1;
+    background-color: $rp_extralightblue;
+  }
+}
+.red-zoom__lens-body {
+  opacity: 1;
+  background-color: $rp_extralightblue;
+}
+
+a {cursor: pointer;}
+
+.clickable { cursor: pointer; }
+ .card { margin-bottom:2rem; width:auto; }
+
+.rp_darkblue { background:$rp_darkblue; }
+.rp_lightblue { background:$rp_lightblue; }
+.rp_orange { background:$rp_orange; }
+
+.bg-extralight { background:$rp_extralight; }
+.no-border { border:0; }
+.no-padding { padding:0; }
+.no-list-style { list-style-type: none; padding:0; margin:0; }
+
+.btn-action-icon { padding:0; margin:0; width:auto; position: relative; }
+.fas .badge.sup, .far .badge.sup {
+    vertical-align: middle;
+    top:16px;
+    right:-5px;
+    font-size: 10px;
+    padding: 5px;
+    min-width: 15px;
+    height: 15px;
+    line-height: 7px;
+    position: absolute;
+}
+#monitoraggio { min-height:600px; }
+.dropdown-menu { border:1px solid #d6dce3 !important;  }
+.dropdown-menu:before { display:none !important; }
+.badge { padding:8px 12px; }
+.badge.sup {
+    vertical-align:middle;
+    margin-left:0px;
+    margin-top: -20px;
+    font-size:11px;
+    padding:5px;
+    min-width:20px;
+    height:20px;
+}
+.badge-stilo { background:$rp_stilo; color:#FFF; }
+.badge-pec { background:$rp_pec; color:#FFF; }
+.badge-pratica { background:$rp_pratica; color:#FFF; }
+.badge-orange { background:$rp_orange; color:#FFF; }
+.cosmo-modal-header {
+    color: $rp_darkblue;
+    border-bottom: 1px solid $rp_extralight;
+    text-transform: uppercase;
+}
+
+@media screen and (min-width:576px) {
+
+}
+@media screen and (min-width:768px) {
+}
+@media screen and (min-width:992px) {
+  body {font-size: 17px;}
+}
+@media screen and (min-width:1200px) {
+}
+
+@media screen and (max-width: 991px) {
+  body {font-size: 15px;}
+}
+
+
+
+
+label.required:after {
+  content: " *";
+}
+
+h4.required:after {
+  content: " *";
+}
+.very-large-popover {
+  max-width: 50em !important;
+}
+
+.very-large-popover-mobile {
+  max-width: 50em !important;
+}
+
+.large-popover {
+  max-width: 15em !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.alert-noicon {
+  background-image: none !important;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.task-modal {
+  font-size: 0.90em !important;
+}
+
+.task-modal li {
+  padding: 0.5rem 0.5rem !important;
+}
+
+@media screen and (max-width: 899px) {
+  .very-large-popover-mobile {
+    max-width: 15em !important;
+  }
+}
+/* Icon pulse */
+
+$animation_duration: 1.65s;
+$opacity_min: 0.15;
+$opacity_max: 0.75;
+
+.fa-pulsar {
+	display: inline-block;
+	-moz-animation: pulse $animation_duration infinite linear;
+	-o-animation: pulse $animation_duration infinite linear;
+	-webkit-animation: pulse $animation_duration infinite linear;
+	animation: pulse $animation_duration infinite linear;
+}
+
+@-webkit-keyframes pulse {
+	0% { opacity: $opacity_max; }
+	50% { opacity: $opacity_min; }
+	100% { opacity: $opacity_max; }
+}
+@-moz-keyframes pulse {
+	0% { opacity: $opacity_max; }
+	50% { opacity: $opacity_min; }
+	100% { opacity: $opacity_max; }
+}
+@-o-keyframes pulse {
+	0% { opacity: $opacity_max; }
+	50% { opacity: $opacity_min; }
+	100% { opacity: $opacity_max; }
+}
+@-ms-keyframes pulse {
+	0% { opacity: $opacity_max; }
+	50% { opacity: $opacity_min; }
+	100% { opacity: $opacity_max; }
+}
+@keyframes pulse {
+	0% { opacity: $opacity_max; }
+	50% { opacity: $opacity_min; }
+	100% { opacity: $opacity_max; }
+}
+.a-bit-smaller {
+  font-size: 0.8rem !important;
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 80%;
+    max-width:1200px;
+  }
+  .modal-xxl {
+    width: 90%;
+    max-width:1200px;
+  }
+}
+
+.breadcrumb-divider {
+  padding-left: 0.50em;
+  padding-right: 0.50em;
+  padding-top: 0.28em;
+  font-weight: 400;
+  color: #06c;
+}
+
+// fix per typeahead dentro i modali
+ngb-typeahead-window.dropdown-menu {
+  z-index: 1051 !important;
+}
+
+.btn-action {
+  min-width: 8em;
+}

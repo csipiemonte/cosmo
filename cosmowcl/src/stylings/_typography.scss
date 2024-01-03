@@ -1,0 +1,38 @@
+// main: main.scss
+::selection {
+} 
+
+body { font-family:"Titillium Web",Geneva,Tahoma,sans-serif; color:$rp_text_color; }
+h1 { font-size:2rem; text-indent:60px;  }
+h2 { font-size:1.2rem; margin-bottom:1rem; }
+h2 .fas { margin-right:5px;}
+h3 { font-size:1rem; }
+a { text-decoration: none; }
+a:hover { text-decoration: none; color:$rp_orange; }
+
+.btn { text-transform: uppercase;}
+.btn-icon .icon-fa { line-height:1.35; }
+p.sml { font-size:0.8rem; }
+.link-nocolor { color:$rp_text_color; }
+.fa-ellipsis-v { width:6px; }
+.rp_darkblue a { color:#FFF; }
+.rp_darkblue a:hover { color:#FFF; }
+
+.lastUpdate { font-size:.7rem; }
+
+.text-white { color:#FFF; }
+.text-rp_darkblue { color:$rp_darkblue; }
+.text-rp_lightblue { color:$rp_lightblue; }
+.text-rp_orange { color:$rp_orange; }
+
+@media screen and (min-width:576px) {
+    h1 { text-indent:30px;  }
+}
+@media screen and (min-width:768px) {
+    h1 { text-indent:0px;  }
+    .dropdown-menu a { color:$rp_text_color; }
+}
+@media screen and (min-width:992px) {
+}
+@media screen and (min-width:1200px) {
+}

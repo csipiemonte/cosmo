@@ -1,0 +1,13 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+@import "../../../../stylings/variables";
+
+.default-message {
+  color: $rp_lightblue;
+}
+
+option:disabled {
+  background: #e9e9e9;
+}

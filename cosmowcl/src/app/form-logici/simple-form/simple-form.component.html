@@ -1,0 +1,11 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<app-simple-form-container #simpleForm
+  [formKey]="formKey"
+  [readOnly]="readOnly"
+  [variabiliProcesso]="variabiliProcesso"
+  (emitter)="createPayloadAndSend($event)"
+  (errorMessage)="showModalAndGoHome()">
+</app-simple-form-container>

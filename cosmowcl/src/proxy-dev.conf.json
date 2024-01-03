@@ -1,0 +1,11 @@
+{
+  "/cosmo": {
+    "target": "https://dev-cosmo.csi.it/",
+    "pathRewrite": {
+      "^/cosmo": "/cosmofe"
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

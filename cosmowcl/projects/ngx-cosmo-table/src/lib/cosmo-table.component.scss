@@ -1,0 +1,191 @@
+@import './cosmo-table.common.scss';
+
+.message-row td {
+  padding: 2em;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline-block-bottom {
+  vertical-align: bottom;
+}
+
+.small-as-possible {
+  width: 1%;
+}
+
+.detail-row td {
+  padding-bottom: 2em;
+}
+
+.header-filter-container {
+  margin-top: 1em;
+}
+
+.header-filter {
+  margin-right: 1em;
+  cursor: pointer;
+}
+
+.header-filter-checkbox {
+  margin-right: 0.25em;
+}
+
+.header-filter-checkbox.checked {
+  background-color: #0d0057;
+}
+
+.row-expansion-container {
+  min-width: 100%;
+}
+
+td .row-header-label {
+  font-size: 0.65em;
+  font-weight: 300;
+}
+
+td .row-header-label-top-inner {
+  margin-top: 1.00em;
+  margin-bottom: 1.00em;
+}
+
+.row-header-top th {
+  padding-top: 0.50em;
+  padding-bottom: 0.10em;
+}
+
+.row-header-bottom th {
+  padding-top: 0.10em;
+  padding-bottom: 0.50em;
+}
+
+.drag-container {
+  min-height: 60px;
+  padding: 1em;
+  background: #7272c055;
+  border: dotted 3px #19162555;
+  /* transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); */
+}
+
+.drop-container {
+  min-height: 60px;
+  padding: 1em;background: #7272c055;
+  border: dotted 3px #19162555;
+  /* transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); */
+}
+
+.nodrop .drop-row {
+  display: none !important;
+}
+.nodrop .drop-cell {
+  display: none !important;
+}
+.nodrop .drop-container {
+  display: none !important;
+}
+
+.cdk-drop-list-dragging.acceptdrop td,th {
+  border: none;
+}
+
+th.cosmosize-min, td.cosmosize-min {
+  max-width: 1.5em;
+}
+th.cosmosize-xxs, td.cosmosize-xxs {
+  max-width: 3.0em;
+}
+th.cosmosize-xs, td.cosmosize-xs {
+  min-width: 2em;
+  max-width: 4em;
+}
+th.cosmosize-s, td.cosmosize-s {
+  min-width: 8em;
+}
+th.cosmosize-m, td.cosmosize-m {
+  min-width: 12em;
+}
+th.cosmosize-l, td.cosmosize-l {
+  min-width: 18em;
+}
+th.cosmosize-xl, td.cosmosize-xl {
+  min-width: 25em;
+}
+th.cosmosize-xxl, td.cosmosize-xxl {
+  min-width: 30em;
+}
+
+/* Porting */
+
+.no-padding-top {
+  padding-top: 0 !important;
+}
+
+.table-hover .detail-row:hover { 
+  background-color: inherit !important;
+  opacity: 1.0  !important;
+}
+
+.table-hover .detail-row tr:hover { 
+  background-color: inherit !important;
+  opacity: 1.0  !important;
+}
+
+/* APPLICATION SPECIFICS */
+.table tr.odd {
+  background-color: #f6f7f9;
+}
+
+
+.table tr.odd:hover {
+  background-color: #c6d8fc;
+}
+
+th {
+  font-weight: normal;
+}
+
+.table-sm {
+  font-size: 0.8rem;
+}
+
+.row-selected {
+  background-color: #7288c047 !important;
+}
+
+.row-selected:hover {
+  background-color: #5656c255 !important;
+}
+
+/* VARIANTS */
+.cosmo-table.variant-primary th {
+  color: #06c;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+}
+
+
+.cosmo-table.variant-centered {
+  font-size: 0.97em;
+}
+
+.cosmo-table.variant-centered th {
+  color: rgb(4, 5, 5);
+  text-transform: none;
+  font-size: 1.05em;
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  text-align: center;
+  font-weight: 700;
+}
+
+.cosmo-table.variant-centered td {
+  text-align: center;
+}

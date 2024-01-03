@@ -1,0 +1,59 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<div class="modal-content">
+
+  <div class="modal-header">
+      <h5 class="modal-title">
+        <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+          (click)="modal.dismiss('click_on_back_arrow')">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        &nbsp; {{(configurazione ? "configurazione_ente.aggiornamento_configurazione" : "configurazione_ente.creazione_configurazione") | translate}}
+      </h5>
+  </div>
+
+  <div class="modal-body">
+
+    <form [formGroup]="configurazioneForm" *ngIf="configurazioneForm">
+
+      <div class="row mb-4">
+          <label [ngClass]="{'active': configurazioneForm?.controls['chiave'].value, 'invalid': displayInvalid('chiave')}" for="chiave">
+            {{"configurazione_ente.chiave" | translate}}
+          </label>
+          <input  [ngClass]="{'invalid': displayInvalid('chiave')}" type="text" id="chiave" name="chiave" formControlName="chiave" class="form-control" maxlength="100" required>
+          <div class="invalid-feedback d-block" *ngIf="displayInvalid('chiave')">
+            <p *ngIf="hasError('chiave','required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('chiave','pattern')">Valore inserito non corretto</p>
+          </div>
+      </div>
+
+      <div class="row mb-4">
+          <label [ngClass]="{'active': configurazioneForm?.controls['valore'].value}" for="valore">
+            {{"configurazione_ente.valore" | translate}}
+          </label>
+          <input type="text" id="valore" name="valore" formControlName="valore" class="form-control" maxlength="255" required>
+      </div>
+
+      <div class="row mb-4">
+          <label [ngClass]="{'active': configurazioneForm?.controls['descrizione'].value}" for="chiave">
+            {{"configurazione_ente.descrizione" | translate}}
+          </label>
+          <input type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control" maxlength="255" >
+        </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <div class="text-right" *ngIf="configurazioneForm">
+      <button type="button" style="margin: 5px;" (click)="pulisciCampi()"
+        class="btn btn-sm btn-danger">{{"common.pulisci_campi" | translate}}</button>
+      <button type="button" style="margin: 5px;" [disabled]="configurazioneForm?.invalid"
+        class="btn btn-sm btn-primary" (click)="configurazione ? modificaConfigurazione() : aggiungiConfigurazione()">
+        {{(configurazione ? "configurazione_ente.modifica" : "configurazione_ente.crea") | translate}}
+      </button>
+    </div>
+  </div>
+</div>

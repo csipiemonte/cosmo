@@ -1,0 +1,69 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+    <h2 class="mt-5 mb-5">COMMON WORKSPACE</h2>
+
+
+    <ng-container *ngIf="loadingError">
+        <div class="mt-5">
+            <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="mt-5">
+            <app-caricamento-in-corso [message]="'Caricamento del profilo ...'"></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+
+    <form class="mt-5" *ngIf="!loadingError && !loading && profilazione">
+        <div class="form-row">
+            <div class="form-group col-12 col-md-4">
+                <label for="ente">{{'profilazione.seleziona_ente' | translate}}</label>
+            </div>
+            <div class="form-group col-12 col-md-8">
+                <select id="ente" name="ente" class="form-control" [(ngModel)]="idEnteSelezionato" class="form-control"
+                    (change)="enteChanged($event)"
+                >
+                    <option hidden [ngValue]="null" selected></option>
+                    <option *ngFor="let option of entiDisponibili" [ngValue]="option.ente.id">
+                        {{ option.ente.nome }}
+                    </option>
+                </select>
+            </div>
+            <ng-container *ngIf="idEnteSelezionato">
+                <div class="form-group col-12 col-md-4">
+                    <label for="profilo">{{'profilazione.seleziona_profilo' | translate}}</label>
+                </div>
+                <div class="form-group col-12 col-md-8">
+                    <select id="profilo" name="profilo" class="form-control" [(ngModel)]="idProfiloSelezionato" class="form-control" >
+                        <option hidden [ngValue]="null" selected></option>
+                        <option *ngFor="let option of profiliDisponibili" [ngValue]="option.profilo.id">
+                            {{ option.profilo.descrizione }}
+                        </option>
+                    </select>
+                </div>
+            </ng-container>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <ng-container *ngFor="let profilo of profiliDirettiDisponibili">
+                    <button type="btn" class="btn btn-action btn-outline-primary mb-3" (click)="selezionaProfiloDiretto(profilo)">
+                        <span class="fas fa-user-lock mr-3"></span>
+                        <small>entra come</small>
+                        {{ profilo.profilo.descrizione }}
+                    </button>
+                </ng-container>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="btn btn-outline-primary float-right btn-action mb-3" (click)="selezionaRuolo()">
+                    {{'common.seleziona' | translate}}</div>
+            </div>
+        </div>
+    </form>
+
+    <div *ngIf="!loadingError && !loading && accessoDirettoHomepage" class="alert alert-info">
+      {{ 'login.messaggi.accesso_diretto_home_ok' | translate }}
+    </div>
+</div>

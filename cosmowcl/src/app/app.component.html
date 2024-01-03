@@ -1,0 +1,21 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-http-loader
+      [debounceDelay]="300"
+      [opacity]=".5"
+      [minDuration]="300"
+      [filteredMethods]="['GET', 'OPTIONS']"
+      [filteredHeaders]="['X-Cosmo-Background']"
+    ></ng-http-loader>
+<app-header (hasPageHelper)="hasPageHelper($event)"></app-header>
+<div class="container mt-3" *ngIf="showHelperWarning">
+  <p class="alert alert-warning" >
+    {{"errori.helper_non_configurato_correttamente" | translate }}
+  </p>
+</div>
+<main [class.padded-for-scroll]="addPadding">
+  <router-outlet (activate)="onActivate($event)" ></router-outlet>
+</main>
+<app-footer></app-footer>

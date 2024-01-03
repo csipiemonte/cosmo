@@ -1,0 +1,118 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="row w-100 mb-3">
+        <div class="col-md-6 col-12">
+          <h5 class="modal-title">
+            <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+              (click)="close()">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            &nbsp; {{"caricamento_pratiche.titolo" | translate}}
+          </h5>
+        </div>
+      </div>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+    <ng-container *ngIf="loadingError">
+      <div class="px-4 py-4">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <div class="px-4 py-4">
+        <app-caricamento-in-corso></app-caricamento-in-corso>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && !loadingError">
+      <div class="modal-body">
+
+
+        <div class="row mb-5" *ngIf="!file">
+            <div class="col-12 text-left" >
+              <button type="button" class="btn btn-sm btn-primary" (click)="apriModale()">
+                {{( file ? "caricamento_pratiche.aggiungi_zip" : "caricamento_pratiche.carica_pratiche") | translate }}
+              </button>
+            </div>
+          </div>
+
+
+            <div class="row mt-3">
+              <div class="col-12 table-container mobile-first">
+                <div *ngIf="!file"><p class="text-left ml-5"><em>{{ "caricamento_pratiche.nessun_file" | translate }}</em></p></div>
+                <table class="table table-sm table-striped">
+                <thead>
+                  <tr *ngIf="file && file.name">
+                    <th><strong>Nome file contenente pratiche</strong></th>
+                    <th class="text-right"><strong>Dimensione</strong></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="file && file.name">
+                    <td>{{ file.name }}</td>
+                    <td class="text-right"> {{ file.size
+                      ? (file.size /1024>1024 ? ((file.size/(1024*1024)).toFixed() + ' MB')
+                      : ((file.size/(1024)).toFixed() + ' kB') )
+                      : ''}}</td>
+                  </tr>
+                </tbody>
+                </table>
+                <div class="row mt-5 mb-5">
+                  <div class="col-12 text-left" *ngIf="file">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="apriModale()">
+                      {{( file ? "caricamento_pratiche.aggiungi_zip" : "caricamento_pratiche.carica_pratiche") | translate }}
+                    </button>
+                  </div>
+                </div>
+                <div class=" row mt-5">
+                  <div class="col-1"></div>
+                  <div class="col-11 text-right">
+                    <table class="table table-sm table-striped ">
+                      <thead>
+                        <tr *ngIf="documenti && documenti.length>0">
+                          <th><strong>Nome archivio zip</strong></th>
+                          <th class="text-right"><strong>Dimensione</strong></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let documento of documenti">
+                          <td> {{ (documento.name ? documento.name : '')}} </td>
+                          <td class="text-right"> {{ documento.size
+                            ? (documento.size /1024>1024 ? ((documento.size/(1024*1024)).toFixed() + ' MB')
+                            : ((documento.size/(1024)).toFixed() + ' kB') )
+                            : ''}} </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+        <div class="row mb-5 mt-5"></div>
+
+      </div>
+
+      <div class="modal-footer mt-5 mb-5">
+
+        <div class="text-right">
+            <button type="button" (click)="completaCaricamento()" class="btn btn-sm btn-success btn-action" [disabled]="!file || !caricamentoPratica">
+                {{ "caricamento_pratiche.completa_caricamento" | translate }}
+              </button>
+        </div>
+      </div>
+    </ng-container>
+
+
+</div>

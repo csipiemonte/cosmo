@@ -1,0 +1,115 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <div class="">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </div>
+</ng-container>
+<ng-container *ngIf="loading">
+  <div class="">
+    <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+  </div>
+</ng-container>
+
+<section class="tabs-and-panel mt-5" [hidden]="loading || loadingError">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <h2>Inserisci i dati per la creazione di una nuova pratica</h2>
+        <p>Tutti i campi sono da compilare</p>
+      </div>
+    </div>
+
+    <form [formGroup]="creaPraticaForm" (ngSubmit)="onSubmit()" action="#" id="form">
+      <div class="row mt-5">
+
+        <div class="form-group col-md-8">
+          <label for="oggetto-pratica">OGGETTO</label>
+          <input #defaultfocus
+            [ngClass]="{ 'is-invalid': creaPraticaForm?.controls['oggetto'].touched && creaPraticaForm?.controls['oggetto'].invalid }"
+            id="oggetto-pratica" type="text" class="form-control border" formControlName="oggetto" name="oggetto"
+            placeholder="" required>
+          <div class="invalid-feedback"
+            *ngIf="creaPraticaForm?.controls['oggetto'].touched && creaPraticaForm?.controls['oggetto'].invalid">
+            <p *ngIf="creaPraticaForm?.controls['oggetto']?.hasError('required')">Oggetto obbligatorio</p>
+          </div>
+          <div class="invalid-feedback"
+            *ngIf="creaPraticaForm?.controls['oggetto'].touched && creaPraticaForm?.controls['oggetto'].invalid">
+            <p *ngIf="creaPraticaForm?.controls['oggetto']?.hasError('regexMatch')">Caratteri non supportati: <b>" * \ >
+                < ? / : | </b>
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group bootstrap-select-wrapper col-md-4">
+          <label>TIPOLOGIA :</label>
+          <select title="Seleziona" class="form-control border" formControlName="tipologia"
+            [ngStyle]="{'height': selectSizer() }">
+            <option [ngValue]="null" selected>Seleziona</option>
+            <option *ngFor="let t of listaTipoPratica" [ngValue]="t.codice">{{ t.descrizione }}</option>
+          </select>
+        </div>
+
+        <div class="form-group col-12" [ngClass]="{'mb-4': idPraticaEsistente != null}">
+          <!--
+         <textarea id="creaPraticaTextArea" rows="3" formControlName="riassunto" name="riassunto"
+           placeholder="Max 200 caratteri"></textarea>
+           -->
+          <label class="active" for="creaPraticaTextArea">RIASSUNTO</label>
+
+          <app-cosmo-editor formControlName="riassunto" [maxlength]="1000"
+            [placeholder]="'inserisci qui eventuali dettagli sul contenuto della pratica'"></app-cosmo-editor>
+
+          <div class="invalid-feedback"
+            *ngIf="creaPraticaForm?.controls['riassunto'].touched && creaPraticaForm?.controls['riassunto'].invalid"
+            style="display: block;">
+            <p *ngIf="creaPraticaForm?.controls['riassunto']?.hasError('regexMatch')">Caratteri non supportati: <b> " *
+                \ &gt; &lt; ? / : | </b></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group form-check ml-4 mb-4" *ngIf="idPraticaEsistente != null">
+          <input id="daAssociare" formControlName="daAssociare" type="checkbox">
+          <label class="inline-label mr-4" for="daAssociare"> Associa nuova pratica all'attuale </label>
+      </div>
+      <div *ngIf="idPraticaEsistente!=null">
+        <div class="col-12 mt-3 mb-3">
+          <p>Seleziona i documenti da duplicare nella nuova pratica</p>
+        </div>
+        <app-consultazione-documenti #docs
+          [idPratica]="idPraticaEsistente"
+          [soloLettura]="true"
+          [selezionaDocumenti]="true"
+          [identificativo]="'selezione-documenti'"
+          [daFirmare]="false"
+          [idDocumentiSelezionati]="idDocumentiSelezionati">
+        </app-consultazione-documenti>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <ng-container *ngIf="permettiSelezioneFruitore">
+            <button *ngIf="!selezionaFruitore" type="button" class="btn btn-link px-0"
+              (click)="abilitaSelezioneFruitore()">associa un fruitore esterno</button>
+            <div *ngIf="selezionaFruitore" class="form-group form-inline">
+              <app-ricerca-fruitore #ricercaFruitoreCtrl formControlName="fruitore" [fruitore]="fruitore"></app-ricerca-fruitore>
+              <button *ngIf="selezionaFruitore" type="button" class="btn-sm ml-1 btn btn-link text-danger"
+                (click)="annullaSelezioneFruitore()" style="margin-top: -0.5em;">
+                <span class="fas fa-times mr-2"></span>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+        <div class="col-12 col-md-6 text-right">
+          <button type="submit" class="btn btn-primary px-5" [disabled]="!(creaPraticaForm?.valid)"
+            form="form">crea</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</section>

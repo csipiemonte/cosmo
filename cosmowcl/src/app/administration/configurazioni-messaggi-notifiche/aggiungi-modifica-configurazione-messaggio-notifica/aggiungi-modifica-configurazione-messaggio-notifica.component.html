@@ -1,0 +1,160 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+      <span class="breadcrumb-divider"> / </span>
+      <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+        {{"configurazioni_messaggi_notifiche.header" | translate}}
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">{{"configurazioni_messaggi_notifiche.header" | translate}}</h2>
+      </div>
+    </div>
+  
+    <ng-container *ngIf="loadingError">
+      <div class="px-4 py-4">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+  
+    <ng-container *ngIf="!loading && !loadingError">
+      <br>
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form" class="mt-4">
+
+        <div formGroupName="identificativo">
+        <div class="row justify-content-between">
+            <div class="col-lg-6 col-sm-12 form-group">
+                <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('identificativo.tipoMessaggio') || hasError('identificativo', 'conflict') }">    
+              <label [ngClass]="{'is-invalid': displayInvalid('identificativo.tipoMessaggio' || hasError('identificativo', 'conflict') )}"
+                  for="label" class="active"><span>{{ "configurazioni_messaggi_notifiche.tipo_messaggio" | translate }}</span>
+              </label>
+              <select
+                  [ngClass]="{ 'is-invalid': displayInvalid('identificativo.tipoMessaggio') || hasError('identificativo', 'conflict') }"
+                  formControlName="tipoMessaggio" name="tipoMessaggio" id="tipoMessaggio"
+                  class="form-control"
+                  [attr.disabled]="null"
+              >
+  
+                  <option [ngValue]="null" disabled selected>
+                    {{ 'common.seleziona' | translate }} ...
+                  </option>
+                  <option *ngFor="let option of tipiMessaggi;  let i = index" [ngValue]="option">
+                      {{(option.descrizione.length>60) ? option.descrizione.slice(0,60)+' ...' : option.descrizione}}
+                  </option>
+              </select>
+              </div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('identificativo.tipoMessaggio') || displayInvalid('identificativo') ">
+                  <p *ngIf="hasError('identificativo.tipoMessaggio', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                  <p *ngIf="hasError('identificativo', 'conflict')">{{( tipoPratica!==null ? "Tipo messaggio già associato con questo ente e tipo pratica" : "Tipo messaggio già associato con questo ente")}}</p>
+              </div>
+            </div>
+            
+          </div>
+  
+        <div class="row justify-content-between">
+  
+          <div class="col-lg-5 col-sm-12 form-group">
+            <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('identificativo.ente') }">
+              <label [ngClass]="{'is-invalid': displayInvalid('identificativo.ente')}" for="ente" class="active">
+                {{"common.ente" | translate}}
+              </label>
+              <app-ricerca-ente
+                [minChars]="0"
+                id="ente"
+                name="ente"
+                formControlName="ente"
+                class="w-100"
+              >
+              </app-ricerca-ente>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('identificativo.ente')">
+              <p *ngIf="hasError('ente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('identificativo.ente')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+       
+          <div class="col-lg-5 col-sm-12 form-group">
+            <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('identificativo.tipoPratica') }">
+              <label [ngClass]="{'is-invalid': displayInvalid('identificativo.tipoPratica')}"
+                for="tipoPratica" class="active">{{"common.tipo_pratica" | translate}}</label>
+              <app-ricerca-tipo-pratica
+                id="tipoPratica"
+                name="tipoPratica"
+                formControlName="tipoPratica"
+                class="w-100"
+                [ngClass]="{'is-invalid': displayInvalid('identificativo.tipoPratica')}"
+                [disabled]="!ente"
+                [ente]="ente"
+                [disabledPlaceholder]="''"
+                >
+              </app-ricerca-tipo-pratica>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('identificativo.tipoPratica')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+        </div>
+    </div>
+  
+       
+
+        <br>
+
+        <div class="row justify-content-between">
+            <div class="col-lg-12 col-sm-12 form-group">
+                <label [ngClass]="{'active': hasValue('testo'), 'is-invalid': displayInvalid('testo')}" for="testo">
+                  {{ "configurazioni_messaggi_notifiche.testo" | translate }}
+                </label>
+                <textarea
+                    name="testo"
+                    id="testo"
+                    formControlName="testo"
+                    rows="5"
+                ></textarea>
+                <div class="invalid-feedback" *ngIf="displayInvalid('testo')">
+                    <p *ngIf="hasError('testo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <br>
+
+        <br>
+        <div class="row">
+          <div class="col-2 text-left">
+            <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+              {{"common.indietro" | translate}}
+            </button>
+          </div>
+          <div class="col-10 text-right">
+            <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+              {{"common.salva" | translate}}
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-danger btn-action" (click)="annullaModifiche()">
+              {{"common.annulla_modifiche" | translate}}
+            </button>
+          </div>
+        </div>
+        <br>
+    </form>
+    </ng-container>
+  
+  </div>
+  
+  

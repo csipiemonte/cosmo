@@ -1,0 +1,96 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+    <div class="row" style="margin: 20px 0px 50px;">
+      <div class="col-3" *ngIf="showInfoApp">
+        <div class="row">
+          <label class="icona"> {{"app_esterne.icona" | translate}}</label>
+        </div>
+        <div class="row">
+          <img *ngIf="iconaApp" class="icona" id="icona" [src]="getLogo()" height="50" width="50" />
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="row" *ngIf="showInfoApp">
+          <label> {{"app_esterne.descrizione_applicazione" | translate}}</label>
+        </div>
+        <div *ngIf="descrizioneApp" class="row">
+          <h3>{{descrizioneApp}}</h3>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" *ngIf="form">
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12  form-group">
+          <label [ngClass]="{'active': form?.controls['descrizione'].value}" for="descrizione">
+            {{"app_esterne.descrizione" | translate}}
+          </label>
+          <input
+            [ngClass]="{ 'is-invalid': form?.controls['descrizione'].touched && form?.controls['descrizione'].invalid }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control">
+          <div class="invalid-feedback"
+            *ngIf="form?.controls['descrizione'].touched && form?.controls['descrizione'].invalid">
+            <p *ngIf="form?.controls['descrizione']?.hasError('required')">{{"errori.campo_obbligatorio" |
+              translate}}
+            </p>
+            <p *ngIf="form?.controls['descrizione']?.hasError('maxlength')">{{"errori.troppi_caratteri" |
+              translate}}
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-sm-12  form-group">
+          <label [ngClass]="{'active': form?.controls['url'].value}" for="url">
+            {{"app_esterne.url" | translate}}
+          </label>
+          <input [ngClass]="{ 'is-invalid': form?.controls['url'].touched && form?.controls['url'].invalid }"
+            type="url" id="url" name="url" formControlName="url" class="form-control">
+          <div class="invalid-feedback" *ngIf="form?.controls['url'].touched && form?.controls['url'].invalid">
+            <p *ngIf="form?.controls['url']?.hasError('required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="form?.controls['url']?.hasError('pattern')">{{"errori.url_non_valido" | translate}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between it-datepicker-wrapper">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <input
+            [ngClass]="{ 'is-invalid': form?.controls['inizioValidita'].touched && form?.controls['inizioValidita'].invalid }"
+            class="form-control it-date-datepicker" id="inizioValidita" name="inizioValidita"
+            formControlName="inizioValidita" type="date" placeholder="gg/mm/aaaa">
+          <label for="inizioValidita">{{"app_esterne.inizio_validita" | translate}}</label>
+          <div class="invalid-feedback"
+            *ngIf="form?.controls['inizioValidita'].touched && form?.controls['inizioValidita'].invalid">
+            <p *ngIf="form?.controls['inizioValidita']?.hasError('required')">
+              {{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12  form-group">
+          <input class="form-control it-date-datepicker" id="fineValidita" name="fineValidita"
+            formControlName="fineValidita" type="date" placeholder="gg/mm/aaaa">
+          <label for="fineValidita">{{"app_esterne.fine_validita" | translate}}</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="button" class="btn btn-sm btn-success" [disabled]="form.invalid" (click)="salva()">
+            {{"common.salva" | translate}}
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-sm btn-danger" (click)="pulisciCampi()">
+            {{"common.annulla_modifiche" | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+</div>

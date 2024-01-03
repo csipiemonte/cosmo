@@ -1,0 +1,225 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span> Home
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">{{"caricamento_pratiche.titolo" | translate}}</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+          <span class="btn-link pointer btn-xs" (click)="downloadTemplatePratiche()" [ngbPopover]="popContentPratiche" triggers="mouseenter:mouseleave">{{"caricamento_pratiche.template_pratiche" | translate}}</span>
+
+          <span class="btn-link pointer btn-xs" (click)="downloadTemplateArchiviZip()" [ngbPopover]="popContentDocumenti" triggers="mouseenter:mouseleave">{{"caricamento_pratiche.template_documenti" | translate}}</span>
+
+          <ng-template #popContentPratiche>
+            <p><em>{{"caricamento_pratiche.help_pratiche.titolo" | translate}}</em></p>
+            <ul>
+              <li><p><em>{{"caricamento_pratiche.help_pratiche.colonne_obbligatorie" | translate}}</em></p></li>
+              <li><p><em>{{"caricamento_pratiche.help_pratiche.campi_obbligatori" | translate}}</em></p></li>
+            </ul>
+          </ng-template>
+          <ng-template #popContentDocumenti>
+            <p><em>{{"caricamento_pratiche.help_documenti.titolo" | translate}}</em></p>
+            <ul>
+              <li><p><em>{{"caricamento_pratiche.help_documenti.descrizione" | translate}}</em></p></li>
+              <li><p><em>{{"caricamento_pratiche.help_documenti.colonne_obbligatorie" | translate}}</em></p></li>
+              <li><p><em>{{"caricamento_pratiche.help_documenti.campi_obbligatori" | translate}}</em></p></li>
+            </ul>
+          </ng-template>
+      </div>
+    </div>
+
+    <ng-container *ngIf="loadingError">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+    </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row mb-5">
+      <div class="col-12 text-right">
+        <button type="button" class="btn btn-sm btn-primary mr-2" (click)="caricamentiInBozza()">
+          {{ "caricamento_pratiche.caricamenti_in_bozza"| translate }}
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="aggiungiCaricamentoPratica()">
+          {{ "caricamento_pratiche.carica_pratiche_da_file"| translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+    
+        <button class="btn btn-outline-primary js-icon-switch border-0 shadow btn-block text-left" type="button"
+          data-toggle="collapse" (click)="isCollapsed = !isCollapsed" aria-expanded="false" aria-controls="collapseExample">
+          <span class="fas {{ isCollapsed ? 'fa-plus-circle' : 'fa-minus-circle' }}"></span> {{"common.filtra" | translate | uppercase}}
+        </button>
+        <div class="collapse shadow js-content-toggle" id="collapseExample" [ngbCollapse]="isCollapsed">
+          <div class="card card-form w-100 mb-0">
+            <div class="card-body px-4 pb-0">
+              <div class="row mt-3">
+                <div class="form-group col-6 mb-1">
+                  <label for="nomeFile" [ngClass]="{'active':nomeFile}"> Nome File </label>
+                  <input type="text" class="form-control border" id="nomeFile" placeholder="" #instanceNomeFile
+                    [(ngModel)]="nomeFile">
+                </div>
+                <div class="form-group col-6 mb-1">
+                  <select title="Seleziona stato da visualizzare" class="form-control border" [(ngModel)]="statoSelezionato" >
+                    <option [ngValue]="null">Seleziona stato da visualizzare </option>
+                    <option *ngFor="let opt of statiCaricamentoDisponibili" [ngValue]="opt">{{ opt.descrizione }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          
+            <div class="card-footer text-right border-top-0 px-4">
+              <button type="button" class="btn btn-outline-primary btn-sm"
+                (click)="cancellaRicerca()">{{"common.azzera" | translate | uppercase}}</button>
+              &nbsp;
+              <button type="button" class="btn btn-primary btn-sm"
+                (click)="filtra()">{{"common.filtra" | translate | uppercase}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="row mt-5">
+  <div class="col-12 table-container mobile-first">
+
+    <cosmo-table
+      #table
+      [tableDisplayClass]="'table table-sm table-hover variant-primary'"
+      [dataProvider]="dataProvider"
+      [columns]="columns"
+      [enableSorting]="false"
+      [enablePagination]="true"
+      [paginationMode]="'SERVER'"
+      [enableRowExpansion]="true"
+      [expandableStatusProvider]="expandableStatusProvider"
+      [defaultPageSize]="10"
+      [possiblePageSize]="[5,10]"
+      [itemIdentifier]="'id'"
+      [enableItemTracking]="true"
+    >
+
+
+    <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+      <div *ngIf="column.name === 'statoCaricamentoPratica'">
+        <span class="badge badge-pill badge-{{ getBadgeClass(row) }}">{{ row.statoCaricamentoPratica.descrizione }}</span>
+      </div>
+    </ng-template>
+
+
+
+    <ng-template #rowDetailTemplate let-row="row">
+      <br/>
+      <cosmo-table
+      *ngIf="row.hasElaborazioni && isExpanded(row)"
+      #pratiche
+      [tableContext]="row"
+      [tableDisplayClass]="'table table-sm table-hover variant-primary'"
+      [dataProvider]="dataProviderPratiche"
+      [columns]="columnsPratiche"
+      [enableSorting]="false"
+      [enablePagination]="true"
+      [defaultPageSize]="5"
+      [possiblePageSize]="[5,10]"
+      [paginationMode]="'SERVER'"
+      [enableRowExpansion]="true"
+      [expandableStatusProvider]="expandableStatusProvider"
+      [itemIdentifier]="'id'"
+      [enableItemTracking]="true"
+      [enableExport]="true"
+      [exportHiddenColumns]="true"
+      [maxRowExport]="exportRowMaxSize"
+      >
+
+        <ng-template let-innerrow="row" let-column="column" let-value="value" #cellTemplate>
+          <div *ngIf="column.name === 'statoCaricamentoPratica'">
+            <span class="badge badge-pill badge-{{ getBadgeClass(innerrow) }}">{{ innerrow.statoCaricamentoPratica.descrizione }}</span>
+          </div>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'dettaglio'">
+              <button *ngIf="innerrow.idPratica && canShowDetailButton(innerrow)" class="btn btn-link btn-xs btn-action-icon" type="button" (click)="goToDettaglio(innerrow.idPratica)">
+                <i class=" fas fa-eye" title="Dettaglio"></i>
+              </button>
+            </div>
+        </ng-template>
+
+        <ng-template #rowDetailTemplate let-innerrow="row">
+          <br/>
+          <cosmo-table
+          *ngIf="innerrow.elaborazioni && innerrow.elaborazioni.length>0"
+          #documentiProcessi
+          [tableDisplayClass]="'table table-sm table-hover variant-primary'"
+          [data]="innerrow.elaborazioni"
+          [columns]="columnsDocProcessi"
+          [enableSorting]="false"
+          [enablePagination]="false"
+          [paginationMode]="'CLIENT'"
+          [enableRowExpansion]="false"
+          >
+            <ng-template let-innerrow="row" let-column="column" let-value="value" #cellTemplate>
+              <div *ngIf="column.name === 'statoCaricamentoPratica'">
+                <span class="badge badge-pill badge-{{ getBadgeClass(innerrow) }}">{{ innerrow.statoCaricamentoPratica.descrizione }}</span>
+              </div>
+            </ng-template>
+          </cosmo-table>
+
+        </ng-template>
+
+
+      </cosmo-table>
+
+      <div class="row mt-3">
+        <div class="col-12 col-lg-3">
+          <!-- EMPTY -->
+        </div>
+        <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination
+          [table]="praticaCorrente(row)"
+        ></cosmo-table-pagination>
+        </div>
+      </div>
+
+    </ng-template>
+
+    </cosmo-table>
+  </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="table">
+    <div class="col-12 col-lg-3">
+      <!-- EMPTY -->
+    </div>
+    <div class="col-12 col-lg-6 text-center">
+      <cosmo-table-pagination *ngIf="table"
+        [table]="table"
+      ></cosmo-table-pagination>
+    </div>
+    <div class="col-12 col-lg-3 text-right pt-2">
+      <cosmo-table-page-size *ngIf="table"
+        [table]="table"
+      ></cosmo-table-page-size>
+    </div>
+  </div>
+
+
+  </ng-container>
+
+
+
+</div>

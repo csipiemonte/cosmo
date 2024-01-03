@@ -1,0 +1,388 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+</ng-container>
+<ng-container *ngIf="loading">
+  <app-caricamento-in-corso></app-caricamento-in-corso>
+</ng-container>
+
+<ng-container *ngIf="!loading && !loadingError">
+  <div class="btn-group" role="group" aria-label="Modalità storico attività">
+    <button type="button" [ngClass]="{'btn-outline-success': toggleEventi !== 1, 'btn-success focus-mouse': toggleEventi === 1 }" class="btn"(click)="toggleEventi = 1">Visualizzazione attivit&agrave;</button>
+    <button type="button" [ngClass]="{'btn-outline-primary': toggleEventi !== 2, 'btn-primary focus-mouse': toggleEventi === 2 }" class="btn" (click)="toggleEventi = 2">Visualizzazione eventi</button>
+    <button type="button" [ngClass]="{'btn-outline-dark': toggleEventi !== 3, 'btn-dark focus-mouse': toggleEventi === 3 }" class="btn" (click)="toggleEventi = 3">Visualizzazione diagramma</button>
+  </div>
+  <hr>
+
+  <div class="container storico" *ngIf="storico?.eventi?.length">
+    <div class="row" *ngIf="toggleEventi === 2">
+      <div class="col-12">
+        <ng-container [ngSwitch]="evento.tipo" *ngFor="let evento of storico?.eventi">
+          <ng-container *ngSwitchCase="'PRATICA_CREATA'">
+            <ng-container *ngTemplateOutlet="creazionePratica; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'PRATICA_AVVIATA'">
+            <ng-container *ngTemplateOutlet="avvioPratica; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'ATTIVITA_CREATA'">
+            <ng-container *ngTemplateOutlet="creazioneAttivita; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'ATTIVITA_ASSEGNATA'">
+            <ng-container *ngTemplateOutlet="assegnazioneAttivita; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'ATTIVITA_LAVORATA'">
+            <ng-container *ngTemplateOutlet="lavorazioneAttivita; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'ATTIVITA_COMPLETATA'">
+            <ng-container *ngTemplateOutlet="chiusuraAttivita; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'ATTIVITA_ANNULLATA'">
+            <ng-container *ngTemplateOutlet="annullamentoAttivita; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'PRATICA_COMPLETATA'">
+            <ng-container *ngTemplateOutlet="chiusuraPratica; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'PRATICA_ANNULLATA'">
+            <ng-container *ngTemplateOutlet="annullamentoPratica; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'PRATICA_CAMBIO_STATO'">
+            <ng-container *ngTemplateOutlet="cambioStatoPratica; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'EVENTO_AUTOMATICO'">
+            <ng-container *ngTemplateOutlet="eventoAutomatico; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <ng-container *ngTemplateOutlet="eventoGenerico; context:{$implicit: evento}"></ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="storico?.attivita?.length && toggleEventi === 1">
+
+    <div class="table-responsive mb-4">
+      <cosmo-table
+        #table
+        [tableDisplayClass]="'table table-sm table-hover'"
+        [dataProvider]="dataProvider"
+        [columns]="columns"
+        [enableSorting]="true"
+        [enablePagination]="true"
+        [paginationMode]="'CLIENT'"
+        [defaultPageSize]="10"
+        [possiblePageSize]="[10,20,50,100]"
+        [enableRowExpansion]="false"
+        [defaultSortingColumn]="'inizio'"
+      >
+        <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate >
+          <div *ngIf="column.name === 'utenti'">
+            <ng-container *ngIf="row.utentiCoinvolti && row.utentiCoinvolti.length > 0; else noUtenti">
+              <ng-container *ngIf="row.utentiCoinvolti.length === 1; else popoverUtenti">
+                {{row.utentiCoinvolti[0].nome + ' ' + row.utentiCoinvolti[0].cognome}}
+              </ng-container>
+              <ng-template #popoverUtenti>
+
+                <span class=" pointer" placement="bottom" [ngbPopover]="popContent" popoverClass="very-large-popover"
+                >
+                <ng-template #popContent>
+                    <table>
+                        <tr *ngFor="let utente of row.utentiCoinvolti">
+                            <td class="bold">
+                              {{utente.nome + ' ' + utente.cognome}}
+                            </td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <i class="fas fa-user"></i>
+            </span>
+
+              </ng-template>
+            </ng-container>
+            <ng-template #noUtenti>
+              --
+            </ng-template>
+          </div>
+          <div *ngIf="column.name === 'gruppi'">
+            <ng-container *ngIf="row.gruppiCoinvolti && row.gruppiCoinvolti.length > 0; else noGruppi">
+              <ng-container *ngIf="row.gruppiCoinvolti.length === 1; else popoverGruppi">
+                {{row.gruppiCoinvolti[0].descrizione}}
+              </ng-container>
+              <ng-template #popoverGruppi>
+
+                <span class=" pointer" placement="bottom" [ngbPopover]="popContent" popoverClass="very-large-popover"
+                >
+                <ng-template #popContent>
+                    <table>
+                        <tr *ngFor="let gruppo of row.gruppiCoinvolti">
+                            <td scope="col" class="bold">
+                              {{gruppo.descrizione}}
+                            </td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <i class="fas fa-users"></i>
+            </span>
+
+              </ng-template>
+            </ng-container>
+            <ng-template #noGruppi>
+              --
+            </ng-template>
+          </div>
+          <div *ngIf="column.name === 'stato'">
+            <span *ngIf="row.stato; else noStato"
+            [ngClass]="{'badge-primary': 'IN_CORSO' === row.stato.codice, 'badge-success': 'TERMINATA' === row.stato.codice }"
+             class="badge">{{row.stato.descrizione}}</span>
+          </div>
+          <ng-template #noStato>--</ng-template>
+        </ng-template>
+      </cosmo-table>
+    </div>
+    <div class="row">
+      <div class="col-sm-3 pb-2">
+      </div>
+      <div class="col-sm-5 text-center pb-2">
+        <cosmo-table-pagination [table]="table">
+        </cosmo-table-pagination>
+      </div>
+      <div class="col-sm-4 text-center pb-2">
+        <cosmo-table-page-size [table]="table">
+        </cosmo-table-page-size>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="storico?.attivita?.length && toggleEventi === 3">
+    <apx-chart
+      *ngIf="chartOptions"
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [legend]="chartOptions.legend"
+      [annotations]="chartOptions.annotations"
+      [grid]="chartOptions.grid"
+    ></apx-chart>
+  </div>
+</ng-container>
+
+<ng-template #eventoGenerico let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'secondary',
+    level: 0,
+    badgeText: evento.string,
+    icon: 'fas fa-exclamation-triangle'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #creazionePratica let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'primary',
+    level: 0,
+    badgeText: 'Creazione pratica',
+    icon: 'far fa-folder',
+    iconSecondary: 'fas fa-plus'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #avvioPratica let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'primary',
+    level: 0,
+    badgeText: 'Avvio pratica',
+    icon: 'far fa-folder',
+    iconSecondary: 'fas fa-play'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #annullamentoPratica let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'danger',
+    level: 0,
+    badgeText: 'Annullamento pratica',
+    icon: 'far fa-folder',
+    iconSecondary: 'fas fa-ban'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #chiusuraPratica let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'success',
+    level: 0,
+    badgeText: 'Chiusura pratica',
+    icon: 'far fa-folder',
+    iconSecondary: 'fas fa-check'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #chiusuraAttivita let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'success',
+    level: 1,
+    badgeText: 'Chiusura attivit&agrave;',
+    icon: 'fas fa-user-check'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #annullamentoAttivita let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'danger',
+    level: 1,
+    badgeText: 'Annullamento attivit&agrave;',
+    icon: 'fas fa-user-check',
+    iconSecondary: 'fas fa-ban'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #assegnazioneAttivita let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'primary',
+    level: 1,
+    badgeText: 'Assegnazione attivit&agrave;',
+    icon: 'fas fa-user-plus'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #creazioneAttivita let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+    $implicit: evento,
+    badgeClass: 'primary',
+    level: 1,
+    badgeText: 'Creazione attivit&agrave;',
+    icon: 'far fa-clipboard'
+  }"></ng-container>
+</ng-template>
+
+<ng-template #lavorazioneAttivita let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+      $implicit: evento,
+      badgeClass: 'primary',
+      level: 1,
+      badgeText: 'Lavorazione attivit&agrave;',
+      icon: 'fas fa-user-edit'
+    }"></ng-container>
+</ng-template>
+
+<ng-template #cambioStatoPratica let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+      $implicit: evento,
+      badgeClass: getBadgeClass(evento),
+      level: 0,
+      badgeText: getStatusText(evento),
+      icon: 'fas fa-window-restore'
+    }"></ng-container>
+</ng-template>
+
+<ng-template #eventoAutomatico let-evento>
+  <ng-container *ngTemplateOutlet="eventCard; context:{
+      $implicit: evento,
+      badgeClass: getBadgeClass(evento),
+      level: 0,
+      badgeText: evento.descrizione,
+      icon: 'fas fa-robot'
+    }"></ng-container>
+</ng-template>
+
+<ng-template #eventCard
+  let-evento
+  let-level="level"
+  let-eventType="eventType"
+  let-badgeClass="badgeClass"
+  let-badgeText="badgeText"
+  let-icon="icon"
+  let-iconSecondary="iconSecondary"
+>
+  <div class="card card-form evento evento-{{ eventType || ( evento.utente ? 'utente' : evento.fruitore ? 'fruitore' : 'sistema') }} level-{{ level || 0 }}">
+    <div class="d-flex align-items-center flex-row event-header">
+      <div class="tipo">
+        <span class="badge badge-{{ badgeClass }}">
+          {{ badgeText }}
+        </span>
+      </div>
+      <div class="ml-auto text-right">
+        &nbsp;
+      </div>
+    </div>
+    <div class="d-flex align-items-center flex-row content-row event-body">
+      <div class="icon-container">
+        <span class="fa-stack fa-4x icon">
+          <ng-container *ngIf="!iconSecondary">
+            <i class="{{ icon }} fa-stack-2x icon-entity"></i>
+          </ng-container>
+          <ng-container *ngIf="iconSecondary">
+            <i class="{{ icon }} fa-stack-2x icon-entity"></i>
+            <i class="{{ iconSecondary }} fa-stack-2x icon-action"></i>
+          </ng-container>
+        </span>
+      </div>
+      <div class="descrizione" *ngIf="evento.descrizione">
+        {{ evento.descrizione }}
+      </div>
+    </div>
+    <div class="d-flex align-items-center flex-row event-footer" *ngIf="evento.timestamp">
+      <div>
+        <span class="timestamp">{{evento.timestamp | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+      </div>
+      <div class="ml-auto text-right">
+
+        <div class="utente" *ngIf="evento.utente && !(evento.utenteCoinvolto || evento.gruppoCoinvolto)">
+          <span>
+            {{ evento.utente.nome  | uppercase }} {{ evento.utente.cognome  | uppercase }}
+          </span>
+          <i class="fas fa-user"></i>
+        </div>
+
+        <div class="utente-coinvolto" *ngIf="evento.utenteCoinvolto">
+          <span *ngIf="evento.utente">
+            <i class="fas fa-user mr-1"></i>
+            {{ evento.utente.nome  | uppercase }} {{ evento.utente.cognome  | uppercase }}
+          </span>
+          <span *ngIf="!evento.utente && !evento.fruitore">
+            <i class="fas fa-user-astronaut mr-1" style="font-size: 1.2em;"></i>
+          </span>
+          <i class="far fa-hand-point-right ml-2 mr-2"></i>
+          <span>
+            {{ evento.utenteCoinvolto.nome  | uppercase }} {{ evento.utenteCoinvolto.cognome  | uppercase }}
+            <i class="fas fa-user ml-1"></i>
+          </span>
+        </div>
+
+        <div class="gruppo-coinvolto" *ngIf="evento.gruppoCoinvolto">
+          <span *ngIf="evento.utente">
+            <i class="fas fa-user mr-1"></i>
+            {{ evento.utente.nome  | uppercase }} {{ evento.utente.cognome  | uppercase }}
+          </span>
+          <span *ngIf="!evento.utente && !evento.fruitore">
+            <i class="fas fa-user-astronaut mr-1" style="font-size: 1.2em;"></i>
+          </span>
+          <i class="far fa-hand-point-right ml-2 mr-2"></i>
+          <span>
+            {{ evento.gruppoCoinvolto.descrizione | uppercase }}
+            <i class="fas fa-users ml-1"></i>
+          </span>
+        </div>
+
+        <div class="fruitore" *ngIf="evento.fruitore">
+          <span>
+            {{ evento.fruitore.nomeApp | uppercase }}
+          </span>
+          <i class="fas fa-robot"></i>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</ng-template>

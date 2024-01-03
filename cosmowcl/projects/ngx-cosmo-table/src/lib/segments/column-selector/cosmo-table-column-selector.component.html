@@ -1,0 +1,74 @@
+<ng-container *ngIf="render">
+  <!-- DROPDOWN IN WEBKIT MODE -->
+  <ng-container *ngIf="!compatibilityModeForDropDowns">
+  <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+      <button type="button" class="btn btn-outline-primary dropdown-toggle" ngbDropdownToggle>
+        {{ 'table.common.messages.add_remove_columns' | translate }}
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu">
+        <h6 ngbDropdownItem class="dropdown-header">
+          {{ 'table.common.messages.select_columns_prompt' | translate }}
+        </h6>
+        <button ngbDropdownItem class="dropdown-item">
+          <div class="nbi-form-group clickable">
+            <div class="nbi-form-check">
+              <input type="checkbox" [checked]="allVisibleColumnsChecked"
+                (change)="toggleAllVisibleColumnsChecked(); $event.stopPropagation();" />
+              <span  (click)="toggleAllVisibleColumnsChecked(); $event.stopPropagation();">
+                {{ 'table.common.messages.pick_all_visible_columns' | translate }}
+              </span>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+        </button>
+        <ng-container *ngFor="let column of parsedColumns">
+        <button ngbDropdownItem class="dropdown-item" 
+          [class.disabled]="!isHideable(column)" 
+          *ngIf="hasLabel(column) && (isHideable(column) || configColumnVisibilityShowFixedColumns)"
+          (click)="toggleVisibleColumnChecked(column); $event.stopPropagation();"
+        >
+          <div class="nbi-form-group clickable" >
+            <div class="nbi-form-check">
+              <input type="checkbox" [checked]="isColumnCheckedForVisualization(column)" *ngIf="isHideable(column)"
+                (change)="toggleVisibleColumnChecked(column); $event.stopPropagation();" />
+              <input type="checkbox" [checked]="true" *ngIf="!isHideable(column)" [disabled]="true" />
+              <span (click)="toggleVisibleColumnChecked(column); $event.stopPropagation();">
+                {{ resolveLabel(column) }}
+              </span>
+            </div>
+          </div>
+        </button>
+        </ng-container>
+      </div>
+  </div>
+  </ng-container>
+
+  <!-- DROPDOWN IN IE11 COMPATIBILITY MODE -->
+  <ng-container *ngIf="compatibilityModeForDropDowns">
+    <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+      <button type="button" class="btn btn-outline-primary dropdown-toggle" style="white-space: normal;" ngbDropdownToggle>
+        {{ 'table.common.messages.add_remove_columns' | translate }}
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu">
+        <h6 ngbDropdownItem class="dropdown-header">
+          {{ 'table.common.messages.select_columns_prompt' | translate }}
+        </h6>
+        <button ngbDropdownItem (click)="toggleAllVisibleColumnsChecked()">
+          <fa-icon [icon]="'check-square'" *ngIf="allVisibleColumnsChecked"></fa-icon>
+          <fa-icon [icon]="'square'" *ngIf="!allVisibleColumnsChecked"></fa-icon>
+          {{ 'table.common.messages.pick_all_visible_columns' | translate }}
+          <div class="dropdown-divider"></div>
+        </button>
+        <ng-container *ngFor="let column of parsedColumns">
+        <button ngbDropdownItem *ngIf="hasLabel(column) && (isHideable(column) || configColumnVisibilityShowFixedColumns)"
+          [class.disabled]="!isHideable(column)" (click)="toggleVisibleColumnChecked(column)">
+            <fa-icon [icon]="'check-square'" *ngIf="isHideable(column) && isColumnCheckedForVisualization(column)"></fa-icon>
+            <fa-icon [icon]="'square'" *ngIf="isHideable(column) && !isColumnCheckedForVisualization(column)"></fa-icon>
+            <fa-icon [icon]="'check-square'" *ngIf="!isHideable(column)"></fa-icon>
+            {{ resolveLabel(column) }}
+        </button>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>  
+</ng-container>

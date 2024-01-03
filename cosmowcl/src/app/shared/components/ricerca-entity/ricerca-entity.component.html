@@ -1,0 +1,46 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend" *ngIf="showIcons">
+        <span class="input-group-text">
+            <span class="{{ 
+            internalControlValue && internalControlValue.entity && internalControlValue.nuovo ? 'fas fa-plus' : 
+            internalControlValue && internalControlValue.entity ? getIcon(internalControlValue) : 
+            'fas fa-search' 
+            }}">
+            </span>
+        </span>
+    </div>
+    <input
+        #instance="ngbTypeahead"
+        #nativeControl
+        type="text"
+        class="form-control"
+        [placeholder]="placeholder"
+        autocomplete="off" 
+        [ngbTypeahead]="inputSearch"
+        [editable]="false"
+        [resultTemplate]="template"
+        [inputFormatter]="inputFormatter"
+        [(ngModel)]="internalControlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="inputFocusOut($event)"
+        (focus)="focus$.next($any($event).target.value)"
+        (click)="click$.next($any($event).target.value)"
+        (change)="change($event)"
+        (selectItem)="selectItemInternal($event)"
+        (blur)="blur($event)"
+        [container]="'body'"
+    />
+</div>
+<ng-template #template let-r="result" let-t="term">
+    <ng-container *ngIf="r.entity">
+        <span *ngIf="showOptionsIcons" class="{{ r.nuovo ? 'fas fa-plus' : getIcon(r) }} mr-2"></span>
+        <ngb-highlight [result]="inputFormatter(r)" [term]="t"></ngb-highlight>
+        <span *ngIf="r.nuovo"> (nuovo {{ getEntityDescriptionSingular() }})</span>
+    </ng-container>
+</ng-template>

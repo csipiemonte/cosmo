@@ -1,0 +1,11 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="riassunto?.length">
+    <div markdown>{{riassunto}}</div>
+</ng-container>
+<ng-container *ngIf="!riassunto?.length">
+    Nessun riassunto presente.
+</ng-container>
+

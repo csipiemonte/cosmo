@@ -1,0 +1,23 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+$animation_duration: 1.5s;
+td.bold {
+    font-weight: bold;
+  }
+.input-group-text {
+  background-color: transparent !important;
+}
+.fa-pulse {
+	display: inline-block;
+	-moz-animation: pulse $animation_duration infinite linear;
+	-o-animation: pulse $animation_duration infinite linear;
+	-webkit-animation: pulse $animation_duration infinite linear;
+	animation: pulse $animation_duration infinite linear;
+}
+
+::ng-deep .very-large-popover {
+  max-width: 60em !important;
+}

@@ -1,0 +1,91 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="render">
+
+
+    <table class="table table-sm">
+        <thead>
+            <th scope="col" *ngIf="!small"></th>
+            <th scope="col">Firmatario</th>
+            <th scope="col" *ngIf="!small">Data</th>
+            <th scope="col" *ngIf="!small">Organizzazione</th>
+            <th scope="col">Verifica</th>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let info of firme">
+                <tr [class.proto-table-warning]="info.esito?.codice === 'NON_VERIFICATA' ||
+                        info.esito?.codice === 'NON_VALIDA'">
+                    <!-- TIPOLOGIA FIRMA -->
+                    <td style="width: 1px;" *ngIf="!small">
+                        <span *ngIf="info.dataApposizioneMarcaturaTemporale" title="Marcatura temporale">
+                            <i class="fas fa-history icon-tipo-firma"></i>
+                        </span>
+                        <span *ngIf="info.dataApposizione && !info.dataApposizioneMarcaturaTemporale"
+                            title="Firma digitale">
+                            <i class="fas fa-file-signature icon-tipo-firma"></i>
+                        </span>
+                    </td>
+                    <!-- FIRMA -->
+                    <td>
+                        {{ info.firmatario || info.codiceFiscaleFirmatario || '--' }}
+                    </td>
+                    <!-- DATA -->
+                    <td *ngIf="!small">
+                        <ng-container *ngIf="info.dataApposizione">
+                            {{ info.dataApposizione | date:'dd/MM/yyyy HH:mm:ss' }}
+                        </ng-container>
+                        <ng-container *ngIf="!info.dataApposizione && info.dataApposizioneMarcaturaTemporale">
+                            {{ info.dataApposizioneMarcaturaTemporale | date:'dd/MM/yyyy HH:mm:ss' }}
+                        </ng-container>
+                        <ng-container *ngIf="!info.dataApposizione && !info.dataApposizioneMarcaturaTemporale">
+                            --
+                        </ng-container>
+                    </td>
+                    <!-- ORGANIZZAZIONE -->
+                    <td *ngIf="!small">
+                        {{ info.organizzazione || '--' }}
+                    </td>
+                    <!-- VALIDA -->
+                    <td [ngSwitch]="info.esito?.codice" class="{{
+                        info.esito?.codice === 'NON_VALIDA' ? 'bg-danger text-white' : ''}} ">
+                        <span *ngSwitchCase="'NON_VERIFICATA'">
+                            <span class="text-warning">
+                                <i class="fas fa-check icon-esito-verifica-firma"></i>
+                            </span>
+                            {{ info.esito?.descrizione | uppercase }}, verifica in data {{info.dataVerificaFirma
+                            | date:"dd/MM/yyyy HH:mm:ss" }}
+                        </span>
+                        <span *ngSwitchCase="'VALIDA'">
+                            <span class="text-success">
+                                <i class="fas fa-check icon-esito-verifica-firma"></i>
+                            </span>
+                            {{ info.esito?.descrizione }} in data {{ info.dataVerificaFirma | date:"dd/MM/yyyy
+                            HH:mm:ss" }}
+                        </span>
+                        <span *ngSwitchCase="'NON_VALIDA'">
+                            <span class="">
+                                <i class="fas fa-times icon-esito-verifica-firma"></i>
+                            </span>
+                            {{ info.esito?.descrizione | uppercase }}, verifica in data {{info.dataVerificaFirma
+                            | date:"dd/MM/yyyy HH:mm:ss" }}
+                            <div *ngIf="info.codiceErrore?.length" style="padding-left: 1.4em;">
+                                {{ ('documenti.verifica_firme.' + info.codiceErrore | lowercase) | translate }}
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngIf="info.infoVerificaFirme?.length">
+                    <td colspan="5">
+                        <caption class="mt-2">Controfirme</caption>
+                        <div class="mt-1 mb-2 pl-5">
+                            <app-dettaglio-verifica-firme [firme]="info.infoVerificaFirme">
+                            </app-dettaglio-verifica-firme>
+                        </div>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</ng-container>

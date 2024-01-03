@@ -1,0 +1,100 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<form [formGroup]="nuovoEventoForm" (ngSubmit)="submit()" *ngIf="nuovoEventoForm">
+
+  <div class="modal-header cosmo-modal-header">
+    <h6 class="modal-title">
+      Inserisci un nuovo evento
+    </h6>
+    <button type="button" class="close"  aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss()">
+      <span aria-hidden="false">&times;</span>
+    </button>&nbsp; &nbsp;
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+  </div>
+  <div class="modal-body px-5 py-3 mobile-first">
+    <ul class="list-unstyled events-list">
+
+      <li class="media evento">
+
+        <div class="media-body">
+
+          <label>Titolo Evento</label>
+          <input
+            [ngClass]="{ 'is-invalid': nuovoEventoForm?.controls['nome'].touched && nuovoEventoForm?.controls['nome'].invalid }"
+            type="text" id="nome" name="nome" formControlName="nome" class="form-control" minlength="{{MIN_LEN_TITLE}}">
+
+          <!-- non-valid titolo messages  -->
+          <div class="invalid-feedback"
+            *ngIf="nuovoEventoForm?.controls['nome'].touched && nuovoEventoForm?.controls['nome'].invalid">
+            <p *ngIf="nuovoEventoForm?.controls['nome']?.hasError('required')">titolo dell'evento necessario</p>
+            <p *ngIf="nuovoEventoForm?.controls['nome'].hasError('minlength')"> titolo troppo corto, deve contenere
+              almeno {{MIN_LEN_TITLE}} caratteri</p>
+          </div>
+
+          <br>
+
+          <label>Descrizione</label>
+          <input
+            [ngClass]="{ 'is-invalid': nuovoEventoForm?.controls['descrizione'].touched && nuovoEventoForm?.controls['descrizione'].invalid }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+            minlength={{MIN_LEN_DESC}}>
+
+          <!-- non-valid descrizione messages  -->
+          <div class="invalid-feedback"
+            *ngIf="nuovoEventoForm?.controls['descrizione'].touched && nuovoEventoForm?.controls['descrizione'].invalid">
+            <p *ngIf="nuovoEventoForm?.controls['descrizione']?.hasError('required')">
+              descrizione dell'evento necessario</p>
+            <p *ngIf="nuovoEventoForm?.controls['descrizione']?.hasError('minlength')">
+              descrizione dell'evento troppo corta, deve contenere almeno {{MIN_LEN_DESC}} caratteri</p>
+          </div>
+
+          <br>
+
+          <label>Data scadenza</label>
+          <div class="row">
+            <div class="col-5">
+              <a (click)="tornaAdOggi()"
+                 data-toggle="tooltip"
+                 title="Vai ad oggi"
+                 class="btn-primary btn-sm text-white text-center btn-block rounded">
+                 <span class="fas fa-calendar-day"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                 {{ today }}
+              </a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5 pt-3">
+              <ngb-datepicker #dp formControlName="dataScadenza" [startDate]="date" (dateSelect)="setDueDate($event)" class="centered it-datepicker-wrapper" [dayTemplate]="t">
+              </ngb-datepicker>
+              <ng-template #t let-date let-focused="focused" let-selected="selected" let-today="today">
+                <span class="custom-day"
+                      [class.focused]="focused"
+                      [class.today]="today"
+                      [class.selected]="selected">
+                  {{ date.day }}
+                </span>
+              </ng-template>
+            </div>
+            <br>
+          </div>
+          <br>
+          <div class="row">
+            <button type="submit" ngbAutoFocus style="width: 100%;" class="btn btn-primary" aria-label="Submit button"
+              [disabled]="!nuovoEventoForm?.valid">{{evento ? 'modifica evento' : 'crea evento' }}</button>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+
+</form>

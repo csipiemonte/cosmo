@@ -1,0 +1,48 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "ngx-cosmo-table": [
+        "projects/ngx-cosmo-table/src/public-api",
+        "dist/ngx-cosmo-table/ngx-cosmo-table",
+        "dist/ngx-cosmo-table"
+      ],
+      "ngx-cosmo-table-lib": [
+        "projects/ngx-cosmo-table/src/public-api"
+      ]
+    },
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
+  "exclude": [
+    ".git",
+    ".app-cache",
+    ".npm",
+    ".npm-tmp",
+    "dist",
+    "dist*",
+    "node_modules",
+    "**/dist/*",
+    "**/node_modules/*",
+    "src/assets"
+  ]
+}

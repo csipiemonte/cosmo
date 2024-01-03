@@ -1,0 +1,140 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+          (click)="modal.dismiss('click_on_back_arrow')">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        &nbsp;{{ "preferenze.aggiungi_certificato" | translate }}
+      </h5>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+              <h2 class="">{{"firma_digitale.certificato_firma" | translate}}</h2>
+            </div>
+          </div>
+        <form [formGroup]="certificatoFirmaForm" *ngIf="certificatoFirmaForm">
+            <div class="row mt-3">
+              <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+                <label [ngClass]="{'active': certificatoFirmaForm?.controls['descrizione'].value}" for="descrizione">
+                  {{"firma_digitale.descrizione" | translate}}
+                </label>
+                <input
+                  [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['descrizione'].touched && certificatoFirmaForm?.controls['descrizione'].invalid }"
+                  type="text" id="descrizione" name="username" formControlName="descrizione" class="form-control border">
+                <div class="invalid-feedback"
+                  *ngIf="certificatoFirmaForm?.controls['descrizione'].touched && certificatoFirmaForm?.controls['descrizione'].invalid">
+                  <p *ngIf="certificatoFirmaForm?.controls['descrizione']?.hasError('required')">
+                    {{"errori.campo_obbligatorio" | translate}}</p>
+                </div>
+              </div>
+              <div class="it-datepicker-wrapper col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                  <label for="scadenza">
+                    {{"firma_digitale.scadenza" | translate}}</label>
+                  <input class="form-control border it-date-datepicker" id="scadenza" name="scadenza" formControlName="scadenza"
+                    type="date" placeholder="gg/mm/aaaa">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+                <label [ngClass]="{'active': certificatoFirmaForm?.controls['username'].value}" for="username">
+                  {{"firma_digitale.username" | translate}}
+                </label>
+                <input
+                  [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['username'].touched && certificatoFirmaForm?.controls['username'].invalid }"
+                  type="text" id="username" name="username" formControlName="username" class="form-control border">
+                <div class="invalid-feedback"
+                  *ngIf="certificatoFirmaForm?.controls['username'].touched && certificatoFirmaForm?.controls['username'].invalid">
+                  <p *ngIf="certificatoFirmaForm?.controls['username']?.hasError('required')">
+                    {{"errori.campo_obbligatorio" | translate}}</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+
+                <div class="input-group" >
+                <label [ngClass]="{'active': certificatoFirmaForm?.controls['pin'].value}" for="pin">
+                  {{"firma_digitale.pin" | translate}}
+                </label>
+                  <input style="position: static;"
+                    [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['pin'].touched && certificatoFirmaForm?.controls['pin'].invalid }"
+                    [type]="showPin ? 'text' : 'password'" id="pin" name="pin" formControlName="pin" class="form-control border border-right-0">
+                  <div class="input-group-append  border border-left-0">
+                    <span class="input-group-text border-bottom-0">
+                      <i class="fa" [ngClass]="{ 'fa-eye-slash': !showPin, 'fa-eye': showPin }" (click)="mostrarePin()" ></i>
+                    </span>
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="certificatoFirmaForm?.controls['pin'].touched && certificatoFirmaForm?.controls['pin'].invalid">
+                  <p *ngIf="certificatoFirmaForm?.controls['pin']?.hasError('required')">
+                    {{"errori.campo_obbligatorio" | translate}}</p>
+                </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-sm-12 form-group" *ngIf="canManagePasswordField">
+
+                <div class="input-group" >
+                  <label [ngClass]="{'active': certificatoFirmaForm?.controls['password'].value}" for="password">
+                    {{"firma_digitale.password" | translate}}
+                  </label>
+                  <input style="position: static;"
+                    [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['password'].touched && certificatoFirmaForm?.controls['password'].invalid }"
+                    [type]="showPassword ? 'text' : 'password'" id="password" name="password" formControlName="password" class="form-control border border-right-0">
+                  <div class="input-group-append  border border-left-0">
+                    <span class="input-group-text border-bottom-0">
+                      <i class="fa" [ngClass]="{ 'fa-eye-slash': !showPassword, 'fa-eye': showPassword }" (click)="mostrarePassword()" ></i>
+                    </span>
+                  </div>
+                  <div class="invalid-feedback"
+                  *ngIf="certificatoFirmaForm?.controls['password'].touched && certificatoFirmaForm?.controls['password'].invalid">
+                  <p *ngIf="certificatoFirmaForm?.controls['password']?.hasError('required')">
+                    {{"errori.campo_obbligatorio" | translate}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <h4>{{"preferenze.impostazioni_firma" | translate }}</h4>
+              </div>
+              <div class="col-12">
+                <app-impostazioni-firma
+                  #impostazioniFirma
+                  [obbligatorietaCampi]="false"
+                  [profiliFeqAbilitati]="[]"
+                  (enteCertificatoreSelezionato) = "enteCertificatoreSelezionato($event)">
+                </app-impostazioni-firma>
+
+              </div>
+            </div>
+          </form>
+    </div>
+    <div class="modal-footer text-right">
+        <button ngbAutoFocus class="btn btn-outline-primary btn-sm mr-2" type="button" data-dismiss="modal" (click)="modal.dismiss('cancel click')">
+            {{'common.annulla' | translate }}
+          </button>
+        <button type="submit" class="btn btn-primary btn-sm" [disabled]="disabilitaSalvaCertificato()" (click)="selezionaCertificato()">
+          {{'common.seleziona' | translate }}
+        </button>
+    </div>
+</div>
+
+
+

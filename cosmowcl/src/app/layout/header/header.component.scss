@@ -1,0 +1,104 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+@import 'variables';
+@import 'typography';
+@import "../../../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss";
+
+.sticky-only { display:none !important; }
+.is-sticky { position: fixed; top:0; width:100%; z-index:97; }
+.is-sticky .sticky-only { display:flex !important; }
+.is-sticky .navbar-brand { display:none !important; }
+.is-sticky .d-lg-inline-block, .is-sticky #button-intranet,
+.is-sticky .news-ticker, .is-sticky .header-title { display:none !important; }
+.is-sticky h1 { margin:5px 15px; }
+.navbar { background:transparent; font-size:0.9rem; padding:0px 10px; }
+.header-title { height:70px; padding:10px 5px 0; }
+.header-top { min-height:60px; padding-top:8px; }
+.navbar-brand { font-weight:bold;  }
+.navbar-brand img { padding-right:10px; }
+.nav-icon { background:#FFF; position: relative; margin-right:5px;  color:$rp_darkblue; padding:5px; border-radius: 100%; width:30px; height:30px; display:inline-block; text-align:center; line-height:1.3 !important;  }
+a:hover .nav-icon { background:$rp_orange; color:#FFF; }
+.nav-icon.fa-search { text-indent:-5px; }
+.nav-icon .internal { position: absolute; top:10px; right:2px; font-size:0.7rem; }
+
+.hamburger { padding:10px 0 0; }
+.hamburger-inner, .hamburger-inner:after, .hamburger-inner:before,
+.hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner:after,
+.hamburger.is-active .hamburger-inner:before { background-color:#FFF; }
+.dropdown-item:hover { color:$rp_text_color !important; }
+.navbar-toggler:focus { outline:none; }
+.navbar-collapse { z-index:99; background-color:$rp_darkblue; }
+.leftnav-hamburger { position:absolute; top:70px; left:20px; z-index:98; }
+.is-sticky .leftnav-hamburger { top:12px; }
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+
+
+@media screen and (min-width:576px) {
+    .navbar-brand { padding-left:0; }
+}
+@media screen and (min-width:768px) {
+    .header-top { height:60px; padding-top:0; }
+    .navbar-collapse { padding-top:5px; }
+    .dropdown-menu.show { background:#FFF; }
+
+}
+@media screen and (min-width:992px) {
+    .navbar { padding-left:5px;}
+
+    .navbar-brand { padding-top:15px; }
+}
+@media screen and (min-width:1200px) {
+}
+
+
+}
+.ellipsis.w-10 {
+    max-width: 10em;
+}
+.ellipsis.w-13 {
+    max-width: 13em;
+}
+@font-face {
+    font-family: space-age;
+    src: url(space_age.ttf) format("truetype");
+  }
+
+h1.space-age {
+    font-family: 'space-age', 'arial', sans-serif;
+}
+
+@media screen and (min-width:576px) {
+  h1 { text-indent:60px;  }
+}
+
+@media screen and (min-width:992px) {
+h1 { text-indent:60px; }
+}
+
+@media screen and (max-width:991px){
+  .dropdown-menu.mobile-first  {
+    background-color: white;
+  }
+}
+
+@media screen and (min-width:768px) and (max-width:991px){
+  h1 { text-indent:20px;  }
+}
+.divider {
+  height: 1px;
+  width:100%;
+  display:block;
+  margin: 5px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+.w-80 {
+  width: 80% !important;
+}

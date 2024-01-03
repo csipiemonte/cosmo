@@ -1,0 +1,164 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+</ng-container>
+<ng-container *ngIf="loading">
+  <app-caricamento-in-corso></app-caricamento-in-corso>
+</ng-container>
+
+<ng-container [ngSwitch]="scenario" *ngIf="!loadingError && !loading">
+
+  <ng-container *ngFor="let commento of commenti">
+    <app-commento [commento]="commento">
+    </app-commento>
+  </ng-container>
+  
+  <div *ngIf="!(commenti?.length)">
+    Non ci sono commenti da collaboratori.
+  </div>
+
+  <ng-container *ngIf="!readOnly">
+    <!--
+      Scenario 1 - Nessun subtask per il task padre selezionato
+    -->
+    <ng-container *ngSwitchCase="1">  
+
+      <form #scenario1form="ngForm" name="scenario1form" novalidate>
+        <div class="row mt-5">
+          <div class="col-sm-10 form-row">
+
+            <textarea
+              placeholder="inserisci il commento ..."
+              name="commentText"
+              [(ngModel)]="commentText" 
+              class="w-100 border"
+              rows="4"
+              required
+              #commentTextCtrl="ngModel"
+              [class.border-warning]="displayErrors(commentTextCtrl)"
+              (change)="update()"
+            ></textarea>
+            <p *ngIf="displayErrors(commentTextCtrl)" class="alert alert-warning mt-3 w-100">
+              <span *ngIf="commentTextCtrl.errors?.required">
+                Il testo del commento &egrave; obbligatorio.
+                <br/>
+              </span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-sm-10 form-row">
+            <input id="assegnaSubtaskRicercaUtente" 
+              type="text" 
+              class="form-control border" 
+              name="selectedUser"
+              [(ngModel)]="selectedUser" 
+              placeholder="ricerca utente"
+              [ngbTypeahead]="search" 
+              [resultFormatter]="formatter" 
+              [inputFormatter]="formatter" 
+              [editable]="false"
+              required
+              #userCtrl="ngModel"
+              [class.border-warning]="displayErrors(userCtrl)"
+              (change)="update()"
+            />
+            <p *ngIf="displayErrors(userCtrl)" class="alert alert-warning mt-3 w-100">
+              <span *ngIf="userCtrl.errors?.required">
+                L'utente collaboratore &egrave; obbligatorio.
+              </span>
+            </p>
+          </div>
+          <div class="col-sm-2">
+            <div
+              style="padding: 0.2em;"
+              (mouseover)="hoverAssegna()"
+            >
+              <button 
+                class="btn btn-primary btn-block" 
+                type="button" 
+                [disabled]="!abilitaInvioCommento" 
+                (click)="assegnaSubtask()"
+              >
+                assegna
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+
+    <!--
+      Scenario 2 - Esecuzione del subtask post scenario 1
+    -->
+    <div class="row mb-7" *ngSwitchCase="2">
+      <div class="col-sm-12">
+        <p class="alert alert-info w-100 mt-5">
+          {{ "form_logici.collaborazione_in_corso" | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!--
+      Scenario 4 - Collaboratore, con task attivo
+    -->
+    <div class="row mb-7" *ngSwitchCase="4">
+
+      <div class="col-sm-12 form-row">
+        <ng-form class="w-100" #scenario4form="ngForm" name="scenario4form" novalidate>
+          <div class="row mt-5">
+            <div class="col-sm-10 form-row">
+
+              <textarea
+                placeholder="inserisci la risposta ..."
+                name="replyText"
+                [(ngModel)]="replyText" 
+                class="w-100 border"
+                rows="4"
+                required
+                #replyTextCtrl="ngModel"
+                [class.border-warning]="displayErrors(replyTextCtrl)"
+                (change)="update()"
+              ></textarea>
+              <p *ngIf="displayErrors(replyTextCtrl)" class="alert alert-warning mt-3 w-100">
+                <span *ngIf="replyTextCtrl.errors?.required">
+                  Il testo della risposta &egrave; obbligatorio.
+                  <br/>
+                </span>
+              </p>
+            </div>
+            <div class="col-sm-2">
+              <div
+                style="padding: 0.2em;"
+              >
+                <button 
+                  class="btn btn-primary btn-block" 
+                  type="button" 
+                  [disabled]="!abilitaInvioRispostaCollaboratore" 
+                  (click)="inviaRispostaCollaboratore()"
+                >
+                  rispondi
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-form>
+      </div>
+    </div>
+
+    <!--
+      Scenario 5 - Collaboratore, senza task attivi
+    -->
+    <div class="form-row mb-7 col-sm-12 md-8" *ngSwitchCase="5">
+      <div class="col-sm-12">
+        <p class="alert alert-info w-100 mt-5">
+          {{ "form_logici.collaborazione_terminata" | translate }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

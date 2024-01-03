@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        This table takes data from a provider
+        function instead of a static array.
+        Ideal to fetch data from a backend with server-side pagination.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [dataProvider]="dataProvider"
+        [columns]="columns"
+        [enablePagination]="true"
+        [paginationMode]="'SERVER'"
+        [defaultPageSize]="5"
+        [possiblePageSize]="[5,10,20]"
+        [enableExport]="true"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="passedToBackend">
+    <div class="col-sm-12">
+      <p>Request sent to backend:</p>
+      <pre class="alert alert-info">{{ passedToBackend | json }}</pre>
+    </div>
+  </div>
+</div>

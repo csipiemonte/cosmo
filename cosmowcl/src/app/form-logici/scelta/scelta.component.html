@@ -1,0 +1,52 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row" *ngIf="messaggi?.length">
+  <div class="col-12 mb-5">
+    <div class="">
+      <ng-container *ngFor="let messaggio of messaggi">
+        <p class="alert alert-{{ messaggio.classe || 'info' }} mt-3 mb-3">
+          <span *ngIf="messaggio.icona" class="{{ messaggio.icona }} mr-2"></span>
+          <span *ngIf="messaggio.chiaveTesto">
+            {{ messaggio.chiaveTesto | translate }}
+          </span>
+          <span *ngIf="messaggio.testo">
+            {{ messaggio.testo }}
+          </span>
+        </p>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="scelte?.length">
+  <div class="col-12 col-lg-6">
+    <div class="">
+      <ng-container *ngFor="let scelta of scelte">
+        <button type="button"
+          class="btn btn-sm btn-{{ scelta.classe || 'primary' }} btn-action mr-3"
+          [disabled]="readOnly"
+          (click)="scegli(scelta)"
+        >
+          <span *ngIf="scelta.icona" class="{{ scelta.icona }} mr-2"></span>
+          <span *ngIf="scelta.chiaveTesto">
+            {{ scelta.chiaveTesto | translate }}
+          </span>
+          <span *ngIf="scelta.testo">
+            {{ scelta.testo }}
+          </span>
+          
+        </button>
+      </ng-container>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6 text-right pr-3">
+    <div *ngIf="sceltaSelezionata">
+      <span *ngIf="sceltaSelezionata.riassunto">{{ sceltaSelezionata.riassunto }}</span>
+      <span *ngIf="!sceltaSelezionata.riassunto && sceltaSelezionata.testo">hai scelto "{{ sceltaSelezionata.testo }}"</span>
+      <span *ngIf="!sceltaSelezionata.riassunto && sceltaSelezionata.chiaveTesto">hai scelto "{{ sceltaSelezionata.chiaveTesto | translate }}"</span>
+      <br/>
+      <span class="pt-2">Premi "conferma" per procedere.</span>
+    </div>
+  </div>
+</div>

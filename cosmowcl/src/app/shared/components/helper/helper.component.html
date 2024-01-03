@@ -1,0 +1,20 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="type === 'CLASSIC'; else modalMode">
+  <a class="nav-link" (click)="openHelperPopup()" role="button" style="white-space: nowrap;">
+    <em class="fas fa-question nav-icon"></em> <span class="d-md-none">
+    </span>
+  </a>
+</ng-container>
+
+<ng-template #modalMode>
+  <button type="button" class="btn btn-link p-0" data-dismiss="modal" (click)="openHelperPopup()">
+  <i class="fas fa-question-circle fa-lg"></i>
+</button>
+</ng-template>
+
+
+
+

@@ -1,0 +1,65 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">ESECUZIONE MULTIPLA</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="">
+      <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="">
+      <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <section class="" [hidden]="loading || loadingError">
+    <app-ricerca-pratiche
+      #ricercaPraticheComponent
+      [readOnly]="true"
+      [selection]="'multi'"
+      [layout]="'compact'"
+      [tipoRicerca]="'selezione'"
+      [filtraPerStatoPratica]="false"
+      [filtraPerStatoAvanzamento]="false"
+      [filtraPerTaskMassivo]="true"
+      [mostraFiltriDefault]="true"
+      [filterAdapter]="filterAdapter"
+      [allowSearch]="allowSearch"
+      [actions]="actions"
+      [actionsStatusProvider]="actionsStatusProvider"
+      (action)="onAction($event)"
+      [selectableStatusProvider]="selectableStatusProvider"
+  ></app-ricerca-pratiche>
+    
+    <div class="row mt-3" *ngIf="!fetching && somePresent && !someSelected">
+      <div class="col-12">
+        <p class="alert alert-info">
+          Seleziona una o pi&ugrave; attivit&agrave; da elaborare.
+        </p>
+      </div>
+    </div>
+    
+    <div class="row mt-3" *ngIf="!fetching && someSelected && !singleTypeSelected">
+      <div class="col-12">
+        <p class="alert alert-warning">
+          Puoi eseguire massivamente solo attivit&agrave; appartenenti alla stessa funzionalit&agrave;
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+</div>

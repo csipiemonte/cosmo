@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        This table has an observable as data input. It refreshes automatically every time the observable input emits.
+        Watch the 'Last updated' column.
+      </p>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="dataObservable"
+        [paginationMode]="'CLIENT'"
+        [columns]="columns"
+        [refreshStrategy]="'NONE'"
+      ></cosmo-table>
+    </div>
+  </div>
+
+</div>

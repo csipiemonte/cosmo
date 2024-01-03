@@ -1,0 +1,123 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+    <div class="row mb-4">
+        <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+            <span class="fas fa-backspace pr-2"></span>Home
+        </button>
+        <span class="breadcrumb-divider"> / </span>
+        <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+            {{ "form_tag.header" | translate }}
+        </button>
+    </div>
+
+    <h2 class="mt-3 mb-5">{{"form_tag.header" | translate}}</h2>
+    <!--Inizio Form-->
+    <form [formGroup]="tgForm" (ngSubmit)="submit()" *ngIf="tgForm">
+        <div class="row justify-content-between pt-5">
+            <div class="col-lg-5 col-sm-12 form-group">
+              <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('tipoTag') }">
+                <label [ngClass]="{'is-invalid': displayInvalid('tipoTag')}" for="tipoTag" class="active">
+                  {{"form_tag.tipo_tag" | translate}}
+                </label>
+                    <app-ricerca-tipo-tags
+                      class="w-100"
+                      #ricercaTipoTagsInput
+                      formControlName = "tipoTag"
+                      name ="tipoTag"
+                      id="tipoTag"
+                      [nuovo]="true"
+                      [tipiTag] = "tipiTags"
+                      [ngClass]="{ 'is-invalid': displayInvalid('tipoTag') }"
+                      (selectItem)="tipoTagSelezionato($event.item)"
+                      [disabled]="!isNuovo">
+                    </app-ricerca-tipo-tags>
+                    <div class="invalid-feedback" *ngIf="displayInvalid('tipoTag')">
+                      <p *ngIf="hasError('tipoTag', 'conflict')">
+                        La chiave composta da tipo tag, ente e codice &egrave; gi&agrave; presente a sistema!
+                      </p>
+                      <p *ngIf="hasError('tipoTag', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                    </div>
+              </div>
+            </div>
+            <div class="col-lg-5 col-sm-12 form-group">
+              <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('ente') }">
+                <label [ngClass]="{'is-invalid': displayInvalid('ente')}" for="ente" class="active">
+                  {{"form_tag.ente" | translate}}
+                </label>
+                <app-ricerca-ente
+                  [ngClass]="{ 'is-invalid': displayInvalid('ente') }"
+                  [minChars]="0"
+                  id="ente" name="ente" formControlName="ente"
+                  class="w-100"
+                  [disabled]="!isNuovo"
+                ></app-ricerca-ente>
+                <div class="invalid-feedback" *ngIf="displayInvalid('ente')">
+                  <p *ngIf="hasError('ente', 'conflict')">
+                    La chiave composta da tipo tag, ente e codice &egrave; gi&agrave; presente a sistema!
+                  </p>
+                </div>
+              </div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('ente')">
+                <p *ngIf="hasError('ente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              </div>
+              <div class="input-icon-container" *ngIf="displayValidating('ente')">
+                <span class="fas fa-circle-notch fa-spin"></span>
+              </div>
+            </div>
+          </div>
+        <!--Sezione Codice e Descrizione-->
+        <div class="row justify-content-between pt-5">
+          <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+                {{"common.codice" | translate}}
+              </label>
+              <input [ngClass]="{ 'is-invalid': displayInvalid('codice') }" type="text" id="codice" name="codice"
+                formControlName="codice" class="form-control" />
+                <div class="input-icon-container" *ngIf="displayValidating('codice')">
+                  <span class="fas fa-circle-notch fa-spin"></span>
+                </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+              <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('codice', 'pattern')">Formato non valido</p>
+              <p *ngIf="hasError('codice', 'conflict')">
+                La chiave composta da tipo tag, ente e codice &egrave; gi&agrave; presente a sistema!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+              {{"form_tag.descrizione" | translate}}
+            </label>
+            <input [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }" type="text" id="descrizione" name="descrizione"
+              formControlName="descrizione" class="form-control" />
+
+            <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+        </div>
+
+        <!--Fine Form-->
+        <div class="row mt-5">
+            <div class="col-2 text-left">
+                <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+                    {{"common.indietro" | translate}}
+                </button>
+            </div>
+            <div class="col-10 text-right">
+                <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action mr-3"
+                [disabled]="!isValid()">
+                    {{"common.salva" | translate}}
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" (click)="pulisciCampi()">
+                    {{"common.annulla_modifiche" | translate}}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

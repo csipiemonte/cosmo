@@ -1,0 +1,380 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="">
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+  
+  <ng-container *ngIf="!loading && !loadingError">
+    <div class="">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+        
+        <!-- Riga RICERCA PROTOCOLLO -->
+        <div class="row pt-1 pb-1">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'is-invalid': displayInvalid('ricercaProtocollo')}"
+              >Ricerca per protocollo</label>
+          </div>
+          <div class="col-12 col-md-9 col-lg-10">
+            <div class="form-check">
+              <input type="radio" formControlName="ricercaProtocollo" id="ricercaProtocolloTrue" [value]="true" >
+              <label for="ricercaProtocolloTrue" class="" >Sì</label>
+            </div>
+            <div class="form-check">
+              <input type="radio" formControlName="ricercaProtocollo" id="ricercaProtocolloFalse" [value]="false" >
+              <label for="ricercaProtocolloFalse" class="" >No</label>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('ricercaProtocollo')">
+              <p *ngIf="hasError('ricercaProtocollo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Riga OGGETTO -->
+        <div class="row pt-1 pb-1" [hidden]="ricercaProtocolloSelected">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'active': hasValue('oggetto'), 'is-invalid': displayInvalid('oggetto')}" for="oggetto">
+              Oggetto
+            </label>
+          </div>
+          <div class="col-12 col-md-3 col-lg-3">
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('oggettoTipoMatch') }"
+              formControlName="oggettoTipoMatch" name="oggettoTipoMatch" id="oggettoTipoMatch"
+              class="form-control" 
+            >
+              <option *ngFor="let option of tipiMatchCO; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('oggettoTipoMatch')">
+              <p *ngIf="hasError('oggettoTipoMatch', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('oggettoTipoMatch', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-7">
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('oggetto') }"
+              formControlName="oggetto" name="oggetto" id="oggetto"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('oggetto')">
+              <p *ngIf="hasError('oggetto', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('oggetto', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('oggetto', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Riga PAROLE CHIAVE -->
+        <div class="row pt-1 pb-1" [hidden]="ricercaProtocolloSelected">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'active': hasValue('paroleChiave'), 'is-invalid': displayInvalid('paroleChiave')}" for="paroleChiave">
+              Parole chiave
+            </label>
+          </div>
+          <div class="col-12 col-md-3 col-lg-3">
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('paroleChiaveTipoMatch') }"
+              formControlName="paroleChiaveTipoMatch" name="paroleChiaveTipoMatch" id="paroleChiaveTipoMatch"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of tipiMatch; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('paroleChiaveTipoMatch')">
+              <p *ngIf="hasError('paroleChiaveTipoMatch', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('paroleChiaveTipoMatch', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-7">
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('paroleChiave') }"
+              formControlName="paroleChiave" name="paroleChiave" id="paroleChiave"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('paroleChiave')">
+              <p *ngIf="hasError('paroleChiave', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('paroleChiave', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('paroleChiave', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Riga NUMERO REPERTORIO -->
+        <div class="row pt-1 pb-1" [hidden]="ricercaProtocolloSelected">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'active': hasValue('numeroRepertorio'), 'is-invalid': displayInvalid('numeroRepertorio')}" for="numeroRepertorio">
+              Numero repertorio
+            </label>
+          </div>
+          <div class="col-12 col-md-3 col-lg-3">
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('numeroRepertorioTipoMatch') }"
+              formControlName="numeroRepertorioTipoMatch" name="numeroRepertorioTipoMatch" id="numeroRepertorioTipoMatch"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of tipiMatchCO; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('numeroRepertorioTipoMatch')">
+              <p *ngIf="hasError('numeroRepertorioTipoMatch', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroRepertorioTipoMatch', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-7">
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('numeroRepertorio') }"
+              formControlName="numeroRepertorio" name="numeroRepertorio" id="numeroRepertorio"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('numeroRepertorio')">
+              <p *ngIf="hasError('numeroRepertorio', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroRepertorio', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroRepertorio', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Riga DATA CRONICA -->
+        <div class="row pt-3 pb-2" [hidden]="ricercaProtocolloSelected">
+          <div class="col-12 col-md-4 col-lg-2">
+            <label [ngClass]="{'is-invalid': displayInvalid('dataCronicaDa') || displayInvalid('dataCronicaA')}" for="">
+              Data cronica
+            </label>
+          </div>
+          <div class="col-12 col-md-4 col-lg-5">
+            
+            <div class="it-datepicker-wrapper">
+              <div class="form-group">
+                <label for="dataCronicaDa">Da</label>
+                <input
+                  [ngClass]="{ 'is-invalid': displayInvalid('dataCronicaDa') }"
+                  class="form-control it-date-datepicker"
+                  formControlName="dataCronicaDa"
+                  type="date"
+                  placeholder="gg/mm/aaaa"
+                >
+                <div class="invalid-feedback" *ngIf="displayInvalid('dataCronicaDa')">
+                  <p *ngIf="hasError('dataCronicaDa', 'dateFormat')">inserisci una data nel formato gg/mm/aaaa.</p>
+                  <p *ngIf="hasError('dataCronicaDa', 'before')">inserisci una data precedente al
+                    {{ getError('dataCronicaDa', 'before').otherDate | date:'dd/MM/yyyy' }}</p>
+                  <p *ngIf="hasError('dataCronicaDa', 'maxDays')">seleziona un periodo al massimo di 30 giorni</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 col-lg-5">
+            <div class="it-datepicker-wrapper">
+              <div class="form-group">
+                <label for="dataCronicaA">A</label>
+                <input
+                  [ngClass]="{ 'is-invalid': displayInvalid('dataCronicaA') }"
+                  class="form-control it-date-datepicker"
+                  formControlName="dataCronicaA"
+                  type="date"
+                  placeholder="gg/mm/aaaa"
+                >
+                <div class="invalid-feedback" *ngIf="displayInvalid('dataCronicaA')">
+                  <p *ngIf="hasError('dataCronicaA', 'dateFormat')">inserisci una data nel formato gg/mm/aaaa.</p>
+                  <p *ngIf="hasError('dataCronicaA', 'after')">inserisci una data successiva al
+                    {{ getError('dataCronicaA', 'after').otherDate | date:'dd/MM/yyyy' }}</p>
+                  <p *ngIf="hasError('dataCronicaA', 'maxDays')">seleziona un periodo al massimo di 30 giorni</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--
+          <div class="col-12 text-right a-bit-smaller">
+            &egrave; consentito selezionare un periodo massimo di 30 giorni.
+          </div>
+          -->
+        </div>
+        
+        <!-- Riga NUMERO PROTOCOLLO -->
+        <div class="row pt-1 pb-1" [hidden]="!ricercaProtocolloSelected">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'active': hasValue('numeroProtocollo'), 'is-invalid': displayInvalid('numeroProtocollo'), 'required': true}" for="numeroProtocollo">
+              Numero protocollo
+            </label>
+          </div>
+          <div class="col-12 col-md-3 col-lg-3">
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('numeroProtocolloTipoMatch') }"
+              formControlName="numeroProtocolloTipoMatch" name="numeroProtocolloTipoMatch" id="numeroProtocolloTipoMatch"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of tipiMatch; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('numeroProtocolloTipoMatch')">
+              <p *ngIf="hasError('numeroProtocolloTipoMatch', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroProtocolloTipoMatch', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-7">
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('numeroProtocollo') }"
+              formControlName="numeroProtocollo" name="numeroProtocollo" id="numeroProtocollo"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('numeroProtocollo')">
+              <p *ngIf="hasError('numeroProtocollo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroProtocollo', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('numeroProtocollo', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Riga DATA REGISTRAZIONE PROTOCOLLO -->
+        <div class="row pt-3 pb-2" [hidden]="!ricercaProtocolloSelected">
+          <div class="col-12 col-md-4 col-lg-2">
+            <label [ngClass]="{'is-invalid': displayInvalid('dataRegistrazioneProtocolloDa') || displayInvalid('dataRegistrazioneProtocolloA')}" for="">
+              Data registrazione protocollo
+            </label>
+          </div>
+          <div class="col-12 col-md-4 col-lg-5">
+            <div class="it-datepicker-wrapper">
+              <div class="form-group">
+                <label for="dataRegistrazioneProtocolloDa">Da</label>
+                <input
+                  [ngClass]="{ 'is-invalid': displayInvalid('dataRegistrazioneProtocolloDa') }"
+                  class="form-control it-date-datepicker"
+                  formControlName="dataRegistrazioneProtocolloDa"
+                  type="date"
+                  placeholder="gg/mm/aaaa"
+                >
+                <div class="invalid-feedback" *ngIf="displayInvalid('dataRegistrazioneProtocolloDa')">
+                  <p *ngIf="hasError('dataRegistrazioneProtocolloDa', 'dateFormat')">inserisci una data nel formato gg/mm/aaaa.</p>
+                  <p *ngIf="hasError('dataRegistrazioneProtocolloDa', 'before')">inserisci una data precedente al
+                    {{ getError('dataRegistrazioneProtocolloDa', 'before').otherDate | date:'dd/MM/yyyy' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 col-lg-5">
+            <div class="it-datepicker-wrapper">
+              <div class="form-group">
+                <label for="dataRegistrazioneProtocolloA">A</label>
+                <input
+                  [ngClass]="{ 'is-invalid': displayInvalid('dataRegistrazioneProtocolloA') }"
+                  class="form-control it-date-datepicker"
+                  formControlName="dataRegistrazioneProtocolloA"
+                  type="date"
+                  placeholder="gg/mm/aaaa"
+                >
+                <div class="invalid-feedback" *ngIf="displayInvalid('dataRegistrazioneProtocolloA')">
+                  <p *ngIf="hasError('dataRegistrazioneProtocolloA', 'dateFormat')">inserisci una data nel formato gg/mm/aaaa.</p>
+                  <p *ngIf="hasError('dataRegistrazioneProtocolloA', 'after')">inserisci una data successiva al
+                    {{ getError('dataRegistrazioneProtocolloA', 'after').otherDate | date:'dd/MM/yyyy' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Riga AOO PROTOCOLLANTE -->
+        <div class="row pt-1 pb-1" [hidden]="!ricercaProtocolloSelected">
+          <div class="col-12 col-md-3 col-lg-2">
+            <label [ngClass]="{'active': hasValue('aooProtocollante'), 'is-invalid': displayInvalid('aooProtocollante'), 'required': true}" for="aooProtocollante">
+              AOO Protocollante
+            </label>
+          </div>
+          <div class="col-12 col-md-3 col-lg-3">
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('aooProtocollanteTipoMatch') }"
+              formControlName="aooProtocollanteTipoMatch" name="aooProtocollanteTipoMatch" id="aooProtocollanteTipoMatch"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of tipiMatch; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('aooProtocollanteTipoMatch')">
+              <p *ngIf="hasError('aooProtocollanteTipoMatch', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('aooProtocollanteTipoMatch', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-7">
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('aooProtocollante') }"
+              formControlName="aooProtocollante" name="aooProtocollante" id="aooProtocollante"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('aooProtocollante')">
+              <p *ngIf="hasError('aooProtocollante', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('aooProtocollante', 'requireValueIf')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('aooProtocollante', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="true" class="row">
+          <div class="col-12 col-md-3 col-lg-2">
+          </div>
+          <div class="col-12 col-md-9 col-lg-10">
+            <p *ngIf="hasError('', 'businessConditionOne')" class="" 
+              [ngClass]="{
+                'no-alert-info': !searchAttempted,
+                'alert alert-danger': searchAttempted
+              }"
+            >
+              Almeno un filtro tra oggetto, parole chiave o numero repertorio &egrave; obbligatorio,
+              a meno di non valorizzare il periodo completo (Data cronica Da - Data cronica A)
+            </p>
+          </div>
+          
+        </div>
+
+      </form>
+    </div>
+    <div class="pt-2">
+      <div class="row w-100">
+        <div class="col-6 text-left">
+          <div style="padding: 0.2em;">
+            <button type="button" (click)="pulisciCampi()" class="btn btn-sm btn-outline-danger btn-action" 
+              [disabled]="false && !somethingDirty"
+            >
+              {{"common.pulisci_campi" | translate}}
+            </button>
+          </div>
+        </div>
+        <div class="col-6 text-right">
+          <div style="padding: 0.2em;" (mouseover)="hoverCerca()">
+            <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+              {{"common.cerca" | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <!--
+      <div class="row w-100 pt-4" *ngIf="debug">
+        <div class="col-12">
+          <app-debug title="payload" [value]="getPayload()"></app-debug>
+        </div>
+      </div>
+    -->
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,139 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/amministrazione'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "form_logici.istanze_funzionalita.header" | translate }}
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "form_logici.istanze_funzionalita.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h3 *ngIf="form" style="margin: 20px 10px;">{{ (isNuovo ? 'form_logici.istanze_funzionalita.aggiungi_istanza_funzionalita' :
+        'form_logici.istanze_funzionalita.modifica_istanza_funzionalita') | translate }}</h3>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+    <form [formGroup]="form" *ngIf="form" (ngSubmit)="submit()">
+
+      <div class="row mt-3 pt-4 justify-content-between">
+        <div class="col-lg-5 col-md-5 col-sm-12 form-group bootstrap-select-wrapper">
+          <label for="tipologieFunzionalita" [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('tipologia')}"
+          >{{"form_logici.istanze_funzionalita.codice_funzionalita" | translate}}</label>
+          <select id="tipologieFunzionalita" name="tipologieFunzionalita" class="form-control border col-lg-12"
+            [ngClass]="{ 'is-invalid': displayInvalid('tipologia') }"
+            formControlName="tipologia">
+            <option *ngFor="let tipologiaFunzionalita of tipologieFunzionalita" [ngValue]="tipologiaFunzionalita">
+              {{ tipologiaFunzionalita.descrizione }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="displayInvalid('tipologia')">
+            <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+            {{"common.descrizione" | translate}}
+          </label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control">
+          <div class="invalid-feedback" *ngIf="displayInvalid('tipologia')">
+            <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('descrizione', 'maxlength')">{{"errori.troppi_caratteri" | translate}}</p>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="parametriDisponibili?.length">
+        <hr class="pb-2 pt-1" />
+
+        <div class="row pt-3">
+          <div class="col">
+            <h3 class="form-section-header">
+              {{ "form_logici.parametri" | translate }}
+            </h3>
+          </div>
+        </div>
+
+        <div class="row pt-4" formGroupName="parametri">
+          <div class="col">
+            <div class="row row-parametro" *ngFor="let parametro of parametriDisponibili">
+              <ng-container *ngIf="getControl('parametri.' + parametro.codice)">
+                <div class="col-12 col-lg-4">
+                  {{ parametro.codice }}
+                  <br/>
+                  {{ parametro.descrizione }}
+                </div>
+                <div class="col-12 col-lg-8">
+                  <app-dynamic-input
+                    [type]="parametro.tipo || 'text'"
+                    [formControlName]="parametro.codice"
+                    [ngClass]="{ 'is-invalid': displayInvalid('parametri.' + parametro.codice) }"
+                  ></app-dynamic-input>
+                  <div class="invalid-feedback" *ngIf="displayInvalid('parametri.' + parametro.codice)">
+                    <p *ngIf="hasError('parametri.' + parametro.codice, 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                    <p *ngIf="hasError('parametri.' + parametro.codice, 'maxlength')">{{"errori.troppi_caratteri" | translate}}</p>
+                    <p *ngIf="hasError('parametri.' + parametro.codice, 'json')">
+                      Deve essere un JSON valido.
+                    </p>
+                    <p *ngIf="hasError('parametri.' + parametro.codice, 'jsonSchema')">
+                      Formato JSON non valido:
+                      <br/>
+                      {{ getError('parametri.' + parametro.codice, 'jsonSchema')?.message }}
+                    </p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <app-debug *ngIf="form" title="payload" [value]="getPayload()"></app-debug>
+
+      <div class="row" style="margin-top: 80px;">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="button" class="btn btn-sm btn-success btn-action" [disabled]="!allValid" (click)="submit()">
+            {{"common.salva" | translate}}
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-sm btn-danger btn-action" [disabled]="!somethingDirty" (click)="pulisciCampi()">
+            {{"common.annulla_modifiche" | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+</div>

@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with different refresh policies.</p>
+      <p>Allowed policies are:
+      </p>
+      <ul>
+        <li>NO AUTO REFRESH</li>
+        <li>INTERVAL REFRESH</li>
+        <li>ON-PUSH REFRESH</li>
+        <li>REFRESH PROGRAMMATICALLY</li>
+        <li>OBSERVABLE AS DATA INPUT</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>This table has refreshStrategy TIMED and refreshes every 2 seconds. Watch the 'Last updated' column. </p>
+      <cosmo-table
+        [dataProvider]="dataProvider"
+        [paginationMode]="'CLIENT'"
+        [columns]="columns"
+        [refreshStrategy]="'TIMED'"
+        [refreshIntervalInBackground]="true"
+        [refreshInterval]="2000"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>This table has refreshStrategy ON_PUSH and refreshes when the refreshEmitter emits a value. Watch the 'Last updated' column. </p>
+      <cosmo-table
+        [dataProvider]="dataProvider"
+        [paginationMode]="'CLIENT'"
+        [columns]="columns"
+        [refreshStrategy]="'ON_PUSH'"
+        [refreshOnPushInBackground]="true"
+        [refreshEmitter]="refreshEmitter"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        This table has refreshStrategy NONE and does not refresh automatically.
+        Press the button to refresh programmatically.
+        Watch the 'Last updated' column.
+      </p>
+      <button type="button" class="btn btn-primary mb-3" (click)="refreshManually()">refresh</button>
+      <cosmo-table
+        #tableNotRefreshingAutomatically
+        [dataProvider]="dataProvider"
+        [paginationMode]="'CLIENT'"
+        [columns]="columns"
+        [refreshStrategy]="'NONE'"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        This table has an observable as data input. It refreshes automatically every time the observable input emits.
+        Watch the 'Last updated' column.
+      </p>
+      <cosmo-table
+        [data]="dataObservable"
+        [paginationMode]="'CLIENT'"
+        [columns]="columns"
+        [refreshStrategy]="'NONE'"
+      ></cosmo-table>
+    </div>
+  </div>
+
+</div>

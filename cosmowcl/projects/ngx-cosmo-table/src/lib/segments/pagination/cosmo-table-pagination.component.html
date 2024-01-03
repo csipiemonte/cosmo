@@ -1,0 +1,101 @@
+<ng-container *ngIf="render">
+  <!-- PAGINATION -->
+  <ng-container *ngIf="currentResultNumber > 0 && currentEnablePagination">
+
+    <!-- PAGE NUMBERS -->
+    <div class="inline-block inline-block-bottom pr-2">
+      <!--
+      <div class="pagination-caption d-none d-md-inline">
+        {{ 'table.common.pagination.total_elements' | translate:{ totalElements: currentResultNumber, totalPages: currentPageCount } }}
+      </div>
+      -->
+
+      <!-- PAGINATION LARGE -->
+      <nav aria-label="pagination" class="pagination-links d-none d-lg-inline" *ngIf="currentPageCount > 1">
+        <ul class="pagination">
+          <li class="page-item clickable" [class.disabled]="!(currentPageIndex > 0)">
+            <a class="page-link" (click)="switchToPage(0)">{{ 'table.common.pagination.first_page' | translate }}</a>
+          </li>
+          <li class="page-item clickable" [class.disabled]="!(currentPageIndex > 0)">
+            <a class="page-link" (click)="switchToPage(currentPageIndex - 1)">{{ 'table.common.pagination.previous_page' | translate }}</a>
+          </li>
+          <ng-container *ngFor="let page of enumPages">
+          <li class="page-item clickable" [class.active]="page === currentPageIndex" *ngIf="!page.skip && (!nextOnlyMode || (currentPageIndex - page) >= 0)">
+            <a class="page-link" (click)="switchToPage(page)"
+              [attr.aria-current]="page === currentPageIndex ? 'page' : null"
+            >
+              {{ page + 1 }}
+              <span class="sr-only" *ngIf="page === currentPageIndex">(current)</span>
+            </a>
+          </li>
+          <li class="page-item" *ngIf="page.skip">
+            <a class="page-link">
+              ...
+            </a>
+          </li>
+          </ng-container>
+          <ng-container *ngIf="!nextOnlyMode">
+          <li class="page-item clickable" [class.disabled]="currentPageIndex >= (currentPageCount - 1)">
+            <a class="page-link" (click)="switchToPage(currentPageIndex + 1)">{{ 'table.common.pagination.next_page' | translate }}</a>
+          </li>
+          </ng-container>
+          <ng-container *ngIf="nextOnlyMode">
+          <li class="page-item clickable" [class.disabled]="currentPageIndex >= (currentPageCount - 1)">
+            <a class="page-link" (click)="switchToPage(currentPageIndex + 1)">
+              {{ 'table.common.pagination.next_page_next_only_mode' | translate }}
+            </a>
+          </li>
+          </ng-container>
+          <ng-container *ngIf="!nextOnlyMode">
+          <li class="page-item clickable" [class.disabled]="currentPageIndex >= (currentPageCount - 1)">
+            <a class="page-link" (click)="switchToPage(currentPageCount - 1)">{{ 'table.common.pagination.last_page' | translate }}</a>
+          </li>
+          </ng-container>
+        </ul>
+      </nav>
+
+      <!-- PAGINATION MOBILE -->
+      <div class="d-lg-none btn-block" ngbDropdown [container]="'body'" *ngIf="currentPageCount > 1">
+        <button type="button" class="btn btn-block btn-outline-primary dropdown-toggle" ngbDropdownToggle>
+          {{ 'table.common.pagination.current_page_dropdown' | translate:{page: currentPageIndex + 1} }}
+        </button>
+        <div ngbDropdownMenu>
+          <button type="button" ngbDropdownItem (click)="switchToPage(0)" [disabled]="!(currentPageIndex > 0)">
+            {{ 'table.common.pagination.first_page' | translate }}
+          </button>
+          <button type="button" ngbDropdownItem (click)="switchToPage(currentPageIndex - 1)" [disabled]="!(currentPageIndex > 0)">
+            {{ 'table.common.pagination.previous_page' | translate }}
+          </button>
+          <div class="dropdown-divider"></div>
+          <ng-container *ngFor="let page of enumPages">
+          <button type="button" ngbDropdownItem (click)="switchToPage(page)" *ngIf="!page.skip && (!nextOnlyMode || (currentPageIndex - page) >= 0)"
+            [disabled]="page === currentPageIndex" [class.btn-outline-primary]="page === currentPageIndex">
+            {{ page + 1 }}
+            <span class="sr-only" *ngIf="page === currentPageIndex">(current)</span>
+          </button>
+          <button type="button" ngbDropdownItem *ngIf="page.skip" [disabled]="true">
+            ...
+          </button>
+          </ng-container>
+          <div class="dropdown-divider"></div>
+          <ng-container *ngIf="!nextOnlyMode">
+          <button type="button" ngbDropdownItem (click)="switchToPage(currentPageIndex + 1)" [disabled]="currentPageIndex >= (currentPageCount - 1)">
+            {{ 'table.common.pagination.next_page' | translate }}
+          </button>
+          </ng-container>
+          <ng-container *ngIf="nextOnlyMode">
+          <button type="button" ngbDropdownItem (click)="switchToPage(currentPageIndex + 1)" [disabled]="currentPageIndex >= (currentPageCount - 1)">
+            {{ 'table.common.pagination.next_page' | translate }}
+          </button>
+          </ng-container>
+          <ng-container *ngIf="!nextOnlyMode">
+          <button type="button" ngbDropdownItem (click)="switchToPage(currentPageCount - 1)" [disabled]="currentPageIndex >= (currentPageCount - 1)">
+            {{ 'table.common.pagination.last_page' | translate }}
+          </button>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+</ng-container>

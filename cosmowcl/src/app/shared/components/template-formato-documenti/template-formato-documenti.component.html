@@ -1,0 +1,31 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && documento.contenutoEffettivo">
+
+  <img *ngIf="iconaFormato(documento.contenutoEffettivo)"
+   [src]="iconaFormato(documento.contenutoEffettivo)"
+   class="icon-filetype"
+   [class.pointer]="documento.contenutoFirmato ? hasAnteprima(documento.contenutoOriginale) : hasAnteprima(documento.contenutoEffettivo)"
+   (click)="documento.contenutoFirmato ? ( documento.ultimoContenutoFEA ? clickIcona(documento.ultimoContenutoFEA) : clickIcona(documento.contenutoOriginale)) :clickIcona(documento.contenutoEffettivo)"
+  />
+ {{ documento.contenutoEffettivo?.formatoFile?.descrizione ||
+  documento.contenutoEffettivo?.formatoFile?.mimeType }}
+
+  {{ documento.contenutoEffettivo?.dimensione
+   ? (documento.contenutoEffettivo?.dimensione /1024>1024 ? ('('+(documento.contenutoEffettivo?.dimensione/(1024*1024)).toFixed() +' MB)')
+   : ('('+(documento.contenutoEffettivo?.dimensione/(1024)).toFixed() +' kB)') )
+   : ''}}
+</div>
+
+<div *ngIf="documento && documento.contenutoSbustato">
+ <img *ngIf="iconaFormato(documento.contenutoSbustato)"
+   [src]="iconaFormato(documento.contenutoSbustato)"
+   class="icon-filetype"
+   [class.pointer]="hasAnteprima(documento.contenutoSbustato)"
+   (click)="clickIcona(documento.contenutoSbustato)"
+  />
+ contenente {{ documento.contenutoSbustato?.formatoFile?.descrizione ||
+  documento.contenutoSbustato?.formatoFile?.mimeType }}
+</div>

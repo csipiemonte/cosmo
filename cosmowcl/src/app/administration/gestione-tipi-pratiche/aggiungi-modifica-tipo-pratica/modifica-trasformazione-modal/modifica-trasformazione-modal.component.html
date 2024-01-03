@@ -1,0 +1,139 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+    <h5 class="modal-title" id="modal-title">Modifica tipo documento</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <ng-container *ngIf="loadingError">
+        <div class="px-4 py-4">
+          <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+      
+    <ng-container *ngIf="!loading && !loadingError">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+
+        <div class="row justify-content-between pt-5">
+          <div class="col-sm-12 form-group">
+            <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceFase') }">
+              <label [ngClass]="{'active': hasValue('codiceFase'), 'is-invalid': displayInvalid('codiceFase')}" for="codiceFase">
+                Quando va eseguita la trasformazione?
+              </label>
+              <select
+                [ngClass]="{ 'is-invalid': displayInvalid('codiceFase') }"
+                formControlName="codiceFase" name="codiceFase" id="codiceFase"
+                class="form-control" 
+                [attr.disabled]="null"
+              >
+                <option *ngFor="let option of opzioniCodiceFase; let i = index" [ngValue]="option.codice">
+                  {{option.valore}}
+                </option>
+              </select>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('codiceFase')">
+              <p *ngIf="hasError('codiceFase', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('codiceFase', 'maxlength')">Troppi caratteri</p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('codiceFase')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }">
+              <label [ngClass]="{'active': true || hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+                Descrizione
+              </label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+                type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+                placeholder="descrizione che verra' mostrata all'utente durante l'esecuzione della trasformazione"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+              <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('descrizione', 'maxlength')">Troppi caratteri</p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('ordine'), 'is-invalid': displayInvalid('ordine')}"
+              for="ordine">Ordine di esecuzione</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('ordine') }"
+              type="number" min="0" max="999999" step="1" 
+              id="ordine" name="ordine" formControlName="ordine" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('ordine')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('ordine')">
+              <p *ngIf="hasError('ordine', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('ordine', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <div class="form-check">
+                <input
+                  [ngClass]="{ 'is-invalid': displayInvalid('obbligatoria') }"
+                  type="checkbox" id="obbligatoria" name="obbligatoria" formControlName="obbligatoria" class="form-control"
+                />
+                <label [ngClass]="{'active': hasValue('obbligatoria'), 'is-invalid': displayInvalid('obbligatoria')}"
+                  for="obbligatoria">Interrompi il processo se l'esecuzione fallisce</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <label [ngClass]="{'active': true || hasValue('definizione'), 'is-invalid': displayInvalid('definizione')}"
+              for="definizione">Definizione JSTL</label>
+            <textarea
+              [ngClass]="{ 'is-invalid': displayInvalid('definizione') }"
+              type="text" id="definizione" name="definizione" formControlName="definizione" class="form-control"
+              rows="6"
+              placeholder="definizione JSTL della trasformazione da applicare"
+            ></textarea>
+            <div class="input-icon-container" *ngIf="displayValidating('definizione')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('definizione')">
+              <p *ngIf="hasError('definizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('definizione', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+  
+      </form>
+
+    </ng-container>
+</div>
+<div class="modal-footer" *ngIf="!loading && !loadingError">
+    <button type="button" class="btn btn-sm btn-primary btn-action" (click)="cancel()">
+        {{"common.indietro" | translate}}
+    </button>
+    <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+        {{"common.salva" | translate}}
+    </button>
+</div>

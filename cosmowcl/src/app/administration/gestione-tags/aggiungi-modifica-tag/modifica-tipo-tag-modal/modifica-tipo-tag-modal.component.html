@@ -1,0 +1,96 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+    <h5 class="modal-title" id="modal-title">Modifica tipo Tag</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <ng-container *ngIf="loadingError">
+        <div class="px-4 py-4">
+          <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && !loadingError">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+        <div class="row justify-content-between pt-5">
+          <div class="col-sm-12 form-group">
+
+            <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codice') }">
+              <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+                {{"common.codice" | translate}}
+              </label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('codice') }"
+                type="text" id="codice" name="codice" formControlName="codice" class="form-control"
+              />
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+              <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('codice', 'pattern')">Formato non valido. Puoi usare numeri, lettere, trattino e underscore.</p>
+              <p *ngIf="hasError('codice', 'conflict')">
+                Questo codice &egrave; gi&agrave; assegnato al Tag {{ getError('codice', 'conflict')?.other?.descrizione }}
+              </p>
+            </div>
+            <div class="input-icon-container" *ngIf="displayValidating('codice')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}"
+              for="descrizione">{{"common.descrizione" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+              type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+              <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('descrizione', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('label'), 'is-invalid': displayInvalid('label')}"
+              for="codiceStardas">{{"common.label" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('label') }"
+              type="text" id="label" name="label" formControlName="label" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('label')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('label')">
+              <p *ngIf="hasError('label', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+</div>
+<div class="modal-footer" *ngIf="!loading && !loadingError">
+    <button type="button" class="btn btn-sm btn-primary btn-action" (click)="cancel()">
+        {{"common.indietro" | translate}}
+    </button>
+    <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+        {{"common.salva" | translate}}
+    </button>
+</div>

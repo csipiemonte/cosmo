@@ -1,0 +1,32 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="readOnly">
+  <p class="alert alert-warning">
+    Questa funzionalit&agrave; non &egrave; disponibile in modalit&agrave; di sola lettura.
+  </p>
+</ng-container>
+
+<ng-container *ngIf="!readOnly">
+
+  <button class="btn btn-outline-dark shadow-none text-button custom-button" type="button" data-toggle="collapse"
+    aria-expanded="false" data-target="#praticheAssociate" aria-controls="praticheAssociate">
+    {{ "form_logici.creazione_pratica.pratiche_associate" | translate }} &nbsp;
+    <span class="span-noexpanded fas fa-angle-down"></span>
+    <span class="span-expanded fas fa-angle-up"></span>
+  </button>
+  <div class="collapse" id="praticheAssociate" style="margin-left: 50px;">
+    <app-pratiche-associate #associaPratiche [idPratica]="idPratica" [isAssociazioneTask]="false">
+    </app-pratiche-associate>
+  </div>
+
+  <br>
+
+  <app-crea-pratica #creaPratica [idPraticaEsistente]="idPratica" [oggetto]="oggettoPraticaFiglia"
+    [riassunto]="riassuntoPraticaFiglia" [codiceTipologiaPratica]="codiceTipologiaPraticaFiglia"
+    [daAssociare]="daAssociare" [apiManagerIdFruitore]="apiManagerIdFruitorePraticaFiglia"
+    [idDocumentiSelezionati]="idDocsDaDuplicare" (aggiornaPraticheAssociateEmitter)="aggiornaPraticheAssociate()">
+  </app-crea-pratica>
+
+</ng-container>

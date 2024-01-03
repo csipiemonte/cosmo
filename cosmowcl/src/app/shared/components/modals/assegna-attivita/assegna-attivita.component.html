@@ -1,0 +1,41 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+  <h5 class="modal-title" id="modal-title">Assegna pratica</h5>
+  <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  &nbsp; &nbsp;
+  <div *ngIf="helper">
+    <app-helper
+      [helper] = "helper"
+      [type] = "'MODAL'">
+    </app-helper>
+  </div>
+</div>
+<div class="modal-body" >
+  <div class="form-row">
+    <div class="col-md-5">
+      {{ "pratica.mantieni_assegnazione" | translate }}
+    </div>
+    <div class="col-2">
+      <div class="toggles">
+        <label class="label" for="keepAssignment">
+        <input type="checkbox" class="form-check-input position-static" id="keepAssignment" [(ngModel)]="mantieniAssegnazione"/>
+        <span class="lever"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="form-row mb-7 col-md-10 md-8 mb-3">
+    <app-ricerca-utente #defaultfocus [(ngModel)]="selectedUser" [gruppi]="true"  [filtroGruppi]="filtroRicercaGruppi"
+    [utenteCorrente]="false" class="w-100"></app-ricerca-utente>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary btn-sm" type="button" [disabled]="!selectedUser"
+    (click)="assegnaAttivita()">assegna</button>
+</div>

@@ -1,0 +1,30 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="card card-form bg-light rounded-lg mt-3 mb-2 card-commento" *ngIf="commento"
+  [class.card-commento-own]="isOwn()"
+>
+
+    <div class="d-flex align-items-center flex-row px-3 mt-3 comment-header">
+      <div class="avatar avatar-secondary comment-avatar">
+        <p aria-hidden="true">{{getInitials(commento)}}</p>
+      </div>
+      <strong class="mx-2 comment-author">
+        {{commento.nomeAutore}} {{commento.cognomeAutore}}
+        <span *ngIf="isOwn()">( Tu )</span>
+      </strong>
+      <div class="head-tags mb-0 comment-timestamp">
+        <span class="data">{{commento.timestamp | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+      </div>
+    </div>
+    <div class="mx-5 pl-4 h7 recipient-text">
+      <strong style="font-size: 0.777rem;">
+        {{commento.nomeDestinatario}} {{commento.cognomeDestinatario}}
+      </strong>
+    </div>
+
+    <div class="px-4 mt-4 mb-3 comment-text">
+      {{commento.messaggio}}
+    </div>
+  </div>

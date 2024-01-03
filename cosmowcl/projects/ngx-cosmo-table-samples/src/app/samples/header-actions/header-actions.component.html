@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with action buttons.</p>
+      <p>Actions are conditionally enabled according to the property 'activationCondition'.</p>
+
+      <p>Button 'Nothing' is always enabled
+        (activationCondition: CosmoTableActionActivationCondition.ALWAYS)</p>
+      <p>Button 'Alert' is enabled if a one or more elements are selected
+        (activationCondition: CosmoTableActionActivationCondition.MULTIPLE_SELECTION)</p>
+      <p>Button 'New' is enabled if no elements are selected
+        (activationCondition: CosmoTableActionActivationCondition.NO_SELECTION)</p>
+      <p>Button 'Clone' is enabled if a single element is selected
+        (activationCondition: CosmoTableActionActivationCondition.SINGLE_SELECTION)</p>
+      <p>Button 'Delete' demonstrates arbitrary conditions:
+        it is enabled if all selected elements are NOT ACTIVE (status column)
+          (activationCondition: CosmoTableActionActivationCondition.DYNAMIC + actionStatusProvider)</p>
+
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-sm-12">
+      <div class="text-right">
+        <cosmo-table-action-buttons
+          [table]="table"
+          [actions]="actions"
+          (action)="onAction($event)"
+          [statusProvider]="actionStatusProvider"
+        ></cosmo-table-action-buttons>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table
+        [data]="users"
+        [columns]="columns"
+        [enableSelection]="true"
+        [enableSelectAll]="true"
+        [enableMultiSelect]="true"
+      ></cosmo-table>
+    </div>
+  </div>
+</div>

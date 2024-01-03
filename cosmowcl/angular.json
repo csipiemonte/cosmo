@@ -1,0 +1,330 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "cosmowcl": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/cosmowcl",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/bootstrap-italia/dist/fonts/Titillium_Web/",
+                "output": "./bootstrap-italia/dist/fonts/Titillium_Web/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "./assets/visualizzatorePdf/"
+			  }
+            ],
+            "styles": [
+              "src/assets/cwwcl/css/bootstrap-italia.css",
+              "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "node_modules/marked/lib/marked.cjs",
+              "src/assets/cwwcl/js/main.js"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/stylings"
+              ]
+            },
+            "allowedCommonJsDependencies": [
+              "jquery",
+              "lodash",
+              "formiojs",
+              "apexcharts",
+              "ajv"
+              ]
+          },
+          "configurations": {
+            "local": {
+              "fileReplacements": [],
+              "outputPath": "dist/cosmowcl/local",
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "scripts": [
+                "./node_modules/bootstrap-italia/dist/js/bootstrap-italia.bundle.min.js"
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "cosmowcl:build:local",
+            "proxyConfig": "src/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "cosmowcl:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "cosmowcl:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/stylings"
+              ]
+            },
+            "scripts": [
+              "node_modules/marked/lib/marked.cjs",
+              "src/assets/cwwcl/js/main.js"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "cosmowcl:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "cosmowcl:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "ngx-cosmo-table": {
+      "projectType": "library",
+      "root": "projects/ngx-cosmo-table",
+      "sourceRoot": "projects/ngx-cosmo-table/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-cosmo-table/tsconfig.lib.json",
+            "project": "projects/ngx-cosmo-table/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-cosmo-table/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-cosmo-table/src/test.ts",
+            "tsConfig": "projects/ngx-cosmo-table/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-cosmo-table/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-cosmo-table/tsconfig.lib.json",
+              "projects/ngx-cosmo-table/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ngx-cosmo-table-samples": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/ngx-cosmo-table-samples",
+      "sourceRoot": "projects/ngx-cosmo-table-samples/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/ngx-cosmo-table-samples",
+            "index": "projects/ngx-cosmo-table-samples/src/index.html",
+            "main": "projects/ngx-cosmo-table-samples/src/main.ts",
+            "polyfills": "projects/ngx-cosmo-table-samples/src/polyfills.ts",
+            "tsConfig": "projects/ngx-cosmo-table-samples/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/ngx-cosmo-table-samples/src/favicon.ico",
+              "projects/ngx-cosmo-table-samples/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/bootstrap-italia/dist/fonts/Titillium_Web/",
+                "output": "./bootstrap-italia/dist/fonts/Titillium_Web/"
+              }
+            ],
+            "styles": [
+              "src/assets/cwwcl/css/bootstrap-italia.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "projects/ngx-cosmo-table-samples/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/marked/lib/marked.cjs",
+              "node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/ngx-cosmo-table-samples/src/environments/environment.ts",
+                  "with": "projects/ngx-cosmo-table-samples/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ngx-cosmo-table-samples:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ngx-cosmo-table-samples:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ngx-cosmo-table-samples:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-cosmo-table-samples/src/test.ts",
+            "polyfills": "projects/ngx-cosmo-table-samples/src/polyfills.ts",
+            "tsConfig": "projects/ngx-cosmo-table-samples/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-cosmo-table-samples/karma.conf.js",
+            "assets": [
+              "projects/ngx-cosmo-table-samples/src/favicon.ico",
+              "projects/ngx-cosmo-table-samples/src/assets"
+            ],
+            "styles": [
+              "projects/ngx-cosmo-table-samples/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-cosmo-table-samples/tsconfig.app.json",
+              "projects/ngx-cosmo-table-samples/tsconfig.spec.json",
+              "projects/ngx-cosmo-table-samples/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/ngx-cosmo-table-samples/e2e/protractor.conf.js",
+            "devServerTarget": "ngx-cosmo-table-samples:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ngx-cosmo-table-samples:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "cosmowcl",
+  "cli": {
+    "analytics": false
+  }
+}

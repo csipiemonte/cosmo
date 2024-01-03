@@ -1,0 +1,200 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+</ng-container>
+<ng-container *ngIf="loading">
+  <app-caricamento-in-corso></app-caricamento-in-corso>
+</ng-container>
+
+<ng-container *ngIf="!loadingError && !loading && readOnly">
+  <p class="alert alert-warning">
+    Questa funzionalit&agrave; non &egrave; disponibile in modalit&agrave; di sola lettura.
+  </p>
+</ng-container>
+
+<ng-container *ngIf="!loadingError && !loading && reportGenerabili && !readOnly">
+  <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+
+    <div class="row">
+
+      <div class="col-12 col-lg-6 form-group bootstrap-select-wrapper" [hidden]="singoloTipo">
+        <label for="reportSelezionato" [ngClass]="{'active': hasValue('reportSelezionato'), 'is-invalid': displayInvalid('reportSelezionato')}"
+        >Report da generare</label>
+        <select id="reportSelezionato" name="reportSelezionato" class="form-control border col-lg-12"
+          [ngClass]="{ 'is-invalid': displayInvalid('reportSelezionato') }"
+          placeholder="selezionare il tipo di report da generare"
+          formControlName="reportSelezionato">
+          <option *ngFor="let opt of reportGenerabili" [ngValue]="opt">
+            {{ opt.descrizione }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="displayInvalid('reportSelezionato')">
+          <p *ngIf="hasError('reportSelezionato', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 form-group bootstrap-select-wrapper" [hidden]="singoloTipoDocumento">
+        <label for="tipoDocumento" [ngClass]="{'active': hasValue('tipoDocumento'), 'is-invalid': displayInvalid('tipoDocumento')}"
+        >Tipo documento</label>
+        <select id="tipoDocumento" name="tipoDocumento" class="form-control border col-lg-12"
+          [ngClass]="{ 'is-invalid': displayInvalid('tipoDocumento') }"
+          formControlName="tipoDocumento">
+          <option [ngValue]="null">
+            Nessun tipo di documento
+          </option>
+          <option *ngFor="let opt of tipiDocumento" [ngValue]="opt">
+            {{ opt.descrizione }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="displayInvalid('tipoDocumento')">
+          <p *ngIf="hasError('tipoDocumento', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 form-group bootstrap-select-wrapper">
+        <label class="required" [ngClass]="{'active': hasValue('titolo'), 'is-invalid': displayInvalid('titolo')}" for="titolo">
+          Titolo
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': displayInvalid('titolo') }"
+          type="text" id="titolo" name="titolo" formControlName="titolo" class="form-control"
+          placeholder="titolo del documento generato"
+        />
+        <div class="invalid-feedback" *ngIf="displayInvalid('titolo')">
+          <p *ngIf="hasError('titolo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('titolo', 'maxlength')">Troppi caratteri</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 form-group bootstrap-select-wrapper">
+        <label class="required" [ngClass]="{'active': hasValue('nomeFile'), 'is-invalid': displayInvalid('nomeFile')}" for="nomeFile">
+          Nome del file
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': displayInvalid('nomeFile') }"
+          type="text" id="nomeFile" name="nomeFile" formControlName="nomeFile" class="form-control"
+          placeholder="nome del file da salvare"
+        />
+        <div class="invalid-feedback" *ngIf="displayInvalid('nomeFile')">
+          <p *ngIf="hasError('nomeFile', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('nomeFile', 'maxlength')">Troppi caratteri</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 form-group bootstrap-select-wrapper">
+        <label for="formato" [ngClass]="{'active': hasValue('formato'), 'is-invalid': displayInvalid('formato')}"
+        >Formato</label>
+        <select id="formato" name="formato" class="form-control border col-lg-12"
+          [ngClass]="{ 'is-invalid': displayInvalid('formato') }"
+          placeholder="selezionare il formato in cui generare il report"
+          formControlName="formato">
+          <option *ngFor="let opt of formati" [ngValue]="opt">
+            {{ opt.valore }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="displayInvalid('formato')">
+          <p *ngIf="hasError('formato', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 form-group form-check pt-3 pl-2" [hidden]="valoreForzatoParametroSovrascrivi">
+        <input class="form-check-input" type="checkbox"
+          [ngClass]="{ 'is-invalid': displayInvalid('sovrascrivi') }"
+          id="sovrascrivi" name="sovrascrivi" formControlName="sovrascrivi"
+        />
+        <div class="invalid-feedback" *ngIf="displayInvalid('sovrascrivi')">
+          <p *ngIf="hasError('sovrascrivi', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('sovrascrivi', 'maxlength')">Troppi caratteri</p>
+        </div>
+        <label class="form-check-label" [ngClass]="{'active': hasValue('sovrascrivi'), 'is-invalid': displayInvalid('sovrascrivi')}" for="sovrascrivi">
+          Sovrascrivi se gi&agrave; esistente
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="tipoSelezionato?.input?.length" formArrayName="input">
+      <div class="col-12 mt-3" *ngFor="let input of tipoSelezionato?.input; let i = index;">
+        <label class="active" for="userInput{{ i }}"
+          [ngClass]="{'is-invalid': displayInvalid('input[' + i + ']'), 'required': !!input.obbligatorio }"
+        >{{ input.titolo }}</label>
+        <app-cosmo-editor
+          [attr.name]="'userInput' + i"
+          [formControlName]="i"
+          [maxlength]="editorConfigs[i].maxlength"
+          [placeholder]="editorConfigs[i].placeholder"
+        ></app-cosmo-editor>
+        <div class="invalid-feedback" *ngIf="displayInvalid('input[' + i + ']')">
+          <p *ngIf="hasError('input[' + i + ']', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('input[' + i + ']', 'maxlength')">Troppi caratteri</p>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="row mt-4">
+    <div class="col-12 text-center">
+      <button type="button" [disabled]="disabilita()" class="btn btn-outline-primary" style="min-width: 10em;" (click)="submitAnteprima()">
+        Anteprima
+      </button>
+      <button type="button" [disabled]="disabilita()" class="btn btn-primary ml-3" style="min-width: 10em;" (click)="submit()">
+        Genera report
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-4" *ngIf="tasks?.length">
+    <div class="col-12">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Coda di generazione report</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>
+              {{ task.request.titolo || task.tipo.descrizione || task.request.nomeFile ||  task.tipo.codiceTemplate }}
+              <div *ngIf="task.errorMessage">
+                <p class="text-danger pt-3">
+                  {{ task.errorMessage }}
+                </p>
+              </div>
+            </td>
+            <td>
+              {{ task.formato?.valore }}
+            </td>
+            <td style="width: 1px;" class="text-right">
+              <div *ngIf="task.completed && task?.status?.risultato?.url?.length">
+                <button class="btn btn-link" style="cursor: pointer; margin-top: -0.55em;" (click)="preview(task)" title="visualizza report">
+                  <span class="fas fa-eye"></span>
+                </button>
+              </div>
+            </td>
+            <td style="width: 1px;" class="text-right">
+              <span class="badge" [ngClass]="{
+                'badge-primary': !task.finished,
+                'badge-success': task.completed,
+                'badge-danger': task.failed
+              }">
+                {{ task.stepDescription || 'in attesa' }}
+                <span class="fas fa-spinner fa-spin ml-3" *ngIf="!task.finished"></span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="debug && form">
+    <app-debug title="payload" [value]="getPayload()"></app-debug>
+  </div>
+
+</ng-container>

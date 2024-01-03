@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with columns and data</p>
+      <p>Allows columns selection. Some columns are fixed, some are hidden by default.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="text-right">
+        <cosmo-table-column-selector [table]="table">
+        </cosmo-table-column-selector>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table
+        [data]="users"
+        [columns]="columns"
+      ></cosmo-table>
+    </div>
+  </div>
+</div>

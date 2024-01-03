@@ -1,0 +1,15 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="debugEnabled">
+    <div class="card">
+        <div class="card-header clickable" (click)="hidden = !hidden;">
+            <span class="fas fa-bug mr-2"></span>
+            <span class="title">{{ effectiveTitle }}</span>
+        </div>
+        <div class="card-body" [ngbCollapse]="hidden">
+            <pre class="debug">{{ value | json }}</pre>
+        </div>
+    </div>
+</ng-container>

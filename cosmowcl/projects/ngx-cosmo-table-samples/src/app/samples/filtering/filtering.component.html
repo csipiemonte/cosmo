@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        Basic table with filtering (by selected columns).
+        Only columns with canFilter = true can be filtered.
+        <br/>
+        Columns with defaultFilter = true are selected for filtering by default.
+      </p>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <cosmo-table-search-filter [table]="table">
+      </cosmo-table-search-filter>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table
+        [data]="users"
+        [columns]="columns"
+      ></cosmo-table>
+    </div>
+  </div>
+</div>

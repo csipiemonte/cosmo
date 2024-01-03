@@ -1,0 +1,100 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row">
+    <div class="col-6">
+      <h2 class="mt-1">Pratiche da lavorare</h2>
+    </div>
+
+  </div>
+
+
+
+  <ng-container *ngIf="loadingError" >
+    <div class="row mb-5 text-center">
+      <div class="col-12">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading" >
+    <div class="row mb-5 text-center">
+      <div class="col-12">
+        <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+      </div>
+
+    </div>
+  </ng-container>
+
+  <div class="custom-card-deck card-deck" *ngIf="!loading && !loadingError">
+    <div class="custom-col col-12 col-sm-4 col-md-3 col-lg-2 ml-2" *ngFor="let pratica of pratiche" >
+
+
+    <div class="card mb-4"  >
+      <div class=" card-title">
+        <div class="btn-action-icon btn-dropdown dropdown-toggle text-right mt-3 mr-3" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+          <button class="btn btn-link btn-xs btn-action-icon" type="button" ngbDropdownToggle>
+          <span class="fas fa-ellipsis-v"></span>
+        </button>
+
+          <div ngbDropdownMenu class="dropdown-menu">
+            <button ngbDropdownItem (click)="dettaglioPratica(pratica)">
+              <a><span class="a-bit-smaller">Dettaglio Pratica</span></a>
+            </button>
+            <button ngbDropdownItem (click)="assignPratica(pratica)" *ngIf="canAssign(pratica.attivita, pratica.tipo)">
+              <a><span class="a-bit-smaller">Assegna attivit&agrave;</span></a>
+            </button>
+            <button ngbDropdownItem (click)="condividiPratica(pratica)" *ngIf="canShare(pratica)">
+              <a><span class="a-bit-smaller">Condividi pratica</span></a>
+            </button>
+            <ng-container *ngIf=" isAnnullabile(pratica)">
+              <button *appHasUseCase="'ADMIN_PRAT'" ngbDropdownItem (click)="annullaPratica(pratica)">
+                <a><span class="a-bit-smaller">Annulla pratica</span></a>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body" (click)="pratica?.attivita && pratica?.attivita?.length===1 ? lavora(pratica?.attivita[0]) : apriPopOver(pratica?.id)">
+
+
+        <ng-container  >
+
+          <span #popOverAttivita="ngbPopover"  [autoClose]="'outside'" class=" pointer" placement="bottom" [ngbPopover]=" popContent " [container]="'body'"  popoverClass="very-large-popover-mobile" triggers="manual">
+
+
+            <i class="fas fa-folder-open fa-solid fa-2xl card-icon text-center mx-auto position-relative   mb-3" style="color: #06c;" *ngIf="!hasImmaginePratica(pratica?.tipo)" ></i>
+            <img class="pratica-img img-fluid mx-auto position-relative mb-3" [src]="getImmaginePratica(pratica?.tipo)" alt="" *ngIf="hasImmaginePratica(pratica?.tipo)"/>
+            <h5 class=" text-card card-title text-center mb-2"> {{ pratica?.oggetto }} </h5>
+            <div class="text-center text-card-tipo mt-1 mb-2"><p><small><em> {{ pratica.tipo?.descrizione }} </em></small></p></div>
+            <div class="text-center text-badge mt-1 mb-3"><span class="badge badge-pill badge-{{ getBadgeClass(pratica) }}">{{ getStatusText(pratica) }}</span></div>
+          </span>
+            <div class="text-center"><p> {{ pratica?.dataCreazionePratica | date: 'dd/MM/yyyy' }} </p></div>
+
+
+
+        <ng-template #popContent >
+          <table >
+            <tr *ngFor="let attivita of pratica?.attivita"  class="row">
+                <td>
+                  <button type="button" class="btn btn-xs" (click)="lavora(attivita)"><span class="a-bit-smaller"><p>{{ attivita.nome }}</p></span></button>
+                </td>
+            </tr>
+        </table>
+
+
+      </ng-template>
+      <ng-template #noPopOver></ng-template>
+
+      </ng-container>
+
+      </div>
+
+    </div>
+
+    </div>
+
+
+  </div>

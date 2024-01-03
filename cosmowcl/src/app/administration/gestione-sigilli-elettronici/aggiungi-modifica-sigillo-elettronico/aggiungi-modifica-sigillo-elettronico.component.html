@@ -1,0 +1,187 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+      <span class="breadcrumb-divider"> / </span>
+      <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+        {{"sigillo_elettronico.header" | translate}}
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">{{"sigillo_elettronico.header" | translate}}</h2>
+      </div>
+    </div>
+  
+    <ng-container *ngIf="loadingError">
+      <div class="px-4 py-4">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+  
+    <ng-container *ngIf="!loading && !loadingError">
+      <br>
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form" class="mt-4">
+  
+        <div class="row justify-content-between">
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('alias'), 'is-invalid': displayInvalid('alias')}"
+              for="label">{{"sigillo_elettronico.alias" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('alias') }"
+              type="text" id="alias" name="alias" formControlName="alias" class="form-control"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('alias')">
+              <p *ngIf="hasError('alias', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('alias', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('alias', 'conflict')">
+                {{"sigillo_elettronico.errore_alias_gia_presente" | translate}}
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('utente'), 'is-invalid': displayInvalid('utente')}"
+              for="label">{{"sigillo_elettronico.user" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('utente') }"
+              type="text" id="utente" name="utente" formControlName="utente" class="form-control"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('utente')">
+              <p *ngIf="hasError('utente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('utente', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('delegatedDomain'), 'is-invalid': displayInvalid('delegatedDomain')}"
+                for="label">{{"sigillo_elettronico.delegated_domain" | translate}}</label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('delegatedDomain') }"
+                type="text" id="delegatedDomain" name="delegatedDomain" formControlName="delegatedDomain" class="form-control"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('delegatedDomain')">
+                <p *ngIf="hasError('delegatedDomain', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('delegatedDomain', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+  
+            <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('delegatedUser'), 'is-invalid': displayInvalid('delegatedUser')}"
+                for="label">{{"sigillo_elettronico.delegated_user" | translate}}</label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('delegatedUser') }"
+                type="text" id="delegatedUser" name="delegatedUser" formControlName="delegatedUser" class="form-control"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('delegatedUser')">
+                <p *ngIf="hasError('delegatedUser', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('delegatedUser', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-lg-5 col-sm-12 form-group">
+            <div class="input-group">
+              <label [ngClass]="{'active': hasValue('delegatedPassword'), 'is-invalid': displayInvalid('delegatedPassword')}"
+                for="label">{{"sigillo_elettronico.delegated_password" | translate}}</label>
+              <input style="position: static;"
+              [ngClass]="{ 'is-invalid': displayInvalid('delegatedPassword') }"
+                [type]="showDelegatedPassword ? 'text' : 'password'" id="delegatedPassword" name="delegatedPassword" formControlName="delegatedPassword" class="form-control"
+              />
+              <div class="input-group-append" >
+                <span class="input-group-text" [class.border-danger]="displayInvalid('delegatedPassword')">
+                  <i class="fa" [ngClass]="{ 'fa-eye-slash': !showDelegatedPassword, 'fa-eye': showDelegatedPassword }" (click)="mostraDelegatedPassword()" ></i>
+                </span>
+            </div>
+              <div class="invalid-feedback" >
+                <p *ngIf="hasError('delegatedPassword', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('delegatedPassword', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+            </div>
+  
+            <div class="col-lg-5 col-sm-12 form-group">
+                <div class="input-group">
+              <label [ngClass]="{'active': hasValue('otpPwd'), 'is-invalid': displayInvalid('otpPwd')}"
+                for="label">{{"sigillo_elettronico.otp_pwd" | translate}}</label>
+              <input style="position: static;"
+                [ngClass]="{ 'is-invalid': displayInvalid('otpPwd') }"
+                [type]="showOtpPwd ? 'text' : 'password'" id="otpPwd" name="otpPwd" formControlName="otpPwd" class="form-control"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text " [class.border-danger]="displayInvalid('otpPwd')">
+                  <i class="fa" [ngClass]="{ 'fa-eye-slash': !showOtpPwd, 'fa-eye': showOtpPwd }" (click)="mostraOtpPwd()" ></i>
+                </span>
+            </div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('otpPwd')">
+                <p *ngIf="hasError('otpPwd', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('otpPwd', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('tipoHsm'), 'is-invalid': displayInvalid('tipoHsm')}"
+                for="label">{{"sigillo_elettronico.tipo_hsm" | translate}}</label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('tipoHsm') }"
+                type="text" id="tipoHsm" name="tipoHsm" formControlName="tipoHsm" class="form-control"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('tipoHsm')">
+                <p *ngIf="hasError('tipoHsm', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('alias', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+  
+            <div class="col-lg-5 col-sm-12 form-group">
+              <label [ngClass]="{'active': hasValue('tipoOtpAuth'), 'is-invalid': displayInvalid('tipoOtpAuth')}"
+                for="label">{{"sigillo_elettronico.tipo_otp_auth" | translate}}</label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('tipoOtpAuth') }"
+                type="text" id="tipoOtpAuth" name="tipoOtpAuth" formControlName="tipoOtpAuth" class="form-control"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('tipoOtpAuth')">
+                <p *ngIf="hasError('tipoOtpAuth', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('tipoOtpAuth', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+        </div>
+        
+        <br>
+        <div class="row">
+          <div class="col-2 text-left">
+            <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+              {{"common.indietro" | translate}}
+            </button>
+          </div>
+          <div class="col-10 text-right">
+            <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+              {{"common.salva" | translate}}
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-danger btn-action" (click)="pulisciCampi()">
+              {{"common.annulla_modifiche" | translate}}
+            </button>
+          </div>
+        </div>
+        <br>
+    </form>
+    </ng-container>
+  
+  </div>

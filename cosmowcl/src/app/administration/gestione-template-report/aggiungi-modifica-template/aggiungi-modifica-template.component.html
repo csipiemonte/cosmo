@@ -1,0 +1,125 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "template_report.header" | translate }}
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "template_report.header" | translate }}</h2>
+    </div>
+  </div>
+
+    <div style="margin: 50px 0px;">
+      <div class="row justify-content-between">
+
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+          <label for="ente" [ngClass]="{'active': hasValue(enteSelezionato)}">{{"processi.enti" | translate}}</label>
+          <input id="ente" type="text" class="form-control border" placeholder=""
+            [(ngModel)]="enteSelezionato" [ngbTypeahead]="searchEnti"
+            [resultFormatter]="formatterEnte" [inputFormatter]="formatterEnte"
+            (focus)="focusEnti$.next($any($event).target.value)" (click)="clickEnti$.next($any($event).target.value)"
+            #instanceEnti="ngbTypeahead" (ngModelChange)="getTipiPratiche(); updateTemplatePadre();" [editable]="false" />
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+          <label for="tipo_pratica" [ngClass]="{'active': hasValue(tipoPraticaSelezionata)}">{{"processi.tipi_pratiche" | translate}}</label>
+          <input #instanceTipoPratiche="ngbTypeahead"
+                 id="tipo_pratica"
+                 type="text"
+                 class="form-control border"
+                 placeholder=""
+                 [ngbTypeahead]="searchTipiPratiche"
+                 [disabled]="!enteSelezionato || !enteSelezionato.id"
+                 [(ngModel)]="tipoPraticaSelezionata"
+                 [resultFormatter]="formatterTipoPratica"
+                 [inputFormatter]="formatterTipoPratica"
+                 (focus)="focusTipoPratiche$.next($any($event).target.value)"
+                 (click)="clickTipoPratiche$.next($any($event).target.value)"
+                 [editable]="false" />
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-12 form-group">
+        </div>
+
+      </div>
+
+      <div class="row justify-content-between">
+        <div class="col-lg-4 col-sm-12 form-group">
+          <label for="codice" [ngClass]="{'active': hasValue(codice)}">Codice</label>
+          <input id="codice" name="codice" [(ngModel)]="codice" class="form-control" type="text" (change)="updateTemplatePadre(true)" />
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+          <label for="template_padre" [ngClass]="{'active': hasValue(templatePadreSelezionato)}">{{"template_report.template_padre" | translate}}</label>
+
+          <input id="template_padre" type="text" class="form-control border"
+            placeholder=""
+            [(ngModel)]="templatePadreSelezionato" [ngbTypeahead]="searchTemplatePadre"
+            [resultFormatter]="formatterTemplatePadre" [inputFormatter]="formatterTemplatePadre"
+            #instanceTemplatePadre="ngbTypeahead"
+            [editable]="false"
+            [disabled]="!templatesPadre || templatesPadre.length === 0"
+            (focus)="focusTemplatePadre$.next($any($event).target.value)"
+            (click)="clickTemplatePadre$.next($any($event).target.value)" />
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-12 form-group">
+        </div>
+
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-lg-2 col-md-4 col-sm-5" style="width: auto !important;">
+          <button type="button" (click)="inputIcona.click()" class="file-upload btn btn-outline-primary btn-sm">
+            <span>{{ 'template_report.sorgente_template' | translate | uppercase }}</span>
+            <input type="file" accept=".jrxml" class="upload" #inputIcona id="sorgenteTemplate" name="sorgenteTemplate"
+              (change)="onFileChanged($event.target.files)" (click)="inputIcona.value = null" required>
+          </button>
+          <input type="text" hidden>
+        </div>
+        <div class="col-lg-10 col-md-8 col-sm-7" style="margin:auto; width: auto !important;">
+          <span>{{nomeFile}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="errore">
+          <p>{{errore}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-md-4 col-sm-5" style="width: auto !important;">
+          <button *ngIf = "uploadedSorgenteTemplate"
+          type="button"
+          (click)="downloadTemplate()"
+          class="btn btn-outline-primary btn-sm"
+          data-toggle="tooltip"
+          title="Download template salvato">
+            <span>{{ 'template_report.scarica_template' | translate | uppercase }}</span>
+          </button>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 80px;">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="button" class="btn btn-sm btn-success" [disabled]="disabilitaSalva()" (click)="salva()">
+            {{"common.salva" | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+

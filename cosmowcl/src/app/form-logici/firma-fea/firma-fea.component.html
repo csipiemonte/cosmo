@@ -1,0 +1,95 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+          (click)="modal.dismiss('click_on_back_arrow')">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        &nbsp; {{ "firma_digitale.titolo" | translate }}
+      </h5>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+
+    <div class="modal-body">
+
+      <ng-container *ngIf="loadingError">
+        <div class="px-4 py-4">
+          <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loading">
+        <div class="px-4 py-4">
+          <app-caricamento-in-corso></app-caricamento-in-corso>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadingError">
+
+        <h3><span role="status">{{documenti.length | i18nPlural: messageMapping}}</span></h3>
+
+        <div class="table-container mb-3 ">
+
+          <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="documenti" [columns]="columns"
+            [enablePagination]="true" [paginationMode]="'CLIENT'" [defaultPageSize]="5" [enableSorting]="true">
+
+            <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+              <!-- TEMPLATE PER LA COLONNA CON IL FORMATO-->
+              <div *ngIf="column.name === 'formato'">
+                <app-template-formato-documenti [documento]="row"></app-template-formato-documenti>
+              </div>
+
+              <!-- TEMPLATE PER LA COLONNA CON IL RIQUADRO FIRMA-->
+              <div *ngIf="column.name === 'riquadroFirma'">
+                  <input id="riquadroFirma" type="checkbox" [checked]="row.coordinataX && row.coordinataY" [disabled]="true"/>
+              </div>
+
+              <!-- TEMPLATE PER LA COLONNA CON LE AZIONI-->
+              <div *ngIf="column.name === 'azioni'">
+                  <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button"  [disabled]="row.action===false" (click)="modifica(row)">
+                      <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                  </button>
+              </div>
+
+            </ng-template>
+          </cosmo-table>
+
+          <div class="row text-center">
+            <div class="col-sm-12">
+              <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row" style="padding-top: 50px;">
+          <div class="col-auto">
+            <button class="btn btn-primary btn-sm btn-action" type="button" [disabled]="disabledOtp"  (click)="richiediOTP()">{{"firma_fea.richiedi_otp" | translate}}</button>
+          </div>
+          <div class="form-group col-md-4">
+            <label class="active" for="inputTextModalFirmaOTP">{{"firma_fea.inserisci_otp_ricevuto" | translate}}</label>
+            <input type="text" [disabled]="disabledOtp" class="form-control border" id="inputTextModalFirmaOTP" placeholder=" " [(ngModel)]="otp" >
+          </div>
+        </div>
+      </ng-container>
+
+
+    </div>
+    <div class="modal-footer">
+
+      <button class="btn btn-outline-primary btn-sm mr-auto js-reset-btn btn-action" type="button" data-dismiss="modal"
+        (click)="modal.dismiss('click_on_back')">{{"common.annulla" | translate}}</button>
+      <button class="btn btn-primary btn-sm js-hide-when-status js-firma-btn btn-action" type="button"
+        [disabled]="disabilitaFirma() || disabledOtp" (click)="firma()">{{"common.firma" | translate}}</button>
+    </div>
+  </div>
+

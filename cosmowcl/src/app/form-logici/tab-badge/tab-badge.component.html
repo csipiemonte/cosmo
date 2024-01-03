@@ -1,0 +1,15 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="render">
+    <span class="tab-badge tab-badge-{{ effectiveClass || 'default' }} {{ hasText ? 'text' : 'no-text' }}"
+          data-toggle="tooltip"
+          title="{{effectiveTooltip}}">
+        <span *ngIf="effectiveIcon?.length" [ngClass]="{
+          'ml-1': hasText
+      }" class="tab-badge-icon {{ effectiveIcon }}"></span>
+        <ng-container *ngIf="hasText">{{ effectiveText }}</ng-container>
+        <ng-container *ngIf="!hasText">&nbsp;</ng-container>
+    </span>
+</ng-container>

@@ -1,0 +1,39 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+main.padded-for-scroll {
+    padding-top: 200px;
+}
+
+.table-hover .detail-row:hover { 
+    background-color: inherit !important;
+    opacity: 1.0  !important;
+}
+
+.table-hover .detail-row tr:hover { 
+    background-color: inherit !important;
+    opacity: 1.0  !important;
+}
+
+deact-main {
+    padding-bottom: 150px;
+}
+
+@media screen and (min-width:576px) {
+
+}
+@media screen and (min-width:768px) {
+}
+
+@media screen and (min-width:992px) {
+    main {
+        min-height: 57vh;
+    }
+}
+
+@media screen and (min-width:1200px) {
+    main {
+        min-height: 57vh;
+    }
+}

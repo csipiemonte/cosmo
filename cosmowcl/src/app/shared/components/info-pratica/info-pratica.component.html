@@ -1,0 +1,147 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row mb-4" *ngIf="!embedded">
+  <span
+    *ngIf="routerHistoryInfo && routerHistoryInfo.data && routerHistoryInfo.data.descrizione; else storicoCancellato">
+    <button type="button" class="btn btn-link btn-xs mr-2" (click)="backTo()">
+      <span class="fas fa-backspace pr-2"></span>
+      {{routerHistoryInfo.data.descrizione | translate}}
+    </button>
+  </span>
+  <ng-template #storicoCancellato>
+    <button type="button" class="btn btn-link btn-xs mr-2" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span> {{'common.home' | translate}}
+    </button>
+  </ng-template>
+</div>
+
+<div class="row mobile-first">
+  <div class="col">
+    <h2 *ngIf="isDettaglio" class="">{{'pratica.dettaglio_pratica' | translate}} {{pratica?.oggetto}}</h2>
+    <!-- <h2 *ngIf="!isDettaglio" class="">{{'pratica.dettaglio_task' | translate}} {{pratica?.oggetto}}</h2> -->
+    <h2 *ngIf="!isDettaglio" class="">{{'pratica.dettaglio_task' | translate}} {{getNomeTaskFromAttivita(pratica) }}
+    </h2>
+
+  </div>
+  <div class="col text-right mobile-first" *ngIf="!embedded">
+    <div class="dropdown d-inline-block mr-3 mb-3" *ngIf="isDettaglio">
+
+      <div class="btn-group mr-3" ngbDropdown role="group">
+        <button class="btn btn-dropdown dropdown-toggle dropdown-disabled" ngbDropdownToggle
+          *ngIf="!attivita || attivita.length == 0 || readOnly || !hasAttivitaAssegnate()" disabled="true">
+          <span class="fas fa-pen dropdown-disabled"></span> {{'common.lavora' | translate}}
+        </button>
+        <button class="btn btn-dropdown dropdown-toggle" ngbDropdownToggle
+          *ngIf="attivita && attivita.length > 0 && !readOnly && hasAttivitaAssegnate()">
+          <span class="fas fa-pen"></span> {{'common.lavora' | translate}} <span class="fas fa-angle-down ml-1"></span>
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu *ngIf="attivita && attivita.length > 0">
+          <div class="link-list-wrapper">
+            <ul class="link-list">
+              <li *ngFor="let singolaAttivita of attivita">
+                <a class="list-item" (click)="doAttivita(singolaAttivita)">
+                  <span class="a-bit-smaller lavora-span">
+                    {{singolaAttivita.nome}} {{singolaAttivita.gruppoAssegnatario}}
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-inline-block" *ngIf="!isDettaglio && !readOnly && !isSubtask && !embedded && isAssegnabile()" ngbDropdown [container]="'body'"
+      [autoClose]="'outside'">
+      <button ngbDropdownToggle class="btn btn-link" type="button">
+        {{'common.altre_azioni' | translate}}
+        <span class="ml-2 fas fa-ellipsis-v" [class.dropdown-disabled]="readOnly" [class.disabled]="readOnly"></span>
+      </button>
+      <div ngbDropdownMenu>
+        <button ngbDropdownItem *ngIf="!isDettaglio && isAssignedToGroup" (click)="assegnaAMe()">
+          Assegna a me
+        </button>
+        <button ngbDropdownItem *ngIf="!isDettaglio" (click)="assegnaAttivita()">
+          Assegna attività ...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row d-flex align-items-center">
+  <div class="col d-flex flex-row align-items-start">
+    <span class="badge badge-{{ getBadgeClass(pratica) }} mr-2">
+      {{ getStatusText(pratica) }}
+    </span>
+    <small>
+      <strong>{{'pratica.ultimo_cambio_stato' | translate}}</strong> {{pratica?.dataCambioStato | date: 'dd/MM/yyyy' }}
+    </small>
+    <small style="margin-left: 50px;" *ngIf="pratica.dataCancellazione">
+      <strong style="color:rgb(222, 53, 11);">{{'pratica.pratica_annullata' | translate}}</strong>
+      {{pratica?.dataCancellazione | date: 'dd/MM/yyyy' }}
+    </small>
+  </div>
+</div>
+
+<div class="table-responsive mt-5">
+  <table class="w-100 table-summary mobile-first">
+    <thead>
+      <tr>
+        <th>{{'pratica.oggetto' | translate}}</th>
+        <th>{{'pratica.tipologia' | translate}}</th>
+        <th class="text-right">{{'pratica.ultima_modifica' | translate}}</th>
+        <th class="text-right">{{'pratica.apertura_pratica' | translate}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{pratica?.oggetto}}</td>
+        <td>{{pratica?.tipo?.descrizione}}</td>
+        <td class="text-right">{{pratica?.dataAggiornamentoPratica | date: 'dd/MM/yyyy' }}</td>
+        <td class="text-right">{{pratica?.dataCreazionePratica | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="mostraInfoFruitore && pratica?.fruitore?.nomeApp?.length" class="table-responsive mt-3">
+  <table class="w-100 table-summary mobile-first">
+    <thead>
+      <tr>
+        <th>Fruitore esterno</th>
+        <th class="text-right" *ngIf="pratica?.idPraticaExt?.length">ID esterno</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="fas fa-robot"></span>
+          <span class="ml-2">
+            {{ pratica?.fruitore?.nomeApp || '--' }}
+          </span>
+        </td>
+        <td class="text-right" style="width: 1px; white-space: nowrap;" *ngIf="pratica?.idPraticaExt?.length">
+          <span>{{ pratica?.idPraticaExt || '--' }}</span>
+          <button type="button" class="btn btn-link btn-xs p-0 ml-2" title="copia ID esterno" (click)="copiaIdEsterno()" [disabled]="justCopied">
+            <span class="fas fa-copy" *ngIf="!justCopied"></span>
+            <span class="fas fa-check" *ngIf="justCopied"></span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isEsterna" class="mt-4 mb-4">
+  <p class="alert alert-info">
+    Questa pratica &egrave; gestita da {{ pratica?.fruitore?.nomeApp || 'un fruitore esterno'}}.
+    <br/>
+    <a class="btn btn-sm btn-outline-primary mt-4" (click)="apriPraticaEsterna()">
+      <i class="fas fa-external-link-alt mr-2"></i>
+      vai alla pratica su {{ pratica?.fruitore?.nomeApp || 'fruitore esterno'}}
+    </a>
+  </p>
+</div>

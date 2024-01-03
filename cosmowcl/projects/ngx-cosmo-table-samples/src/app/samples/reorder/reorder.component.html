@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with drag and drop to reorder rows.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        id="table"
+        [data]="users"
+        [columns]="columns"
+        [tableId]="'table'"
+        [dropConnectedTo]="'table'"
+        [enableDrag]="true"
+        [enableDrop]="true"
+        (itemDropped)="onItemDropped($event)"
+      >
+        <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+          <!-- Custom rendering for 'status' column -->
+          <div *ngIf="column.name === 'status'">
+            <span *ngIf="row.moved" class="badge badge-danger"> MOVED </span>
+          </div>
+        </ng-template>
+      </cosmo-table>
+    </div>
+  </div>
+
+</div>

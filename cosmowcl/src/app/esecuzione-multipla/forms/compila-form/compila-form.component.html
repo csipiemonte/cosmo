@@ -1,0 +1,57 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+        (click)="modal.dismiss('click_on_back_arrow')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      &nbsp; {{ "compilazione_form.title" | translate }}
+    </h5>
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="table-container mb-3 ">
+      <!-- CUSTOM FORM -->
+      <div *ngIf="formType && formType === 'custom' && codiceForm">
+        <app-form-formio #formFormio [readOnly]="false" [formCodice]="codiceForm" [variabiliProcesso]="variabiliProcesso"
+          (compEmitter)="salvaVariabiliDaFormio($event)">
+        </app-form-formio>
+      </div>
+      <!-- SIMPLE FORM -->
+      <div *ngIf="formType && formType === 'simple' && codiceForm">
+        <app-simple-form-container #simpleForm
+          [formKey]="codiceForm"
+          [readOnly]="false"
+          [variabiliProcesso]="variabiliProcesso"
+          (emitter)="salvaVariabiliSimpleForm($event)"
+          (errorMessage)="sendError('Errore nel reperimento dei dati')">
+      </app-simple-form-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div *ngIf="!mandareAvantiProcesso">
+      <p class="alert alert-info">
+        {{ "esecuzione_multipla.messaggio" | translate }}
+      </p>
+    </div>
+
+    <button class="btn btn-outline-primary btn-sm mr-auto js-reset-btn btn-action" type="button" data-dismiss="modal"
+      (click)="modal.dismiss('click_on_back')">{{"common.annulla" | translate}}</button>
+    <button class="btn btn-primary btn-sm js-hide-when-status js-firma-btn btn-action" type="button"
+      [disabled]="disabilita()" (click)="salva()">{{"common.salva" | translate}}</button>
+  </div>
+</div>

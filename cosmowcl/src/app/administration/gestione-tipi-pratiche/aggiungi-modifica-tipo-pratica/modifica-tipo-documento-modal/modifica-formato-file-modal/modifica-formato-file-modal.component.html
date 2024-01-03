@@ -1,0 +1,154 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container pb-5 pt-5 pr-3 pl-3">
+
+  <ng-container *ngIf="loadingError">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="loading">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- TABELLA FORMATO FILE AGGIUNTI AL TIPO DOCUMENTO -->
+    <br>
+    <strong class="">{{ 'formato_file.actions.formati_file_aggiunti' | translate }}</strong>
+    <div class="row mt-3" *ngIf="tableFormatoFileAggiunti">
+      <div class="col-12 col-lg-8">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right pt-2">
+        <cosmo-table-search-filter *ngIf="tableFormatoFileAggiunti" [table]="tableFormatoFileAggiunti" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table
+          #tableFormatoFileAggiunti
+          [tableDisplayClass]="'table-sm table-hover variant-centered'"
+          [columns]="columnsFormatoFileAggiunti"
+          [paginationMode]="'CLIENT'"
+          [data]="formatiFile"
+          [enablePagination]="true"
+          [enableSorting]="true"
+          [enableRowExpansion]="false"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'descrizione'"
+          [itemIdentifier]="'codice'"
+          [enableItemTracking]="true"
+        >
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="rimuoviFormatoFile(row)">
+                <em class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></em>
+              </button>
+            </div>
+
+          </ng-template>
+        </cosmo-table>
+      </div>
+  </div>
+  <div class="row mt-3" *ngIf="tableFormatoFileAggiunti">
+    <div class="col-12 col-lg-3">
+      <!-- EMPTY -->
+    </div>
+    <div class="col-12 col-lg-6 text-center">
+      <cosmo-table-pagination *ngIf="tableFormatoFileAggiunti" [table]="tableFormatoFileAggiunti"></cosmo-table-pagination>
+    </div>
+    <div class="col-12 col-lg-3 text-right pt-2">
+      <cosmo-table-page-size *ngIf="tableFormatoFileAggiunti" [table]="tableFormatoFileAggiunti"></cosmo-table-page-size>
+    </div>
+  </div>
+  <br>
+
+  <!-- TABELLA FORMATO FILE -->
+  <strong class="">{{ 'formato_file.actions.formati_file' | translate }}</strong>
+
+  <div class="row mt-3" *ngIf="tableFormatiFile">
+    <div class="col-12 col-lg-8">
+      <!-- EMPTY -->
+    </div>
+    <div class="col-12 col-lg-4 text-right pt-2">
+      <cosmo-table-search-filter *ngIf="tableFormatiFile" [table]="tableFormatiFile" [enableSearchIn]="false">
+      </cosmo-table-search-filter>
+    </div>
+  </div>
+
+  <div class="row mt-4 mb-5">
+    <div class="col-12 table-container mobile-first">
+
+      <cosmo-table #tableFormatiFile
+          [tableDisplayClass]="'table-sm table-hover variant-centered'"
+          [columns]="columnsFormatiFile"
+          [paginationMode]="'SERVER'"
+          [dataProvider]="dataProviderFormatiFile"
+          [enablePagination]="true"
+          [enableSorting]="true"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'codice'"
+          [itemIdentifier]="'codice'"
+          [enableItemTracking]="true">
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+          <!-- cella ICONA DETTAGLIO -->
+          <div *ngIf="column.name === 'azioni'">
+            <div *ngIf="!isFormatoFileSelezionato(row); else notSelectedTemplate">
+              <button class="btn btn-primary btn-xs btn-seleziona" type="button"
+                title="{{ 'gruppi.actions.seleziona' | translate }}" (click)="selezionaFormatoFile(row)">
+                {{ 'gruppi.actions.seleziona' | translate }}
+              </button>
+            </div>
+            <ng-template #notSelectedTemplate>
+              <button class="btn btn-primary btn-xs btn-seleziona" type="button"
+                title="{{ 'gruppi.status.selezionato' | translate }}" [disabled]="true">
+                {{ 'gruppi.status.selezionato' | translate }}
+              </button>
+            </ng-template>
+          </div>
+
+
+          </ng-template>
+        </cosmo-table>
+
+
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="tableFormatiFile">
+    <div class="col-12 col-lg-3">
+      <!-- EMPTY -->
+    </div>
+    <div class="col-12 col-lg-6 text-center">
+      <cosmo-table-pagination *ngIf="tableFormatiFile" [table]="tableFormatiFile"></cosmo-table-pagination>
+    </div>
+    <div class="col-12 col-lg-3 text-right pt-2">
+      <cosmo-table-page-size *ngIf="tableFormatiFile" [table]="tableFormatiFile"></cosmo-table-page-size>
+    </div>
+  </div>
+
+  </ng-container>
+
+<div class="modal-footer" *ngIf="!loading && !loadingError">
+  <button type="button" class="btn btn-sm btn-primary btn-action" (click)="modal.dismiss()">
+    {{"common.indietro" | translate}}
+  </button>
+  <button type="button" #defaultfocus (click)="salva()" class="btn btn-sm btn-success btn-action">
+    {{"common.salva" | translate}}
+</button>
+</div>

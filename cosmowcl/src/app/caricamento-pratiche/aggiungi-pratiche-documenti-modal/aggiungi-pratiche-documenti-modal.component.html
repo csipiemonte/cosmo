@@ -1,0 +1,114 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="row w-100 mb-3">
+        <div class="col-md-6 col-12">
+          <h5 class="modal-title">
+            <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+              (click)="modal.dismiss('click_on_back_arrow')">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            &nbsp; {{"caricamento_pratiche.titolo" | translate}}
+          </h5>
+        </div>
+      </div>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+    <ng-container *ngIf="loadingError">
+      <div class="px-4 py-4">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <div class="px-4 py-4">
+        <app-caricamento-in-corso></app-caricamento-in-corso>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && !loadingError">
+      <div class="modal-body">
+        <div>
+            <div class="row">
+                <div class="uploadfilecontainer"
+                    *ngIf="!file"
+                    appCaricamentoPratiche
+                    (click)="fileInput.click();"
+                    (fileDropped)="uploadFile($event)">
+                    <input  hidden type="file" id="file" name="file" #fileInput
+                    (change)="uploadFile($event.target.files); $event.target.value='';">
+                    <div class="content">
+                      <h3>{{(pratica ? "caricamento_pratiche.trascina_pratica" : "caricamento_pratiche.trascina_zip") | translate}}</h3>
+                      <p>{{"caricamento_pratiche.oppure" | translate}}</p>
+                      <h3>{{"caricamento_pratiche.selezionalo_cliccando_qui" | translate}}</h3>
+                    </div>
+                </div>
+                <div *ngIf="file" class="file" [ngClass]="{'error': errorSize || (file && file.size===0) || errorType || errorZipPresente}">
+                    <div class="text-left">
+                        <span class="fas fa-paperclip fa-1x mr-3"></span>
+                        <span *ngIf="file.name">{{ file.name }}</span>
+                        <br/>
+                        <small>
+                        <span *ngIf="file.size">
+                            ({{ file.size
+                            ? (file.size /1024>1024 ? ((file.size/(1024*1024)).toFixed() + ' MB')
+                            : ((file.size/(1024)).toFixed() + ' kB') )
+                            : ''}})
+                        </span>
+                        </small>
+                    </div>
+                    <button class="btn btn-action-icon btn-link text-danger" (click)="pulisciCampi()"
+                        [disabled]="uploading">
+                        <span class="fas fa-trash-alt"></span>
+                    </button>
+                </div>
+                <div *ngIf="file && file.size===0" class="error-text">
+                    <p>Il file inserito è vuoto</p>
+                </div>
+                <div *ngIf="errorSize" class="error-text">
+                  <p>Il file inserito ha dimesioni superiori a quelle consentite, ovvero {{ (maxSize/1024 > 1024 ? (maxSize/(1024*1024)).toFixed() + 'MB' : (maxSize/1024).toFixed() + 'kB') }} </p>
+                </div>
+                <div *ngIf="errorType" class="error-text">
+                  <p>Il file inserito non è di tipo corretto, ovvero di tipo {{ (pratica ? "excel" : "zip") }}</p>
+                </div>
+                <div *ngIf="file && errorZipPresente" class="error-text">
+                  <p>Il file {{ file.name }} è già stato inserito</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 mb-3" *ngIf="uploading">
+          <div class="col-12">
+            <p *ngIf="uploadingDesc">{{ uploadingDesc }}</p>
+            <div class="progress w-100">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                [attr.aria-valuenow]="uploadingProgress" aria-valuemin="0" aria-valuemax="100"
+                [ngStyle]="{
+                  'width': '' + uploadingProgress + '%'
+                }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="text-right">
+          <button type="button" style="margin: 5px;" (click)="annullaCaricamento()" *ngIf="uploading"
+            class="btn btn-sm btn-outline-danger">Annulla caricamento</button>
+          <!--
+          <button type="button" style="margin: 5px;" (click)="pulisciCampi()" [disabled]="uploading"
+            class="btn btn-sm btn-danger">{{"common.pulisci_campi" | translate}}</button>
+          -->
+          <button type="button" style="margin: 5px;" [disabled]="!file || uploading || errorSize || errorType || errorZipPresente"
+            class="btn btn-sm btn-primary" (click)="pratica ? aggiungiPratiche() : aggiungiDocumento()">
+            {{(pratica ? "caricamento_pratiche.carica_pratiche" : "caricamento_pratiche.carica_zip") | translate}}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>

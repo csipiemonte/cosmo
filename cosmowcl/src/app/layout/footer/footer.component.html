@@ -1,0 +1,44 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+              <ng-container *ngIf="principal?.ente">
+                <span *ngIf="valorePreferenzeEnte.logoFooter; then logo;"></span>
+                <ng-template #logo>
+                  <p>
+                    <img [src]="getLogoToview()" alt="{{valorePreferenzeEnte.header}}"  class="img-fluid">
+                  </p>
+                </ng-template>
+              </ng-container>
+            </div>
+
+            <div class="col text-center">
+              <ng-container *ngIf="principal?.ente">
+                <span *ngIf="valorePreferenzeEnte.logoFooterCentrale; then logoCentrale;"></span>
+                <ng-template #logoCentrale>
+                  <p>
+                    <img [src]="getLogoCentraleToview()" alt="{{valorePreferenzeEnte.header}}" class="img-fluid">
+                  </p>
+                </ng-template>
+              </ng-container>
+            </div>
+
+            <div class="col text-right">
+              <ng-container *ngIf="principal?.ente">
+                <span *ngIf="valorePreferenzeEnte.logoFooterDestra; then logoDestra;"></span>
+                <ng-template #logoDestra>
+                  <p>
+                    <img [src]="getLogoDestraToview()" alt="{{valorePreferenzeEnte.header}}" class="img-fluid">
+                  </p>
+                </ng-template>
+              </ng-container>
+            </div>
+        </div>
+        <hr />
+        <p markdown>Tutti i diritti riservati ©2023</p>
+    </div>
+</footer>

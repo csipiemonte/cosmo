@@ -1,0 +1,353 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="row w-100 mb-3">
+      <div class="col-12">
+        <h5 class="modal-title">
+          <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+            (click)="modal.dismiss('click_on_back_arrow')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          &nbsp; {{ "fruitori.schemi_auth" | translate }}
+        </h5>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+  
+  <ng-container *ngIf="!loading && !loadingError">
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+      
+        <div class="row pt-3 pb-3">
+          <div class="col">
+            <!--
+            <div class="form-check">
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('inIngresso') }"
+                type="checkbox" id="inIngresso" name="inIngresso" formControlName="inIngresso" class="form-control"
+              />
+              <label [ngClass]="{'active': hasValue('inIngresso'), 'is-invalid': displayInvalid('inIngresso')}"
+                for="inIngresso">Utilizza per autenticare le connessioni in ingresso
+              </label>
+            </div>
+            -->
+            <label [ngClass]="{'active': hasValue('inIngresso'), 'is-invalid': displayInvalid('inIngresso')}" for="inIngresso">
+              Direzione
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('inIngresso') }"
+              formControlName="inIngresso" name="inIngresso" id="inIngresso"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option [ngValue]="false">
+                Utilizza in uscita (da Cosmo al fruitore)
+              </option>
+              <option [ngValue]="true">
+                Utilizza in ingresso (dal fruitore a Cosmo)
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('inIngresso')">
+              <p *ngIf="hasError('inIngresso', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3">
+          <div class="col">
+            <label [ngClass]="{'active': hasValue('tipo'), 'is-invalid': displayInvalid('tipo')}" for="tipo">
+              Tipologia
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('tipo') }"
+              formControlName="tipo" name="tipo" id="tipo"
+              class="form-control" 
+              [attr.disabled]="null"
+            >
+              <option [ngValue]="null">
+                seleziona ...
+              </option>
+              <option *ngFor="let option of tipologieApplicabili; let i = index" [ngValue]="option">
+                {{option.descrizione}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('tipo')">
+              <p *ngIf="hasError('tipo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('tipo', 'requireValueIf')">
+                Solo Basic authentication e Digest signature sono supportate per le connessioni in ingresso.
+                <br/>
+                L'autenticazione ApiManager supporta solo connessioni in uscita.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3" [hidden]="!basicSelected">
+          <div class="col-12 col-lg-6">
+            <label [ngClass]="{'active': hasValue('username'), 'is-invalid': displayInvalid('username'), 'required': true}" for="username">
+              Username
+            </label>
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('username') }"
+              formControlName="username" name="username" id="username"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('username')">
+              <p *ngIf="hasError('username', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('username', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <label [ngClass]="{'active': hasValue('password'), 'is-invalid': displayInvalid('password'), 'required': true}" for="password">
+              Password
+            </label>
+            <input
+              type="password" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('password') }"
+              formControlName="password" name="password" id="password"
+              [attr.disabled]="null"
+              (focus)="checkPasswordEdit($event)"
+              (keydown)="checkPasswordEdit($event)"
+              (keyup)="checkPasswordEdit($event)"
+              (paste)="checkPasswordEdit($event)"
+              (cut)="checkPasswordEdit($event)"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('password')">
+              <p *ngIf="hasError('password', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('password', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3" [hidden]="!tokenSelected && !digestSelected && !apiMgrSelected">
+          <!-- CLIENT ID -->
+          <div class="col-12 col-lg-6">
+            <label [ngClass]="{'active': hasValue('clientId'), 'is-invalid': displayInvalid('clientId'), 'required': true}" for="clientId">
+              Client ID
+            </label>
+            <input
+              type="text" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('clientId') }"
+              formControlName="clientId" name="clientId" id="clientId"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('clientId')">
+              <p *ngIf="hasError('clientId', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('clientId', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+
+          <!-- CLIENT SECRET -->
+          <div class="col-12 col-lg-6">
+            <label [ngClass]="{'active': hasValue('clientSecret'), 'is-invalid': displayInvalid('clientSecret'), 'required': true}" for="clientSecret">
+              Client Secret
+            </label>
+            <input
+              type="password" class="form-control" 
+              [ngClass]="{ 'is-invalid': displayInvalid('clientSecret') }"
+              formControlName="clientSecret" name="clientSecret" id="clientSecret"
+              [attr.disabled]="null"
+              (focus)="checkSecretEdit($event)"
+              (keydown)="checkSecretEdit($event)"
+              (keyup)="checkSecretEdit($event)"
+              (paste)="checkSecretEdit($event)"
+              (cut)="checkSecretEdit($event)"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('clientSecret')">
+              <p *ngIf="hasError('clientSecret', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('clientSecret', 'maxlength')">Troppi caratteri</p>
+            </div>
+          </div>
+
+          <ng-container *ngIf="!inIngressoSelected">
+            <!-- TOKEN ENDPOINT -->
+            <div class="col-12 col-lg-12 pt-5" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('tokenEndpoint'), 'is-invalid': displayInvalid('tokenEndpoint'), 'required': false}" for="tokenEndpoint">
+                Endpoint di richiesta token
+              </label>
+              <input
+                type="text" class="form-control" 
+                [ngClass]="{ 'is-invalid': displayInvalid('tokenEndpoint') }"
+                formControlName="tokenEndpoint" name="tokenEndpoint" id="tokenEndpoint"
+                [attr.disabled]="null"
+                placeholder="/token"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('tokenEndpoint')">
+                <p *ngIf="hasError('tokenEndpoint', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('tokenEndpoint', 'maxlength')">Troppi caratteri</p>
+                <p *ngIf="hasError('tokenEndpoint', 'pattern')">Formato non valido. Deve essere una URI assoluta o relativa.</p>
+              </div>
+            </div>
+            <div class="col-12 col-lg-12 pt-5" [hidden]="!apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('tokenEndpoint'), 'is-invalid': displayInvalid('tokenEndpoint'), 'required': false}" for="tokenEndpoint">
+                Esposizione Api Manager
+              </label>
+              <select
+                [ngClass]="{ 'is-invalid': displayInvalid('tokenEndpoint') }"
+                formControlName="tokenEndpoint" name="tokenEndpoint" id="tokenEndpoint"
+                class="form-control" 
+                [attr.disabled]="null"
+              >
+                <option *ngFor="let option of apiManagerExposures; let i = index" [ngValue]="option.codice">
+                  {{option.descrizione}}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="displayInvalid('tokenEndpoint')">
+                <p *ngIf="hasError('tokenEndpoint', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('tokenEndpoint', 'pattern')">Formato non valido.</p>
+              </div>
+            </div>
+
+            <!-- NOME DELL'HEADER -->
+            <div class="col-12 col-lg-12 pt-5" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('nomeHeader'), 'is-invalid': displayInvalid('nomeHeader'), 'required': false}" for="nomeHeader">
+                Nome dell'header che conterr&agrave; il token
+              </label>
+              <input
+                type="text" class="form-control" 
+                [ngClass]="{ 'is-invalid': displayInvalid('nomeHeader') }"
+                formControlName="nomeHeader" name="nomeHeader" id="nomeHeader"
+                [attr.disabled]="null"
+                placeholder="Authorization"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('nomeHeader')">
+                <p *ngIf="hasError('nomeHeader', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('nomeHeader', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+
+            <!-- FORMATO DELL'HEADER -->
+            <div class="col-12 col-lg-12 pt-5" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('formatoHeader'), 'is-invalid': displayInvalid('formatoHeader'), 'required': false}" for="formatoHeader">
+                Formato dell'header che conterr&agrave; il token
+              </label>
+              <input
+                type="text" class="form-control" 
+                [ngClass]="{ 'is-invalid': displayInvalid('formatoHeader') }"
+                formControlName="formatoHeader" name="formatoHeader" id="formatoHeader"
+                [attr.disabled]="null"
+                placeholder="Bearer ${token}"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('formatoHeader')">
+                <p *ngIf="hasError('formatoHeader', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('formatoHeader', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+            
+            <!-- METODO RICHIESTA TOKEN -->
+            <div class="col-12 col-lg-6 pt-5" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('metodoRichiestaToken'), 'is-invalid': displayInvalid('metodoRichiestaToken'), 'required': true}" for="metodoRichiestaToken">
+                Metodo HTTP per la richiesta token
+              </label>
+              <select
+                [ngClass]="{ 'is-invalid': displayInvalid('metodoRichiestaToken') }"
+                formControlName="metodoRichiestaToken" name="metodoRichiestaToken" id="metodoRichiestaToken"
+                class="form-control" 
+                [attr.disabled]="null"
+              >
+                <option *ngFor="let option of metodiHttp; let i = index" [ngValue]="option.codice">
+                  {{option.descrizione}}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="displayInvalid('metodoRichiestaToken')">
+                <p *ngIf="hasError('metodoRichiestaToken', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              </div>
+            </div>
+
+            <!-- CONTENT TYPE RICHIESTA TOKEN -->
+            <div class="col-12 col-lg-6 pt-5" *ngIf="getValue('metodoRichiestaToken') !== 'GET'" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('contentTypeRichiestaToken'), 'is-invalid': displayInvalid('contentTypeRichiestaToken'), 'required': true}" for="contentTypeRichiestaToken">
+                Tipologia di contentuo per la richiesta token
+              </label>
+              <select
+                [ngClass]="{ 'is-invalid': displayInvalid('contentTypeRichiestaToken') }"
+                formControlName="contentTypeRichiestaToken" name="contentTypeRichiestaToken" id="contentTypeRichiestaToken"
+                class="form-control" 
+                [attr.disabled]="null"
+              >
+                <option *ngFor="let option of contentTypes; let i = index" [ngValue]="option.codice">
+                  {{option.descrizione}}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="displayInvalid('contentTypeRichiestaToken')">
+                <p *ngIf="hasError('contentTypeRichiestaToken', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              </div>
+            </div>
+
+            <!-- TOKEN REQUEST INPUT MAPPING -->
+            <div class="col-12 col-lg-12 pt-5" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('mappaturaRichiestaToken'), 'is-invalid': displayInvalid('mappaturaRichiestaToken'), 'required': false}" for="mappaturaRichiestaToken">
+                Mappatura dell'input per la richiesta del token
+              </label>
+              <textarea class="form-control" 
+                [ngClass]="{ 'is-invalid': displayInvalid('mappaturaRichiestaToken') }"
+                formControlName="mappaturaRichiestaToken" name="mappaturaRichiestaToken" id="mappaturaRichiestaToken"
+                [attr.disabled]="null"
+                placeholder="// se non compilata verr&agrave; utilizzato lo standard OAuth &#10;{&#10;&nbsp;&nbsp;&#34;grant_type&#34;: &#34;client_credentials&#34;,&#10;&nbsp;&nbsp;&#34;client_id&#34;: .credenziali.clientId,&#10;&nbsp;&nbsp;&#34;client_secret&#34; .credenziali.clientSecret &#10;}"
+                rows="6"
+              ></textarea>
+              <div class="invalid-feedback" *ngIf="displayInvalid('mappaturaRichiestaToken')">
+                <p *ngIf="hasError('mappaturaRichiestaToken', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('mappaturaRichiestaToken', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+            
+            <!-- TOKEN REQUEST OUTPUT MAPPING -->
+            <div class="col-12 col-lg-12 pt-3" [hidden]="apiMgrSelected">
+              <label [ngClass]="{'active': hasValue('mappaturaOutputToken'), 'is-invalid': displayInvalid('mappaturaOutputToken'), 'required': false}" for="mappaturaOutputToken">
+                Mappatura dell'output per la richiesta del token
+              </label>
+              <textarea class="form-control" 
+                [ngClass]="{ 'is-invalid': displayInvalid('mappaturaOutputToken') }"
+                formControlName="mappaturaOutputToken" name="mappaturaOutputToken" id="mappaturaOutputToken"
+                [attr.disabled]="null"
+                placeholder="// se non compilata verr&agrave; utilizzato lo standard OAuth &#10;{&#10;&nbsp;&nbsp;&#34;token&#34;: .body.access_token,&#10;&nbsp;&nbsp;&#34;expiresIn&#34;: .body.expires_in &#10;}"
+                rows="5"
+              ></textarea>
+              <div class="invalid-feedback" *ngIf="displayInvalid('mappaturaOutputToken')">
+                <p *ngIf="hasError('mappaturaOutputToken', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('mappaturaOutputToken', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+          </ng-container>
+          
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer pt-3">
+      <div class="row w-100">
+        <div class="col-6 text-left">
+          <!--
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="modal.dismiss('close_button')">
+            {{"common.chiudi" | translate}}
+          </button>
+          -->
+        </div>
+        <div class="col-6 text-right">
+          <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+            {{"common.salva" | translate}}
+          </button>
+        </div>
+      </div>
+      <div class="row w-100 pt-4" *ngIf="debug">
+        <div class="col-12">
+          <app-debug title="payload" [value]="getPayload()"></app-debug>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

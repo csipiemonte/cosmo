@@ -1,0 +1,104 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/amministrazione'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+    <span class="breadcrumb-divider">/</span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "app_esterne.header" | translate }}
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "app_esterne.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h3 *ngIf="appForm" style="margin: 20px 10px;">{{ title }}</h3>
+    </div>
+  </div>
+
+  <form [formGroup]="appForm" *ngIf="appForm" style="margin: 50px 20px;">
+
+    <div class="row justify-content-between">
+
+      <div class="col-lg-7 col-md-7 col-sm-12 form-group">
+
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-sm-6 " style="width: auto !important;">
+            <button type="button" (click)="inputIcona.click()" class="file-upload btn btn-outline-primary btn-sm">
+              <span>{{ 'app_esterne.carica_icona' | translate | uppercase }}</span>
+              <input type="file" accept="image/*" class="upload" #inputIcona id="icona" name="icona"
+                (change)="onFileChanged($event)" (click)="inputIcona.value = null" required>
+            </button>
+            <input [ngClass]="{ 'is-invalid': (appForm?.controls['icona'].touched && appForm?.controls['icona'].invalid)
+              || appForm?.controls['sizeIcona'].invalid
+              || appForm?.controls['heightIcona'].invalid || appForm?.controls['widthIcona'].invalid}" type="text"
+              hidden>
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-6" style="width: auto !important;">
+            <img [src]="iconaURL" alt="" height="50">
+          </div>
+        </div>
+        <div class="row">
+          <div style="font-size: 0.777rem; color: #d9364f; margin: 8px 15px;"
+          *ngIf="(appForm?.controls['icona'].touched && appForm?.controls['icona'].invalid)
+          || appForm?.controls['sizeIcona'].invalid
+          || appForm?.controls['widthIcona'].invalid || appForm?.controls['heightIcona'].invalid">
+            <p *ngIf="appForm?.controls['icona']?.hasError('required')">
+              {{"errori.campo_obbligatorio" | translate}}
+            </p>
+            <p *ngIf="appForm?.controls['sizeIcona']?.hasError('max')">
+              {{"errori.grandezza_upload_file_superata" | translate:{v1: maxSize / 1000} }}
+            </p>
+            <p
+              *ngIf="appForm?.controls['heightIcona']?.hasError('max') || appForm?.controls['widthIcona']?.hasError('max')">
+              {{"errori.grandezza_pixel_upload_file_superata" | translate:{v1: maxNumOfPixels} }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-md-5 col-sm-12 form-group">
+        <label [ngClass]="{'active': appForm?.controls['descrizione'].value}" for="descrizione">
+          {{"app_esterne.descrizione" | translate}}
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': appForm?.controls['descrizione'].touched && appForm?.controls['descrizione'].invalid }"
+          type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control">
+        <div class="invalid-feedback"
+          *ngIf="appForm?.controls['descrizione'].touched && appForm?.controls['descrizione'].invalid">
+          <p *ngIf="appForm?.controls['descrizione']?.hasError('required')">{{"errori.campo_obbligatorio" |
+            translate}}
+          </p>
+          <p *ngIf="appForm?.controls['descrizione']?.hasError('maxlength')">{{"errori.troppi_caratteri" |
+            translate}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 80px;">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="button" class="btn btn-sm btn-success" [disabled]="appForm.invalid" (click)="salva()">
+          {{"common.salva" | translate}}
+        </button>
+        &nbsp;
+        <button type="button" class="btn btn-sm btn-danger" (click)="pulisciCampi()">
+          {{"common.pulisci_campi" | translate}}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

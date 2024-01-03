@@ -1,0 +1,40 @@
+
+.clickable {
+  cursor: pointer;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline-block-bottom {
+  vertical-align: bottom;
+}
+
+.action-icon {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+.icon {
+  color: #185aa6;
+}
+
+.btn-action-icon { 
+  padding:0; margin:0; width:auto; position: relative;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  color: #185aa6;
+
+}
+
+.header-filter-checkbox {
+  background-color: white;
+  color: #185aa6;
+  border-color: #185aa6;
+}
+
+.nbi-form-check {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}

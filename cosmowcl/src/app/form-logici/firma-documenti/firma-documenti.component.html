@@ -1,0 +1,48 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container" *ngIf="idPratica">
+
+  <div class="shadow">
+    <app-approvazione-rifiuto
+      [approvazione]="approvazione"
+      [note]="note"
+      [siButton]="siButton"
+      [noButton]="noButton"
+      [readOnly]="readOnly"
+      (accettaEmitter)="accetta($event)"
+      (noteChangedEmitter)="noteChanged($event)"
+      (rifiutaEmitter)="rifiuta($event)">
+    </app-approvazione-rifiuto>
+  </div>
+
+  <app-messaggi-controlli-obbligatori [messaggiObbligatori]="messaggiObbligatori"></app-messaggi-controlli-obbligatori>
+
+  <br>
+  <div>
+    <app-consultazione-documenti
+      [idPratica]="idPratica"
+      [pratica]="pratica"
+      [soloLettura]="readOnly"
+      [identificativo]="'firma-documenti'"
+      [daFirmare]="daFirmare"
+      [firmaFea]="firmaFea"
+      [listaDocObbligatori]="listaDocObbligatori"
+      [soloFirmabili]="true"
+      [infoTask]="task"
+      [verificaValiditaFirme]="controlloValiditaFirme"
+      [listaDocDaFirmareObbl]="listaDocDaFirmareObbligatori"
+      [codiceModaleAnteprima]="'anteprima-documento-firma'"
+      [codiceModalePreview]="'preview-documento-firma'"
+      [codiceModaleInfoSigillo]="'info-sigillo-firma'"
+      [codiceModaleInfoFea]="'info-fea-firma'"
+      [codiceModaleInfoFirma]="'info-firma-firma'"
+      (messaggiObbligatori)="sendMessages($event)"
+      (numDocumentiDaFirmare)="getNumeriDocumentiDaFirmare($event)"
+      (firmeUtenteValide)="areUserSignaturesAllValid($event)"
+      (attesaElaborazioneDocumenti)="areAllDocsProcessed($event)">
+    </app-consultazione-documenti>
+  </div>
+
+</div>

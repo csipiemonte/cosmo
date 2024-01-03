@@ -1,0 +1,102 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "custom_form.header" | translate }}
+    </button>
+  </div>
+
+  <h2 class="mt-3 mb-5">{{"custom_form.header" | translate}}</h2>
+
+  <form [formGroup]="cfForm" (ngSubmit)="onSubmit()" *ngIf="cfForm">
+
+    <div class="row justify-between pt-5">
+      <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+            {{"custom_form.codice" | translate}}
+          </label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('codice') }"
+            type="text" id="codice" name="codice" formControlName="codice" class="form-control"
+          />
+          <div class="input-group-append" *ngIf="!isNuovo">
+            <span class="input-group-text pointer" (click)="copyCodice()">
+              <span class="{{ codiceCopied ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+            </span>
+          </div>
+          
+          <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+            <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codice', 'conflict')">
+              Questo codice &egrave; gi&agrave; assegnato al custom form {{ getError('codice', 'conflict')?.other?.descrizione }}
+            </p>
+
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codice')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="text-right">
+            <small>{{ codiceCopied ? 'codice copiato negli appunti' : '&nbsp;' }}</small>
+          </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12 form-group">
+        <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+          {{"custom_form.descrizione" | translate}}
+        </label>
+        <input
+          [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+          type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+        />
+        <div class="input-icon-container" *ngIf="displayValidating('descrizione')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-between">
+      <div class="col-lg-12 col-sm-12 form-group">
+        <label [ngClass]="{'active': hasValue('customForm'), 'is-invalid': displayInvalid('customForm')}" for="customForm">
+          {{"custom_form.custom_form" | translate}}
+        </label>
+          <textarea
+          name="customForm"
+          id="customForm"
+          formControlName="customForm"
+          rows="5"
+      ></textarea>
+      <div class="invalid-feedback" *ngIf="displayInvalid('customForm')">
+        <p *ngIf="hasError('customForm', 'json')">
+          Deve essere un JSON valido.
+        </p>
+      </div>
+      </div>
+    </div>
+
+
+    <hr />
+
+    <div class="row pt-4">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!cfForm?.valid">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+
+</form>
+
+</div>

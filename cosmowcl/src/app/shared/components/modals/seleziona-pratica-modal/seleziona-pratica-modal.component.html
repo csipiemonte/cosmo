@@ -1,0 +1,52 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+  <h5 class="modal-title" id="modal-title">{{(isAssociazione ? 'form_logici.associazioni.associa_pratica' : 'pratica.ricerca_pratica' ) | translate }}</h5>
+  <button type="button" class="close" aria-label="chiudi il modale" aria-describedby="modal-title"
+    (click)="activeModal.dismiss({ crossClick: true })"
+    #crossButton
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>&nbsp; &nbsp;
+  <div *ngIf="helper">
+    <app-helper
+      [helper] = "helper"
+      [type] = "'MODAL'">
+    </app-helper>
+  </div>
+</div>
+<div class="modal-body">
+
+  <div *ngIf="isAssociazione">
+    <app-associa-pratiche
+      #associaPraticheComponent
+      [messaggiErroriConfigurazione]="messaggiErroriConfigurazione"
+      [descrizioneInfo]="descrizioneInfo"
+      [tipiRelazionePratica]="tipiRelazionePratica"
+      [defaultTipoAssociazione]="defaultTipoAssociazione">
+    </app-associa-pratiche>
+  </div>
+
+  <app-ricerca-pratiche
+    #ricercaPraticheComponent
+    [readOnly]="true"
+    [selection]="isAssociazione ? 'multi' : 'single'"
+    [layout]="'compact'"
+    [tipoRicerca]="tipoRicerca"
+    [daAssociareA]="isAssociazione ? idPratica : null"
+    [tipologieStatiPraticaDaAssociare]="tipologieStatiPraticaDaAssociare"
+  ></app-ricerca-pratiche>
+</div>
+<div class="modal-footer text-right">
+  <button ngbAutoFocus class="btn btn-outline-primary btn-sm mr-2" type="button" data-dismiss="modal" (click)="activeModal.dismiss('cancel click')">
+    {{'common.annulla' | translate }}
+  </button>
+
+  <button class="btn btn-primary btn-sm" type="button"
+    [disabled]="!canProceed"
+    (click)="proceed()" >
+    {{(isAssociazione ? 'form_logici.associazioni.associa' : 'common.seleziona' ) | translate }}
+  </button>
+</div>

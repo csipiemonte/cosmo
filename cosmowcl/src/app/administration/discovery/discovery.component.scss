@@ -1,0 +1,22 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+.card-service-status {
+    border: 1px solid;
+    min-width: 15em;
+}
+
+.card-service-status .service-icon {
+    font-size: 1.25em;
+    padding-top: 0.25em;
+}
+
+.card-service-status .card-title {
+    padding-bottom: 0.5em;
+}
+
+.instance-status-badge {
+    min-width: 4em;
+    margin-left: 0.5em;
+}

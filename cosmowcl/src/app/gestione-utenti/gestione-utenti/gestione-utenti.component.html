@@ -1,0 +1,119 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">Gestione utenti</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="loading">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row mt-3" *ngIf="table">
+      <div class="col-12 col-lg-4">
+        <button class="btn btn-primary btn-sm" (click)="aggiungi()">
+          <span class="fas fa-plus-circle mr-2"></span> {{ "utenti.aggiungi_utente" | translate }}
+        </button>
+      </div>
+      <div class="col-12 col-lg-4 text-center">
+         <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right pt-2">
+        <cosmo-table-search-filter *ngIf="table" [table]="table" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table
+          #table
+          [tableDisplayClass]="'table-sm table-hover variant-centered'"
+          [columns]="columns"
+          [paginationMode]="'SERVER'"
+          [dataProvider]="dataProvider"
+          [enablePagination]="true"
+          [enableSorting]="true"
+          [enableRowExpansion]="false"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'nome'"
+          [itemIdentifier]="'id'"
+          [enableItemTracking]="true"
+          [storeAdapter]="storeAdapter"
+          [enableStorePersistence]="true"
+        >
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button" (click)="modifica(row)">
+                <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+              </button>
+              <ng-container *ngIf="!itsAMe(row); else itsAMeTemplate">
+                <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" 
+                  (click)="elimina(row)"
+                >
+                  <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                </button>
+              </ng-container>
+              <ng-template #itsAMeTemplate>
+                <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" 
+                  [disabled]="true"
+                  title="impossibile rimuovere l'utente corrente"
+                >
+                  <i class=" fas fa-ban" title="impossibile rimuovere l'utente corrente"></i>
+                </button>
+              </ng-template>
+
+            </div>
+          </ng-template>
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="table">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination *ngIf="table"
+          [table]="table"
+        ></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size *ngIf="table"
+          [table]="table"
+        ></cosmo-table-page-size>
+      </div>
+    </div>
+
+  </ng-container>
+  
+  <!-- OLD -->
+</div>
+<router-outlet></router-outlet>

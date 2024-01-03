@@ -1,0 +1,135 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<header class="header" [class.is-sticky]="stickHeader">
+  <section class="header-top text-white rp_darkblue">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="navbar navbar-expand-md">
+            <ng-container *ngIf="principal?.ente">
+              <div *appHasUseCase="'LOGIN'" class="navbar-brand d-flex">
+                <span *ngIf="valorePreferenzeEnte.logo; then logo; else testoDiCortesia;"></span>
+                <ng-template #logo>
+                    <a href="{{ deployContextPath }}/"><img [src]="getLogoToview()" alt="{{valorePreferenzeEnte.header}}" height="25" />
+                    <span class="d-none d-xl-inline-block">{{valorePreferenzeEnte.header}}</span></a>
+                </ng-template>
+                <ng-template #testoDiCortesia>
+                  {{'common.logo_non_trovato' | translate}}
+                </ng-template>
+              </div>
+            </ng-container>
+            <div class="sticky-only d-flex">
+              <h1 class="space-age">{{"header.cosmo" | translate}}</h1>
+            </div>
+            <div class="navbar-collapse collapse w-100" id="collapsingNavbar">
+              <ul class="navbar-nav ml-auto  mt-3 mt-md-0 mr-1 justify-content-end" *ngIf="principal && !principal.anonimo">
+                <li class="nav-item">
+                  <a *ngIf="accessoDiretto" class="nav-link" [routerLink]="" routerLinkActive="active" role="button" style="white-space: nowrap; cursor: default;">
+                    <em class="fas fa-user nav-icon"></em> <span class="d-md-none d-xl-inline-block ellipsis w-100">
+                      {{ principal.nome }} {{ principal.cognome }}
+                    </span>
+                  </a>
+                  <a *ngIf="!accessoDiretto" class="nav-link" [routerLink]="'/login'" routerLinkActive="active" role="button" style="white-space: nowrap;">
+                    <em class="fas fa-user nav-icon"></em> <span class="d-md-none d-xl-inline-block ellipsis w-100">
+                      {{ principal.nome }} {{ principal.cognome }}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav mr-lg-5 justify-content-end" *ngIf="principal?.ente || principal?.profilo">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" title="Mostra menu operatore"
+                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <em class="fas fa-pen nav-icon"></em>
+                    <span class="d-md-none d-xl-inline-block w-13 pr-3">
+                      {{ principal?.profilo?.descrizione || '' }} {{ principal?.ente?.nome || '' }}
+                      <br />
+                    </span>
+                    <em class="fas fa-angle-down"></em>
+                  </a>
+                  <div class="dropdown-menu mobile-first" aria-labelledby="userDropdown">
+
+                    <a *ngIf= "!accessoDiretto" class="dropdown-item" [routerLink]="'/login'" routerLinkActive="active">{{"header.cambia_profilo" | translate}}</a>
+                    <a *appHasUseCase="'MG_USERS'" class="dropdown-item"
+                      [routerLink]="['./gestisci-utenti']">{{"header.gestisci_utenti" | translate}}</a>
+                      <a *appHasUseCase="'ADMIN_ENTE'" class="dropdown-item" [routerLink]="['./gestisci-gruppi']">
+                        {{"header.gestisci_gruppi" | translate}}
+                      </a>
+                    <a class="dropdown-item" [routerLink]="['./informazioni-utente']" routerLinkActive="active">{{"header.informazioni_utente" | translate}}</a>
+                    <a class="dropdown-item" [routerLink]="['/preferenze-utente']" routerLinkActive="active">{{"header.preferenze_utente" | translate}}</a>
+                    <a *appHasUseCase="'ADMIN_ENTE'" class="dropdown-item"
+                      [routerLink]="['./preferenze-ente']">{{"header.preferenze_ente" | translate}}</a>
+                    <a *appHasUseCase="'CONF'" class="dropdown-item" [routerLink]="'/configurazione'">{{"header.configurazione_processi" | translate}}</a>
+                    <span class="divider"></span>
+                    <a class="dropdown-item" (click)=logout() style="cursor: pointer;">
+                      <i class="fas fa-sign-out-alt"></i><span>   {{"header.logout" | translate}}</span>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav justify-content-end mt-3 mt-md-0">
+
+                <li class="nav-item d-inline dropdown" *ngIf="principal?.profilo && !principal?.ente">
+                  <a class="nav-link" title="Amministrazione" [routerLink]="'/amministrazione'"
+                    routerLinkActive="active">
+                    <i class="fas fa-user-secret nav-icon"></i> <span class="d-md-none">{{"header.amministrazione" | translate}}</span>
+                  </a>
+                </li>
+                <!--
+                <li class="nav-item d-inline dropdown">
+                  <a class="nav-link" title="Messaggi" href="#">
+                    <i class="fas fa-comments nav-icon"></i> <span class="d-md-none">{{"header.messaggi" | translate}}</span>
+                  </a>
+
+                </li>
+                <li class="nav-item d-inline-block dropdown">
+                  <a class="nav-link dropdown-toggle" title="Mostra menu ricerca" href="#" id="searchDropdown"
+                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-search nav-icon"><i class="fas fa-angle-down internal"></i> </i> <span
+                      class="d-md-none">{{"header.ricerca" | translate}}</span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="searchDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </li>
+                <li class="nav-item d-inline">
+                  <a class="nav-link" title="Aiuto" href="#">
+                    <i class="fas fa-question-circle nav-icon"></i> <span class="d-md-none">{{"header.aiuto" | translate}}</span>
+                  </a>
+                </li>
+                -->
+              </ul>
+                <button id="button-intranet" (click)="openIntranet()"
+                class="btn btn-sm btn-primary d-flex mt-3 mb-3 mb-md-0 mt-md-0  ml-lg-3 justify-content-end btn-icon"
+                type="button"><span class="icon icon-fa mr-1"><i class="fas fa-external-link-alt"></i></span>
+                {{"header.intranet" | translate}}</button>
+              <div *ngIf="helper">
+                <app-helper
+                  [parentRoute] = "child"
+                  [childrenRoute] = "children"
+                  [helper] = "helper">
+                </app-helper>
+              </div>
+
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="header-title text-white rp_lightblue">
+    <div class="container">
+      <div class="col-12">
+         <h1 class="space-age"><a style="color: white;" [routerLink]="'home'">{{"header.cosmo" | translate}}</a></h1>
+      </div>
+    </div>
+  </section>
+
+  <app-menu *appHasUseCase="'LOGIN'"></app-menu>
+
+</header>

@@ -1,0 +1,152 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header" *ngIf="isDefaultLayout">
+    <h5 class="modal-title">{{ task?.nome || 'Operazione in corso ...' }}</h5>
+</div>
+<div class="modal-body pb-5">
+    <ng-container *ngIf="isDefaultLayout">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        [class.list-group-item-not-started]="!started"
+                        [class.list-group-item-started]="started"
+                    >
+                        <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                            <i *ngIf="!started" class="fas fa-circle-notch fa-spin"></i>
+                            <i *ngIf="started" class="far fa-check-circle"></i>
+                            &nbsp;
+                        </span>
+    
+                        Avvio dell'operazione
+    
+                        <span style="float: right;">
+                            <span class="badge badge-pill badge-success" *ngIf="started">completata</span>
+                            <span class="badge badge-pill badge-primary" *ngIf="!started">in corso</span>
+                        </span>
+                    </li>
+                    
+                    <ng-container *ngTemplateOutlet="messagesTemplate; context:{ $implicit: task }">
+                    </ng-container>
+                    
+                    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: steps, index: 0 }">    
+                    </ng-container>
+                    
+                    <li *ngIf="finished" 
+                        class="list-group-item"
+                        [class.list-group-item-success]="task?.stato === 'COMPLETED'"
+                        [class.list-group-item-danger]="task?.stato === 'FAILED'">
+    
+                        <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                            <i *ngIf="task?.stato === 'COMPLETED'" class="far fa-check-circle"></i>
+                            <i *ngIf="task?.stato === 'FAILED'" class="fas fa-ban"></i>
+                            &nbsp;
+                        </span>
+    
+                        <span *ngIf="task?.stato === 'COMPLETED'">
+                            Operazione terminata con successo
+                        </span>
+                        <span *ngIf="task?.stato === 'FAILED'">
+                            Operazione fallita
+                        </span>
+    
+                        <span style="float: right;">
+                            <span class="badge badge-pill badge-success" *ngIf="task?.stato === 'COMPLETED'">completata</span>
+                            <span class="badge badge-pill badge-danger" *ngIf="task?.stato === 'FAILED'">FALLITA</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="isMinimalLayout">
+        <div class="text-center" style="font-size: 2.00em;">
+            <i class="{{ icon }} fa-pulsar mt-3 mb-4"></i>
+            <br/>
+            <p>
+                Operazione in corso. Per favore attendi.
+            </p>
+            <p *ngIf="lastStepDescription" class="mt-3">
+                {{ lastStepDescription }} ...
+            </p>
+        </div>
+        
+    </ng-container>
+    
+</div>
+
+<ng-template #recursiveList let-steps let-index="index">
+    <ng-container *ngIf="!(index > maxTaskDepth)">
+        <ng-container *ngFor="let item of steps">
+            <ng-container *ngIf="!!item.nome">
+                <li class="list-group-item"
+                    [class.list-group-item-started]="item.stato === 'STARTED'"
+                    [class.list-group-item-completed]="item.stato === 'COMPLETED'"
+                    [class.list-group-item-danger]="item.stato === 'FAILED'"
+                >
+                    <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                        <i *ngIf="item.stato === 'STARTED' && (!hasPendingChild(item) || index === maxTaskDepth)" class="fas fa-circle-notch fa-spin"></i>
+                        <i *ngIf="item.stato === 'COMPLETED'" class="far fa-check-circle"></i>
+                        <i *ngIf="item.stato === 'FAILED'" class="fas fa-ban"></i>
+                        &nbsp;
+                    </span>
+
+                    <ng-container *ngIf="item.level > 1" >
+                        <span *ngFor="let l of enumLevel(item.level)" class="mr-2"> &nbsp; </span>
+                    </ng-container>
+                    
+                    <span>
+                        {{item.nome}}
+                    </span>
+                    
+                    <span style="float: right;">
+                        <span class="badge badge-pill badge-success" *ngIf="item.stato === 'COMPLETED'">completata</span>
+                        <span class="badge badge-pill badge-danger" *ngIf="item.stato === 'FAILED'">FALLITA</span>
+                        <span class="badge badge-pill badge-primary" *ngIf="item.stato === 'STARTED'">in corso</span>
+                    </span>
+                </li>
+            </ng-container>
+            
+            <ng-container *ngTemplateOutlet="messagesTemplate; context:{ $implicit: item }">
+            </ng-container>
+            
+            <ul class="list-group list-group-flush" *ngIf="item.steps.length > 0">
+                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.steps, index: index + 1 }">
+                </ng-container>
+            </ul>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #messagesTemplate let-item>
+    <ng-container *ngIf="showMessages && item?.messaggi?.length">
+        <li class="list-group-item"
+            [class.list-group-item-started]="item.stato === 'STARTED'"
+            [class.list-group-item-completed]="item.stato === 'COMPLETED'"
+            [class.list-group-item-danger]="item.stato === 'FAILED'"
+            style="border-top: 0; padding-top: 0;"
+        >
+            <div class="mr-4" style="width: 2em;display: inline-block;max-width: 2em;">
+                &nbsp;
+            </div>
+
+            <ng-container *ngIf="item.level > 1" >
+                <div style="display: inline-block;" *ngFor="let l of enumLevel(item.level)" class="mr-2"> &nbsp; </div>
+            </ng-container>
+            
+            <div style="display: inline-block;">
+                <span *ngFor="let message of item.messaggi"
+                    [class.text-muted]="message.livello === 'DEBUG'"
+                    [class.text-standard]="message.livello === 'INFO'"
+                    [class.text-warning]="message.livello === 'WARNING'"
+                    [class.text-danger]="message.livello === 'ERROR'"
+                >
+                    {{message.testo}}
+                    <br/>
+                </span>
+            </div>
+        </li>
+    </ng-container>
+</ng-template>

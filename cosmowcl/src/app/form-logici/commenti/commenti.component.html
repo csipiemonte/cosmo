@@ -1,0 +1,7 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="pratica">
+  <app-commenti *ngIf="pratica" [pratica]="pratica" [readOnly]="readOnly" (numCommenti)="getNumeroCommenti($event)"></app-commenti>
+</ng-container>

@@ -1,0 +1,396 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "enti.header" | translate }}
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "enti.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <form [formGroup]="enteForm" (ngSubmit)="onSubmit()" *ngIf="enteForm">
+
+    <hr/>
+    <div class="row pt-3 pb-3">
+      <div class="col">
+        <h3 class="form-section-header"
+          [ngClass]="{'is-invalid': displayInvalid('anagrafica') }"
+        >
+          <span class="{{ displayInvalid('anagrafica') ? 'fas fa-exclamation-circle mr-2' : '' }}"></span>
+          {{ "enti.anagrafica" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="row" formGroupName="anagrafica">
+      <div class="col">
+        <div class="row mt-5">
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.nome'), 'is-invalid': displayInvalid('anagrafica.nome')}" for="nome">
+              {{"enti.nome" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.nome') }"
+              type="text" id="nome" name="nome" formControlName="nome" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.nome')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.nome')">
+              <p *ngIf="hasError('anagrafica.nome', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.nome', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('anagrafica.nome', 'conflict')">Esiste gi&agrave; un ente con questo nome</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.codiceFiscale'), 'is-invalid': displayInvalid('anagrafica.codiceFiscale')}" for="codiceFiscale">
+              {{"enti.codice_fiscale" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.codiceFiscale') }"
+              type="text" id="codiceFiscale" name="codiceFiscale" formControlName="codiceFiscale" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.codiceFiscale')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.codiceFiscale')">
+              <p *ngIf="hasError('anagrafica.codiceFiscale', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.codiceFiscale', 'pattern')">{{"errori.codice_fiscale_non_valido" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.codiceFiscale', 'conflict')">
+                Questo codice fiscale &egrave; gi&agrave; assegnato all'ente {{ getError('anagrafica.codiceFiscale', 'conflict')?.otherName }}
+              </p>
+            </div>
+
+          </div>
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.codiceIpa'), 'is-invalid': displayInvalid('anagrafica.codiceIpa')}"
+              for="codiceIpa">{{"enti.codice_ipa" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.codiceIpa') }"
+              type="text" id="codiceIpa" name="codiceIpa" formControlName="codiceIpa" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.codiceIpa')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.codiceIpa')">
+              <p *ngIf="hasError('anagrafica.codiceIpa', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.codiceIpa', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('anagrafica.codiceIpa', 'conflict')">
+                Questo codice IPA &egrave; gi&agrave; assegnato all'ente {{ getError('anagrafica.codiceIpa', 'conflict')?.otherName }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="getControl('utenteAmministratore')">
+      <hr />
+      <div class="row pt-3 pb-3">
+        <div class="col">
+          <h3 class="form-section-header"
+            [ngClass]="{'is-invalid': displayInvalid('utenteAmministratore') || displayInvalid('nuovoUtenteAmministratore') || !isAlmenoUnAmministratore}"
+          >
+            <span class="{{ displayInvalid('utenteAmministratore') || displayInvalid('nuovoUtenteAmministratore') || !isAlmenoUnAmministratore ? 'fas fa-exclamation-circle mr-2' : '' }}"></span>
+            {{ "enti.utente_admin" | translate }}
+          </h3>
+        </div>
+      </div>
+
+      <ng-container *ngIf="getControl('utenteAmministratore')">
+
+
+        <div class="row pt-3 pb-3 justify-content-between">
+
+          
+        <div class="col-12 col-lg-5 form-group" formGroupName="utenteAmministratore">
+          <label [ngClass]="{'active': hasValue('utenteAmministratore.email'), 'is-invalid': displayInvalid('utenteAmministratore.email') || emailRequired }"
+            for="email">{{"utenti.email" | translate}}</label>
+          <input #elemento
+            [ngClass]="{ 'is-invalid': displayInvalid('utenteAmministratore.email') || emailRequired }"
+            type="text" id="email" name="email" formControlName="email" class="form-control"
+          />
+          <div class="invalid-feedback" *ngIf="displayInvalid('utenteAmministratore.email') || emailRequired">
+            <p *ngIf="emailRequired">Campo Obbligatorio</p>
+            <p *ngIf="hasError('utenteAmministratore.email', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('utenteAmministratore.email', 'pattern')">Formato non valido</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5 form-group" formGroupName="utenteAmministratore">
+          <label [ngClass]="{'active': hasValue('utenteAmministratore.telefono'), 'is-invalid': displayInvalid('utenteAmministratore.telefono')}"
+            for="telefono">{{"utenti.telefono" | translate}}</label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('utenteAmministratore.telefono') }"
+            type="text" id="telefono" name="telefono" formControlName="telefono" class="form-control"
+          />
+          <div class="invalid-feedback" *ngIf="displayInvalid('utenteAmministratore.telefono')">
+            <p *ngIf="hasError('utenteAmministratore.telefono', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('utenteAmministratore.telefono', 'pattern')">Formato non valido</p>
+          </div>
+        </div>
+
+          <div class="col-12 col-lg-5" formGroupName="utenteAmministratore">
+            <app-ricerca-utente
+              [gruppi]="false"
+              [nuovo]="true"
+              class="w-100"
+              formControlName="utente"
+              [filtroUtenti]="ricercaUtenteFilter"
+              [ngClass]="{ 'is-invalid': displayInvalid('utenteAmministratore.utente') }"
+            ></app-ricerca-utente>
+            <div *ngIf="displayValidating('utenteAmministratore.utente')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('utenteAmministratore.utente')">
+              <p *ngIf="hasError('utenteAmministratore.utente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('utenteAmministratore.utente', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('utenteAmministratore.utente', 'conflict')">Utente già amministratore per questo ente</p>
+            </div>
+          </div>
+
+          <ng-container *ngIf="getControl('nuovoUtenteAmministratore')">
+            <div class="col-12 col-lg-5 form-group" formGroupName="nuovoUtenteAmministratore">
+              <label [ngClass]="{'active': hasValue('nuovoUtenteAmministratore.cognome'), 'is-invalid': displayInvalid('nuovoUtenteAmministratore.cognome')}"
+                for="nuovoUtenteAmministratore_cognome">
+                {{"utenti.cognome" | translate}}
+              </label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('nuovoUtenteAmministratore.cognome') }"
+                type="text"
+                id="nuovoUtenteAmministratore_cognome"
+                name="nuovoUtenteAmministratore_cognome"
+                formControlName="cognome"
+                class="form-control"
+              />
+              <div class="invalid-feedback" *ngIf="displayInvalid('nuovoUtenteAmministratore.cognome')">
+                <p *ngIf="hasError('nuovoUtenteAmministratore.cognome', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('nuovoUtenteAmministratore.cognome', 'maxlength')">Troppi caratteri</p>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-5 form-group" formGroupName="nuovoUtenteAmministratore">
+              <label [ngClass]="{'active': hasValue('nuovoUtenteAmministratore.codiceFiscale'), 'is-invalid': displayInvalid('nuovoUtenteAmministratore.codiceFiscale')}"
+                for="nuovoUtenteAmministratore_codiceFiscale">
+                {{"utenti.codice_fiscale" | translate}}
+              </label>
+              <input
+                [ngClass]="{ 'is-invalid': displayInvalid('nuovoUtenteAmministratore.codiceFiscale') }"
+                type="text"
+                id="nuovoUtenteAmministratore_codiceFiscale"
+                name="nuovoUtenteAmministratore_codiceFiscale"
+                formControlName="codiceFiscale"
+                class="form-control"
+              />
+              <div class="input-icon-container" *ngIf="displayValidating('nuovoUtenteAmministratore.codiceFiscale')">
+                <span class="fas fa-circle-notch fa-spin"></span>
+              </div>
+              <div class="invalid-feedback" *ngIf="displayInvalid('nuovoUtenteAmministratore.codiceFiscale')">
+                <p *ngIf="hasError('nuovoUtenteAmministratore.codiceFiscale', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+                <p *ngIf="hasError('nuovoUtenteAmministratore.codiceFiscale', 'pattern')">{{"errori.codice_fiscale_non_valido" | translate}}</p>
+                <p *ngIf="hasError('nuovoUtenteAmministratore.codiceFiscale', 'maxlength')">Troppi caratteri</p>
+                <p *ngIf="hasError('nuovoUtenteAmministratore.codiceFiscale', 'conflict')">Esiste gi&agrave; un utente con questo codice fiscale</p>
+              </div>
+            </div>
+          </ng-container>
+  
+          
+
+          <div class="col-12 text-right">
+            <button type="button" class="btn btn-sm btn-success btn-action" [disabled]="!utenteValid" (click)="addUser()">
+              {{ amministratoreDaModificare===null ? 'Aggiungi Utente' : 'Modifica Utente' }}
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-danger btn-action" (click)="resetUser()">
+              Pulisci campi
+            </button>
+          </div>
+
+        </div>
+        
+        <div class="row mt-4">
+          <h3 class="form-section-header"> Utenti amministratori da aggiungere</h3>
+          <div class="col-12 table-container mobile-first">
+            <cosmo-table
+              #prov
+              [tableDisplayClass]="'table-sm table-hover variant-centered'"
+              [columns]="columnsProv"
+              [paginationMode]="'CLIENT'"
+              [data]="amministratori"
+              [defaultPageSize]="10"
+              [possiblePageSize]="[5,10,20,50,100]"
+              [defaultSortingDirection]="'ASC'"
+              [defaultSortingColumn]="'nome'"
+              [enablePagination]="true" 
+            >
+              <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+                <div *ngIf="column.name === 'azioni'">
+                    <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button" (click)="modificaUtente(row)">
+                      <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                    </button>
+                    <ng-container>
+                      <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" 
+                        (click)="eliminaUtente(row)"
+                      >
+                        <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                      </button>
+                    </ng-container>
+                </div>
+              </ng-template>
+            </cosmo-table>
+          </div>
+        </div>
+      
+        <div class="row mt-3" *ngIf="prov">
+          <div class="col-12 col-lg-3">
+          </div>
+          <div class="col-12 col-lg-6 text-center">
+            <cosmo-table-pagination *ngIf="prov"
+              [table]="prov"
+            ></cosmo-table-pagination>
+          </div>
+          <div class="col-12 col-lg-3 text-right pt-2">
+            <cosmo-table-page-size *ngIf="prov"
+              [table]="prov"
+            ></cosmo-table-page-size>
+          </div>
+        </div>
+      
+      
+        <div class="row mt-4" *ngIf="!isNuovo">
+          <h3 class="form-section-header"> Utenti amministratori salvati</h3>
+          <div class="col-12 table-container mobile-first">
+            <cosmo-table
+              #table
+              [tableDisplayClass]="'table-sm table-hover variant-centered'"
+              [columns]="columns"
+              [paginationMode]="'SERVER'"
+              [dataProvider]="dataProvider"
+              [enablePagination]="true"
+              [enableSorting]="true"
+              [enableRowExpansion]="false"
+              [defaultSortingDirection]="'ASC'"
+              [defaultSortingColumn]="'nome'"
+              [itemIdentifier]="'id'"
+              [enableItemTracking]="true"
+              [storeAdapter]="storeAdapter"
+              [enableStorePersistence]="true"
+            >
+            
+            </cosmo-table>
+          </div>
+        </div>
+    
+        
+        <div class="row mt-3" *ngIf="table">
+          <div class="col-12 col-lg-3">
+            <!-- EMPTY -->
+          </div>
+          <div class="col-12 col-lg-6 text-center">
+            <cosmo-table-pagination *ngIf="table"
+              [table]="table"
+            ></cosmo-table-pagination>
+          </div>
+          <div class="col-12 col-lg-3 text-right pt-2">
+            <cosmo-table-page-size *ngIf="table"
+              [table]="table"
+            ></cosmo-table-page-size>
+          </div>
+        </div>
+
+        
+       
+
+      
+      </ng-container>
+    </ng-container>
+    <ng-container>
+        <hr />
+        <div class="row pt-3 pb-3">
+          <div class="col">
+            <h3 class="form-section-header"
+              [ngClass]="{'is-invalid': displayInvalid('profilo')}"
+            >
+              <span class="{{ displayInvalid('profilo') ? 'fas fa-exclamation-circle mr-2' : '' }}"></span>
+              {{ "enti.profilo_default" | translate }}
+            </h3>
+          </div>
+        </div>
+
+        <ng-container>
+
+          <div class="row pt-3 pb-3 justify-content-between">
+          <div class="col-12 col-lg-5 form-group">
+            <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <span class="fas fa-search"></span>
+              </span>
+            </div>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('profilo') }"
+              [ngbTypeahead]="searchProfili" placeholder="Inserisci o cerca profilo utente"
+              [resultFormatter]="formatterProfilo"  [inputFormatter]="formatterProfilo"(blur)="checkProfilo($event.target.value)"
+              type="text" class="form-control" formControlName="profilo"
+              (focus)="focusProfili$.next($any($event).target.value)" (click)="clickProfili$.next($any($event).target.value)"
+              #instanceProfili="ngbTypeahead" [editable]="false"/>
+              <div class="invalid-feedback" *ngIf="displayInvalid('profilo')">
+                Profilo non corretto
+              </div>
+          </div>
+          </div>
+          </div>
+        </ng-container> 
+      
+    </ng-container>
+
+
+
+    <div *ngIf="idEnte">
+      <hr>
+      <app-configurazione-ente [idEnte]="idEnte"></app-configurazione-ente>
+    </div>
+
+
+    <hr />
+
+    <div class="row pt-4">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!enteForm?.valid || !isAlmenoUnAmministratore">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+
+    <div class="row pt-4" *ngIf="debug && enteForm">
+      <div class="col-12">
+        <app-debug title="form" [value]="enteForm.getRawValue()"></app-debug>
+        <app-debug *ngIf="isNuovo" title="payload creazione" [value]="buildPayloadCreazione()"></app-debug>
+        <app-debug *ngIf="!isNuovo" title="payload modifica" [value]="buildPayloadModifica()"></app-debug>
+      </div>
+    </div>
+
+
+
+  </form>
+
+</div>

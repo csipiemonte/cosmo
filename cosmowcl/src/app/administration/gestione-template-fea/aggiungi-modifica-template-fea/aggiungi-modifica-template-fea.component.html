@@ -1,0 +1,197 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{"template_fea.header" | translate}}
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{"template_fea.header" | translate}}</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+      <div class="px-4 py-4">
+        <app-caricamento-in-corso></app-caricamento-in-corso>
+      </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+    <br>
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form" class="mt-4">
+
+      <div class="row justify-content-between">
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('ente') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('ente')}" for="ente" class="active">
+              {{"common.ente" | translate}}
+            </label>
+            <app-ricerca-ente
+              [disabled]="isConfiguratore || !isNuovo"
+              [minChars]="0"
+              id="ente"
+              name="ente"
+              formControlName="ente"
+              class="w-100">
+            </app-ricerca-ente>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('ente')">
+            <p *ngIf="hasError('ente', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('ente')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('tipoPratica') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('tipoPratica')}"
+              for="tipoPratica" class="active">{{"common.tipo_pratica" | translate}}</label>
+            <app-ricerca-tipo-pratica
+              id="tipoPratica"
+              name="tipoPratica"
+              formControlName="tipoPratica"
+              class="w-100"
+              [ngClass]="{'is-invalid': displayInvalid('tipoPratica')}"
+              [disabled]="!isNuovo || !ente"
+              [ente] = "ente">
+            </app-ricerca-tipo-pratica>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('tipoPratica')">
+            <p *ngIf="hasError('tipoPratica', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('tipoPratica')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+        </div>
+        <div class="col-lg-5 col-sm-12 form-group">
+          <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('tipoDocumento') }">
+            <label [ngClass]="{'is-invalid': displayInvalid('tipoDocumento')}" for="tipoDocumento" class="active">
+              {{"common.tipo_documento" | translate}}
+            </label>
+            <app-ricerca-tipo-documento
+              id="tipoDocumento"
+              name="tipoDocumento"
+              formControlName="tipoDocumento"
+              class="w-100"
+              [disabled]="!isNuovo || !tipoPratica"
+              [onlyByTipoPratica]="true"
+              [codiceTipoPratica]="tipoPratica?.codice">
+            </app-ricerca-tipo-documento>
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('tipoDocumento')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+          <div class="invalid-feedback" *ngIf="displayInvalid('tipoDocumento')">
+            <p *ngIf="hasError('tipoDocumento', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('tipoDocumento', 'conflict')">Tipo documento già associata con questa tipologia di pratica</p>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}"
+            for="label">{{"template_fea.descrizione_template" | translate}}</label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control"
+          />
+          <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+            <p *ngIf="hasError('descrizione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('descrizione', 'maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-lg-4 col-sm-6 form-group">
+          <button type="button" (click)="inputDaTemplate.click()" class="file-upload btn btn-outline-primary">
+            <span>{{ 'template_fea.carica_da_template' | translate | uppercase }}</span>
+            <input
+              type="file"
+              accept="application/pdf"
+              class="upload"
+              (change)="onChange($event.target.files); $event.target.value='';"
+              #inputDaTemplate
+              required>
+          </button>
+        </div>
+        <div class="col-lg-4 col-sm-6 form-group">
+          <button
+            type="button"
+            class="file-upload btn btn-outline-primary"
+            (click)="apriVisualizzatore()">
+            <span>{{ 'template_fea.carica_da_foglio_bianco' | translate | uppercase }}</span>
+          </button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-lg-6 col-sm-6 form-group">
+          <div class="errore" *ngIf="errore">
+            <p class="alert alert-danger">{{errore}}</p>
+          </div>
+          <div class="info" *ngIf="infoHtml">
+              <p class="alert alert-info" [innerHTML]="infoHtml"></p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngIf="showPage" class="col-lg-6 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('pagina'), 'is-invalid': displayInvalid('pagina')}"
+            for="label">{{'template_fea.pagina' | translate}}</label>
+          <input
+            [ngClass]="{ 'is-invalid': displayInvalid('pagina') }"
+            type="number" min="1" step="1" id="pagina" name="pagina" formControlName="pagina" class="form-control"
+          />
+          <div class="invalid-feedback" *ngIf="displayInvalid('pagina')">
+            <p *ngIf="hasError('pagina', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+
+          <div class="invalid-feedback" *ngIf="displayInvalid('pagina')">
+            <p *ngIf="hasError('pagina', 'min')">Valore non consentito</p>
+          </div>
+
+          <div class="invalid-feedback" *ngIf="displayInvalid('pagina')">
+            <p *ngIf="hasError('pagina', 'pattern')">Formattazione numero non consentita</p>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+            {{"common.salva" | translate}}
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-sm btn-danger btn-action" (click)="annullaModifiche()">
+            {{"common.annulla_modifiche" | translate}}
+          </button>
+        </div>
+      </div>
+      <br>
+  </form>
+  </ng-container>
+
+</div>
+

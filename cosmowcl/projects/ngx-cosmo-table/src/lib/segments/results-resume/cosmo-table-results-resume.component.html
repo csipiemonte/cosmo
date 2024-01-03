@@ -1,0 +1,8 @@
+<ng-container *ngIf="render">
+  <!-- PAGINATION -->
+  <ng-container *ngIf="currentResultNumber > 0">
+    <div class="pagination-caption d-inline">
+      {{ 'table.common.pagination.total_elements' | translate:{ totalElements: currentResultNumber, totalPages: currentPageCount } }}
+    </div>
+  </ng-container>
+</ng-container>

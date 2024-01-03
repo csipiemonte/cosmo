@@ -1,0 +1,14 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<app-approvazione-rifiuto
+  [approvazione]="approvazione"
+  [note]="note"
+  [siButton]="siButton"
+  [noButton]="noButton"
+  [readOnly]="readOnly"
+  (accettaEmitter)="accetta($event)"
+  (noteChangedEmitter)="noteChanged($event)"
+  (rifiutaEmitter)="rifiuta($event)"
+></app-approvazione-rifiuto>

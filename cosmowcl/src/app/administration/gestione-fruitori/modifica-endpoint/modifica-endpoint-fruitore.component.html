@@ -1,0 +1,183 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="row w-100 mb-3">
+      <div class="col-12">
+        <h5 class="modal-title">
+          <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+            (click)="modal.dismiss('click_on_back_arrow')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          &nbsp; {{ "fruitori.endpoints" | translate }}
+        </h5>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+
+        <div class="row pt-3 pb-3">
+          <div class="col">
+            <label [ngClass]="{'active': hasValue('operazione'), 'is-invalid': displayInvalid('operazione')}" for="operazione">
+              Operazione
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('operazione') }"
+              formControlName="operazione" name="operazione" id="operazione"
+              class="form-control"
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of operazioni; let i = index" [ngValue]="option">
+                {{option.descrizione}}
+              </option>
+            </select>
+            <div class="select-icon-container" *ngIf="displayValidating('operazione')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('operazione')">
+              <p *ngIf="hasError('operazione', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('operazione', 'conflict')">Esiste gi&agrave; un endpoint attivo per questa operazione.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3" *ngIf="getValue('operazione') && getValue('operazione').personalizzabile">
+          <div class="col-12 col-lg-12">
+            <label [ngClass]="{'active': hasValue('codiceDescrittivo'), 'is-invalid': displayInvalid('codiceDescrittivo')}" for="endpoint">
+              Codice descrittivo
+            </label>
+            <input
+              type="text"
+              [ngClass]="{ 'is-invalid': displayInvalid('codiceDescrittivo') }"
+              formControlName="codiceDescrittivo" name="codiceDescrittivo" id="codiceDescrittivo"
+              class="form-control"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('codiceDescrittivo')">
+              <p *ngIf="hasError('codiceDescrittivo', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('codiceDescrittivo', 'conflict')">Esiste gi&agrave; un endpoint attivo per questa operazione con questo codice descrittivo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3">
+
+          <div class="col-12 col-lg-6">
+            <label [ngClass]="{'active': hasValue('codiceTipo'), 'is-invalid': displayInvalid('codiceTipo')}" for="codiceTipo">
+              Tipo di endpoint
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('codiceTipo') }"
+              formControlName="codiceTipo" name="codiceTipo" id="codiceTipo"
+              class="form-control"
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of tipiEndpoint; let i = index" [ngValue]="option">
+                {{option}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('codiceTipo')">
+              <p *ngIf="hasError('codiceTipo', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6" [hidden]="!restSelected">
+            <label [ngClass]="{'active': hasValue('metodoHttp'), 'is-invalid': displayInvalid('metodoHttp'), 'required': true}" for="metodoHttp">
+              Metodo HTTP
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('metodoHttp') }"
+              formControlName="metodoHttp" name="metodoHttp" id="metodoHttp"
+              class="form-control"
+              [attr.disabled]="null"
+            >
+              <option *ngFor="let option of metodiHttp; let i = index" [ngValue]="option">
+                {{option}}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="displayInvalid('metodoHttp')">
+              <p *ngIf="hasError('metodoHttp', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3">
+          <div class="col-12 col-lg-12">
+            <label [ngClass]="{'active': hasValue('endpoint'), 'is-invalid': displayInvalid('endpoint')}" for="endpoint">
+              Endpoint
+            </label>
+            <input
+              type="text"
+              [ngClass]="{ 'is-invalid': displayInvalid('endpoint') }"
+              formControlName="endpoint" name="endpoint" id="endpoint"
+              class="form-control"
+              [attr.disabled]="null"
+            />
+            <div class="invalid-feedback" *ngIf="displayInvalid('endpoint')">
+              <p *ngIf="hasError('endpoint', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('endpoint', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('endpoint', 'pattern')">Formato non valido. Deve essere una URI assoluta o relativa.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row pt-3 pb-3">
+          <div class="col-12 col-lg-12">
+            <label [ngClass]="{'active': hasValue('schemaAutenticazione'), 'is-invalid': displayInvalid('schemaAutenticazione')}" for="schemaAutenticazione">
+              Schema di autenticazione
+            </label>
+            <select
+              [ngClass]="{ 'is-invalid': displayInvalid('schemaAutenticazione') }"
+              formControlName="schemaAutenticazione" name="schemaAutenticazione" id="schemaAutenticazione"
+              class="form-control"
+              [attr.disabled]="null"
+            >
+              <option [ngValue]="null">
+                Nessuna autenticazione
+              </option>
+              <option *ngFor="let option of schemiAutenticazione; let i = index" [ngValue]="option">
+                {{option.tipo?.descrizione}} - {{ option.credenziali?.username || option.credenziali?.clientId}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer pt-3">
+      <div class="row w-100">
+        <div class="col-6 text-left">
+          <!--
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="modal.dismiss('close_button')">
+            {{"common.chiudi" | translate}}
+          </button>
+          -->
+        </div>
+        <div class="col-6 text-right">
+          <button type="button" (click)="submit()" class="btn btn-sm btn-success btn-action" [disabled]="!allValid">
+            {{"common.salva" | translate}}
+          </button>
+        </div>
+      </div>
+      <div class="row w-100 pt-4" *ngIf="debug">
+        <div class="col-12">
+          <app-debug title="payload" [value]="getPayload()"></app-debug>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

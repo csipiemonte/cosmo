@@ -1,0 +1,14 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+  <h5 class="modal-title" id="modal-title">{{title}}</h5>
+  <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" >
+    <div [innerHTML]="safeHtml"></div>
+</div>
+

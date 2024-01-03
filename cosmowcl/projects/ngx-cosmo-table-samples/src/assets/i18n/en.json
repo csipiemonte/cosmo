@@ -1,0 +1,52 @@
+{
+  "table": {
+    "common": {
+      "accessibility": {
+        "caption": "results table"
+      },
+      "pagination": {
+        "total_elements": "{{ totalElements }} elements in {{ totalPages }} pages",
+        "previous_page": "‹",
+        "first_page": "«",
+        "next_page": "›",
+        "last_page": "»",
+        "current_page_dropdown": "Page {{ page }}"
+      },
+      "messages": {
+        "pick_action": "Select one action",
+        "filter_prompt": "Filter data",
+        "filter_placeholder": "Search ...",
+        "customize_view_prompt": "Customize view",
+        "add_remove_columns": "Add or remove columns",
+        "select_columns_prompt": "Select columns",
+        "pick_filtering_columns": "Select columns to filter",
+        "pick_all_filtering_columns": "Filter on all columns",
+        "pick_all_visible_columns": "View all columns",
+        "page_size_button": "{{ current }} results per page",
+        "context_filter_prompt": "Pick filters",
+        "actions_button": "Action",
+        "no_results": "no results to display.",
+        "fetching": "fetching data ...",
+        "export": "export",
+        "export_xlsx": "export as xlsx"
+      }
+    },
+    "headers": {
+      "full_name": "Full Name",
+      "email": "Email address",
+      "age": "Age",
+      "balance": "Balance",
+      "company": "Company",
+      "status": "Status"
+    },
+    "actions": {
+      "book": "Book",
+      "confirm": "Confirm"
+    },
+    "departures": {
+      "filters": {
+        "prompt": "View flights only ..."
+      }
+    }
+  }
+}

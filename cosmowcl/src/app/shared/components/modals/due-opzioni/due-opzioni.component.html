@@ -1,0 +1,35 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+  <h5 class="modal-title" id="modal-title">{{titolo}}</h5>
+  <button type="button" class="close" aria-label="chiudi il modale" aria-describedby="modal-title" 
+    (click)="activeModal.dismiss({ crossClick: true })"
+    #crossButton
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <ng-container *ngIf="messaggi?.length">
+      <p *ngFor="let message of messaggi" class="{{ message.classe }} mb-2">
+        {{ message.testo }}
+      </p>
+    </ng-container>
+</div>
+<div class="modal-footer">
+  <ng-container *ngIf="pulsanti?.length">
+    <button 
+      *ngFor="let pulsante of pulsanti"
+      #optionButtons
+      [class.defaultfocus]="pulsante.defaultFocus || false" 
+      class="btn {{ pulsante.classe || 'btn-outline-primary' }} btn-sm" 
+      type="button" 
+      (click)="pulsanteCliccato(pulsante)"
+    >
+      <span *ngIf="pulsante.icona" class="{{ pulsante.icona }} mr-2"></span>
+      {{ pulsante.testo }}
+    </button>
+  </ng-container>
+</div>

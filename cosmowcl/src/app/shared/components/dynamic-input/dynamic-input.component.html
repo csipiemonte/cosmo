@@ -1,0 +1,96 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="render">
+    <ng-container [ngSwitch]="type">
+        <ng-container *ngSwitchCase="'text'">
+            <ng-container *ngTemplateOutlet="textInput; context:{$implicit: options}"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'boolean'">
+            <ng-container *ngTemplateOutlet="booleanInput; context:{$implicit: options}"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'object'">
+            <ng-container *ngTemplateOutlet="jsonInput; context:{$implicit: options}"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'number'">
+            <ng-container *ngTemplateOutlet="numberInput; context:{$implicit: options}"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'select'">
+          <ng-container *ngTemplateOutlet="selectCustomFormInput; context:{$implicit: options}"></ng-container>
+      </ng-container>
+    </ng-container>
+</ng-container>
+
+<ng-template #textInput let-options>
+    <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="controlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="onFocusOut($event)"
+        (focus)="onFocus($event)"
+        (click)="onClick($event)"
+        (change)="onChange($event)"
+        (blur)="onBlur($event)"
+    />
+</ng-template>
+
+<ng-template #booleanInput let-options>
+    <select
+        class="form-control"
+        [(ngModel)]="controlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="onFocusOut($event)"
+        (focus)="onFocus($event)"
+        (click)="onClick($event)"
+        (change)="onChange($event)"
+        (blur)="onBlur($event)"
+    >
+    <option [ngValue]="null" [disabled]="true">{{ 'common.seleziona' | translate }} ...</option>
+    <option [ngValue]="true">{{ 'common.si' | translate }}</option>
+    <option [ngValue]="false">{{ 'common.no' | translate }}</option>
+    </select>
+</ng-template>
+
+<ng-template #jsonInput let-options>
+    <textarea
+        class="form-control"
+        [(ngModel)]="controlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="resizeTextArea(); onFocusOut($event)"
+        (focus)="resizeTextArea(); onFocus($event)"
+        (click)="resizeTextArea(); onClick($event)"
+        (change)="resizeTextArea(); onChange($event)"
+        (keyup)="resizeTextArea(); onKeyup($event)"
+        (blur)="resizeTextArea(); onBlur($event)"
+        #textareaInput
+    ></textarea>
+</ng-template>
+
+<ng-template #numberInput let-options>
+    <input
+        type="number"
+        step="options.step"
+        min="options.min"
+        max="options.max"
+        class="form-control"
+        [(ngModel)]="controlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="onFocusOut($event)"
+        (focus)="onFocus($event)"
+        (click)="onClick($event)"
+        (change)="onChange($event)"
+        (blur)="onBlur($event)"
+    />
+</ng-template>
+
+<ng-template #selectCustomFormInput let-options>
+  <app-ricerca-custom-form
+    [(ngModel)]="controlValue"
+  ></app-ricerca-custom-form>
+</ng-template>

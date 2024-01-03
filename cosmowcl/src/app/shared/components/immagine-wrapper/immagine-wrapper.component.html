@@ -1,0 +1,10 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="src">
+    <div *ngIf="!isImgLoaded" class="loading {{ class }} pt-5 pb-5">
+        <i class="fas fa-circle-notch fa-spin"></i>
+    </div>
+    <img class="{{ class }}" [hidden]="!isImgLoaded" [src]="src" (load)="hasLoaded()" >
+</ng-container>

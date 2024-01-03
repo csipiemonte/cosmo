@@ -1,0 +1,190 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "helper.header" | translate }}
+    </button>
+  </div>
+
+  <h2 class="mt-3 mb-5">{{"helper.header" | translate}}</h2>
+
+  <ng-container *ngIf="loadingError">
+    <div class="">
+      <app-caricamento-fallito [error]="loadingError" (retry)="ngOnInit()"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="">
+      <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <form [formGroup]="helperForm" (ngSubmit)="onSubmit()" *ngIf="!loading && !loadingError && helperForm">
+    <div class="row justify-content-between pt-5">
+      <div class="col-lg-5 col-sm-12 form-group">
+        <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codicePagina') }">
+          <label [ngClass]="{'is-invalid': displayInvalid('codicePagina')}" for="codicePagina" class="active">
+            {{"helper.codice_pagina" | translate}}
+          </label>
+          <select
+              id="codicePagina"
+              name="codicePagina"
+              class="form-control border"
+              formControlName="codicePagina"
+              [(ngModel)]="codicePaginaSelezionato"
+              (change)="aggiornaVisibiltaFiltriModali($event.target);">
+            <option *ngFor="let codicePagina of codiciPagina" [ngValue]="codicePagina">{{ codicePagina.descrizione }}</option>
+          </select>
+        </div>
+        <div class="invalid-feedback" *ngIf="displayInvalid('codicePagina')">
+          <p *ngIf="hasError('codicePagina', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('codicePagina', 'conflict')">
+            Questo codice pagina &egrave; gi&agrave; stato assegnato ad un helper
+          </p>
+        </div>
+        <div class="input-icon-container" *ngIf="displayValidating('codicePagina')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12 form-group" *ngIf="showCodiciTabs">
+        <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceTab') }">
+          <label [ngClass]="{'is-invalid': displayInvalid('codiceTab')}" for="codiceTab" class="active">
+            {{"helper.codice_tab" | translate}}
+          </label>
+          <select title="Seleziona"
+                  id="codiceTab"
+                  name="codiceTab"
+                  class="form-control border"
+                  formControlName="codiceTab"
+                  [(ngModel)]="codiceTabSelezionato"
+                  (change)="aggiornaVisibiltaFiltriModali($event.target);">
+            <option *ngFor="let codiceTab of codiciTabs" [ngValue]="codiceTab">{{ codiceTab.descrizione }}</option>
+          </select>
+        </div>
+        <div class="invalid-feedback" *ngIf="displayInvalid('codiceTab')">
+          <p *ngIf="hasError('codiceTab', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('codiceTab', 'conflict')">
+            Questo codice tab &egrave; gi&agrave; stato assegnato al codice pagina selezionato
+          </p>
+        </div>
+        <div class="input-icon-container" *ngIf="displayValidating('codiceTab')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-between pt-2">
+      <div class="col-lg-5 col-sm-12 form-group" *ngIf="showCodiciForms">
+        <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceForm') }">
+          <label [ngClass]="{'is-invalid': displayInvalid('codiceForm')}" for="codiceForm" class="active">
+            {{"helper.codice_form" | translate}}
+          </label>
+
+          <app-ricerca-custom-form
+            id="codiceForm"
+            name="codiceForm"
+            formControlName="codiceForm"
+            class="w-100"
+            [disabled]="!isNuovo"
+          ></app-ricerca-custom-form>
+        </div>
+        <div class="invalid-feedback" *ngIf="displayInvalid('codiceForm')">
+          <p *ngIf="hasError('codiceForm', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('codiceForm', 'conflict')">
+            Questo codice form &egrave; gi&agrave; stato assegnato al codice tab selezionato
+          </p>
+        </div>
+        <div class="input-icon-container" *ngIf="displayValidating('codiceForm')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12 form-group" *ngIf="showCodiciModalsPage">
+        <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceModalePagina') }">
+          <label [ngClass]="{'is-invalid': displayInvalid('codiceModalePagina')}" for="codiceModalePagina" class="active">
+            {{"helper.codice_modale_pagina" | translate}}
+          </label>
+          <select title="Seleziona"
+                  id="codiceModalePagina"
+                  name="codiceModalePagina"
+                  class="form-control border"
+                  formControlName="codiceModalePagina"
+                  [(ngModel)]="codiceModalePaginaSelezionato"
+                  (change)="aggiornaVisibiltaFiltriModali($event.target)">
+            <option *ngFor="let codiceModalePagina of codiciModalsPage" [ngValue]="codiceModalePagina">{{ codiceModalePagina.descrizione }}</option>
+          </select>
+        </div>
+        <div class="invalid-feedback" *ngIf="displayInvalid('codiceModalePagina')">
+          <p *ngIf="hasError('codiceModalePagina', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('codiceModalePagina', 'conflict')">
+            Questo codice modale &egrave; gi&agrave; stato assegnato al codice pagina selezionato
+          </p>
+        </div>
+        <div class="input-icon-container" *ngIf="displayValidating('codiceModalePagina')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-sm-12 form-group" *ngIf="showCodiciModalsTab">
+        <div class="input-group" [ngClass]="{ 'is-invalid': displayInvalid('codiceModaleTab') }">
+          <label [ngClass]="{'is-invalid': displayInvalid('codiceModaleTab')}" for="codiceModaleTab" class="active">
+            {{"helper.codice_modale_tab" | translate}}
+          </label>
+          <select title="Seleziona"
+                  id="codiceModaleTab"
+                  name="codiceModaleTab"
+                  class="form-control border"
+                  formControlName="codiceModaleTab"
+                  [(ngModel)]="codiceModaleTabSelezionato"
+                  (change)="aggiornaVisibiltaFiltriModali($event.target);">
+            <option *ngFor="let codiceModaleTab of codiciModalsPageTab" [ngValue]="codiceModaleTab">{{ codiceModaleTab.descrizione }}</option>
+          </select>
+        </div>
+        <div class="invalid-feedback" *ngIf="displayInvalid('codiceModaleTab')">
+          <p *ngIf="hasError('codiceModaleTab', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+          <p *ngIf="hasError('codiceModaleTab', 'conflict')">
+            Questo codice modale &egrave; gi&agrave; stato assegnato al codice pagina e al codice tab selezionati
+          </p>
+        </div>
+        <div class="input-icon-container" *ngIf="displayValidating('codiceModaleTab')">
+          <span class="fas fa-circle-notch fa-spin"></span>
+        </div>
+      </div>
+    </div>
+
+
+    <div ckass="row justify-content-between pt-5">
+      <app-cosmo-editor
+        formControlName="html"
+        [maxlengthByte]= "maxSize"
+        [customToolbar]="toolbar">
+      </app-cosmo-editor>
+    </div>
+
+    <div class="row pt-4">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button *ngIf="isNuovo" type="button" class="btn btn-sm btn-danger ml-3" (click)="pulisciCampi()">
+          {{"common.pulisci_campi" | translate}}
+        </button>
+        <button type="submit" class="btn btn-sm btn-success btn-action ml-3" [disabled]="!helperForm?.valid">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+  </form>
+
+
+</div>

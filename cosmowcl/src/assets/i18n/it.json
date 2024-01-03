@@ -1,0 +1,1037 @@
+{
+  "table": {
+    "common": {
+      "accessibility": {
+        "caption": "tabella dei risultati"
+      },
+      "pagination": {
+        "total_elements": "{{ totalElements }} elementi in {{ totalPages }} pagine",
+        "previous_page": "‹",
+        "first_page": "«",
+        "next_page": "›",
+        "last_page": "»",
+        "current_page_dropdown": "Pagina {{ page }}",
+        "next_page_next_only_mode": "Carica altri ..."
+      },
+      "messages": {
+        "pick_action": "Scegli una azione",
+        "filter_prompt": "Filtra",
+        "filter_placeholder": "Ricerca ...",
+        "customize_view_prompt": "Personalizza vista",
+        "add_remove_columns": "Aggiungi o rimuovi colonne",
+        "select_columns_prompt": "Seleziona le colonne",
+        "pick_filtering_columns": "Seleziona le colonne da filtrare",
+        "pick_all_filtering_columns": "Filtra su tutte",
+        "pick_all_visible_columns": "Visualizza tutte",
+        "page_size_button": "{{ current }} risultati per pagina",
+        "context_filter_prompt": "Seleziona i filtri",
+        "actions_button": "Azioni",
+        "no_results": "nessun risultato.",
+        "fetching": "aggiornamento in corso ...",
+        "export": "Esporta ...",
+        "export_xlsx": "Esporta come file excel"
+      }
+    }
+  },
+  "common": {
+    "seleziona": "seleziona",
+    "azioni": "Azioni",
+    "nessun_risultato": "Nessun risultato trovato per '{{v1}}'",
+    "salva": "Salva",
+    "cancella": "Cancella",
+    "indietro": "Indietro",
+    "si": "Si'",
+    "no": "No",
+    "ok": "OK",
+    "eliminazione_utente_titolo": "Eliminazione utente",
+    "eliminazione_messaggio": "Sei sicuro di voler eliminare ${oggettoDaEliminare}?",
+    "creazione_utente_titolo": "Creazione utente",
+    "creazione_utente_messaggio": "Utente ${utenteDaCreare} creato correttamente",
+    "creazione_utente_messaggio_errore": "Errore nella creazione dell'utente",
+    "aggiornamento_utente_titolo": "Aggiornamento utente",
+    "aggiornamento_utente_messaggio": "Utente ${utenteDaCreare} aggiornato correttamente",
+    "aggiornamento_utente_messaggio_errore": "Errore nell'aggiornamento dell'utente",
+    "home": "Home",
+    "lavora": "LAVORA",
+    "altre_azioni": "Altre azioni",
+    "filtra": "FILTRA",
+    "azzera": "AZZERA",
+    "aggiungi": "AGGIUNGI",
+    "utente": "Utente",
+    "conferma": "Conferma",
+    "vai_alle_preferenze": "Vai alle preferenze",
+    "header": "Header",
+    "carica_footer": "Carica footer",
+    "informazione": "Avviso",
+    "caricamento_fallito": "Si e' verificato un errore nel caricamento dei dati.",
+    "riprova": "Riprova",
+    "contatta_assistenza": "contatta l'assistenza",
+    "or": "o",
+    "caricamento_in_corso": "Caricamento in corso ...",
+    "logo_non_trovato": "Logo non trovato",
+    "pulisci_campi": "Pulisci campi",
+    "firma": "FIRMA",
+    "firma_tutti": "FIRMA TUTTI",
+    "annulla": "Annulla",
+    "salva_modifiche": "Salva modifiche",
+    "elimina": "Elimina",
+    "ritorna_alla_home": "HOME",
+    "ritorna_elenco_lavorazioni": "RICERCA",
+    "ritorno_ai_task": "ATTIVITA'",
+    "ritorna_al_caricamento_pratiche": "CARICAMENTO PRATICHE",
+    "procedi": "Procedi",
+    "chiudi": "Chiudi",
+    "modifica": "Modifica",
+    "dati_non_salvati": "Dati non salvati",
+    "codice": "Codice",
+    "descrizione": "Descrizione",
+    "label": "Label",
+    "anagrafica": "Anagrafica",
+    "pratica": "Pratica",
+    "scegli": "Scegli",
+    "annulla_modifiche": "Annulla modifiche",
+    "obbligatori": "Obbligatori",
+    "facoltativi": "Facoltativi",
+    "caricati": "Caricati",
+    "inseriti": "Inseriti",
+    "approvatori": "Approvatori",
+    "ricerca": "Ricerca",
+    "cerca": "Cerca",
+    "gruppo": "Gruppo",
+    "ente": "Ente",
+    "tipo_pratica": "Tipologia di pratica",
+    "tipo_documento": "Tipologia di documento",
+    "esporta": "Esporta",
+    "pulisci_filtri": "Pulisci filtri"
+  },
+  "header": {
+    "cambia_profilo": "Cambia profilo",
+    "gestisci_utenti": "Gestisci utenti",
+    "gestisci_gruppi": "Gestisci gruppi",
+    "logout": "Logout",
+    "amministrazione": "Amministrazione",
+    "messaggi": "Messaggi",
+    "ricerca": "Ricerca",
+    "aiuto": "Aiuto",
+    "intranet": "INTRANET",
+    "cosmo": "cosmo",
+    "preferenze_ente": "Preferenze ente",
+    "carica_header": "Carica header",
+    "preferenze_utente": "Preferenze utente",
+    "informazioni_utente": "Informazioni utente",
+    "configurazione_processi": "Configurazione processi"
+  },
+  "footer": {
+    "carica_footer": "Carica footer",
+    "carica_footer_sinistra": "Carica footer di sinistra",
+    "carica_footer_centrale": "Carica footer centrale",
+    "carica_footer_destra": "Carica footer di destra"
+  },
+  "profilazione": {
+    "seleziona_ente": "Ente",
+    "seleziona_profilo": "Profilo"
+  },
+  "errori": {
+    "error_title": "Si e' verificato un errore",
+    "error_message": "Si e' verificato un errore: ${message}",
+    "errore_fatale": "Si e' verificato un errore fatale",
+    "errore_sconosciuto": "Errore sconosciuto",
+    "pagina_non_trovata": "La pagina richiesta non e' stata trovata",
+    "contattare_assistenza": "contattare l'assistenza all'indirizzo",
+    "comunicando_codice_errore": "comunicando il codice di errore",
+    "identita_ko": "Identita' non verificata",
+    "errore_identificazione_utente": "Errore in fase di identificazione dell'utente: ${descrizioneErrore}",
+    "non_autorizzato": "Non sei autorizzato all'operazione richiesta",
+    "riesegui_login": "Esegui nuovamente il login",
+    "utente_non_abilitata": "Utenza non abilitata",
+    "utente_non_abilitata_all_accesso": "La tua utenza non e' piu' abilitata all'accesso all'applicativo",
+    "ruolo_non_associato_utenza": "Nessun ruolo associato all'utenza",
+    "nessun_ruolo_associato_utenza": "Errore durante la selezione dei ruoli di {{v1}}",
+    "campo_obbligatorio": "Campo obbligatorio",
+    "email_non_valida": "Email non valida",
+    "codice_fiscale_non_valido": "Codice fiscale non valido",
+    "troppi_caratteri": "Troppi caratteri",
+    "url_non_valido": "Url non valido",
+    "reperimento_dati": "Errore nel reperimento dei dati",
+    "completamento_task": "Errore nel completamento del task. Riprovare",
+    "salvataggio_task": "Errore nel salvataggio del task. Riprovare",
+    "link_task_non_valido": "Link del task non valido",
+    "dati_inviati_non_completi": "Dati inviati non completi",
+    "utente_non_riconosciuto": "Utente non riconosciuto: ${codFiscale}",
+    "caricamento_file": "Errore nel caricamento del file",
+    "caricamento_file_msg": "Errore durante l'upload del documento ${v1}",
+    "aggiornamento_documento_msg": "Error durante l'aggiornamento delle informazioni del documento",
+    "eliminazione_file": "Errore nell'eliminazione del file",
+    "eliminazione_file_msg": "Errore durante l'eliminazione del documento ${v1}",
+    "download_file": "Errore nel download del file",
+    "download_file_msg": "Errore durante il download del documento ${v1}",
+    "preview_file": "Errore nella preview del file",
+    "preview_file_msg": "Errore durante la preview del documento ${v1}",
+    "grandezza_upload_file_superata": "Errore durante il caricamento del file: grandezza massima di {{v1}} kb superata",
+    "grandezza_pixel_upload_file_superata": "Errore durante il caricamento del file: grandezza massima {{v1}}*{{v1}} pixels superata",
+    "nuove_configurazioni_ente": "Attenzione: non sono presenti le preferenze di ente. Si consiglia di procedere con la configurazione prima di continuare",
+    "impostazioni_firma_non_configurate": "Impostazioni di firma non configurate",
+    "user_non_autorizzato_task": "Non hai l'autorizzazione necessaria per lavorare su questa attività",
+    "creazione_pratica": "Errore nella creazione della pratica",
+    "eliminazione_certificazione_msg": "Errore durante l'eliminazione del certificato ${v1}",
+    "creazione_certificazione_msg": "Errore durante la creazione del certificato ${v1}",
+    "aggiornamento_certificazione_msg": "Errore durante l'aggiornamento del certificato ${v1}",
+    "impossibile_firmare_documenti": "Al momento non e' possibile firmare i documenti",
+    "impossibile_richiedere_OTP": "Al momento non e' possibile richiedere l'OTP",
+    "errore_associazione_applicazioni": "Si e' verificato un errore durante l'associazione delle applicazioni",
+    "attivita_obbligatorie": "Attività obbligatorie: ${v1}",
+    "attivita_facoltative": "Attività facoltative: ${v1}",
+    "tipi_doc_obbligatori": "Tipi documento obbligatori: ${v1}",
+    "tipi_doc_facoltativi": "Tipi documento facoltativi: ${v1}",
+    "tipi_doc_da_firmare_obbligatori": "Tipi documento da firmare obbligatori: ${v1}",
+    "tipi_doc_da_firmare_facoltativi": "Tipi documento da firmare facoltativi: ${v1}",
+    "aggiornamento_applicazione": "Errore nell'aggiornamento dell'applicazione",
+    "creazione_applicazione": "Errore nella creazione dell'applicazione",
+    "aggiornamento_funzionalita": "Errore nell'aggiornamento della funzionalita'",
+    "creazione_funzionalita": "Errore nella creazione della funzionalita'",
+    "aggiornamento_istanza_funzionalita": "Errore nell'aggiornamento dell'istanza della funzionalita del form logico",
+    "creazione_istanza_funzionalita": "Errore nella creazione dell'istanza della funzionalita del form logico",
+    "formato_file_non_valido": "Formato file non valido",
+    "salvataggio_processo": "Errore nel salvataggio del processo",
+    "campo_obbligatorio_valore_non_valido": "Campo obbligatorio o valore non valido",
+    "creazione_nuovo_evento": "Errore nella creazione di un nuovo evento",
+    "aggiornamento_evento": "Errore nell'aggiornamento dell'evento",
+    "eliminazione_evento": "Errore nell'eliminazione dell'evento",
+    "cfg_tipi_documenti_obbligatori_errata": "Configurazione tipi documento obbligatori, facoltativi non corretta per il tipo pratica: ${v1}",
+    "cfg_tipi_documenti_caricabili_errata": "Configurazione tipi documento caricabili non corretta",
+    "cfg_tipi_allegati_caricabili_errata": "Configurazione tipi allegato caricabili non corretta",
+    "attivazione_sistema_esterno": "Errore in fase di attivazione del sistema esterno",
+    "associazione_pratiche": "Errore nell'associare le pratiche",
+    "dissociazione_pratiche": "Errore nell'eliminazione dell'associazione tra le pratiche",
+    "tipi_associazione_selezionabili": "Configurazione errata dei possibili tipi di associazione selezionabili",
+    "tipi_associazione_default": "Configurazione errata del valore di default dei possibili tipi di associazione selezionabili",
+    "tipologie_pratiche_associabili": "Configurazione errata delle tipologie di pratiche da poter associare",
+    "stati_pratiche_associabili": "Configurazione errata degli stati delle pratiche da poter associare",
+    "duplicazione_documenti": "Errore in fase di duplicazione dei documenti",
+    "creazione_nuova_configurazione_ente": "Errore nella creazione della nuova configurazione dell'ente",
+    "aggiornamento_nuova_configurazione_ente": "Errore nell'aggiornamento della configurazione dell'ente",
+    "eliminazione_nuova_configurazione_ente": "Errore nell'eliminazione della configurazione dell'ente",
+    "esecuzione_multipla": "Esecuzione multipla",
+    "tag_non_associati_a_utenti": "I tag: ${v1} non sono associati ad alcun utente / gruppo. Le attività in capo a quei tag non potranno essere lavorate",
+    "validita_firme": "Una o piu' firme risultano non essere valide",
+    "validita_firme_facoltative": "Una o piu' firme risultano non essere valide. Procedere ugualmente?",
+    "richiesta_esecuzione_task": "Richiesta esecuzione task non andata a buon fine",
+    "form_logico_inesistente": "Form logico inesistente",
+    "attesa_elaborazione_documenti": "In attesa dell'elaborazione dei documenti presenti",
+    "helper_non_configurato_correttamente": "Helper non configurato correttamente: verificare che il codice pagina sia presente sia a livello di routing che di database e che i due valori coincidano"
+  },
+  "mail": {
+    "oggetto_segnalazione_errore": "[COSMO] richiesta di assistenza ${ray}"
+  },
+  "utenti": {
+    "cerca_utente": "Cerca utente",
+    "codice_fiscale": "Codice fiscale",
+    "nome": "Nome",
+    "cognome": "Cognome",
+    "aggiungi_utente": "Aggiungi utente",
+    "anagrafica": "Anagrafica",
+    "profili": "Profili",
+    "email": "Email",
+    "telefono": "Telefono",
+    "inizio_validita": "Inizio Validita'",
+    "fine_validita": "Fine Validita'",
+    "profili_utente": "Profili dell'utente",
+    "profili_associabili": "Profili associabili"
+  },
+  "paginazione": {
+    "pagina_x": "{{ v }}",
+    "prima_pagina": "<<",
+    "pagina_precedente": "<",
+    "ultima_pagina": ">>",
+    "pagina_successiva": ">",
+    "elementi_per_pagina": "Elementi per pagina "
+  },
+  "eventi": {
+    "modal": {
+      "dettaglio_relativo": "Dettaglio relativo",
+      "del": "del",
+      "creato_il": "Creato il"
+    },
+    "creazione_evento": "Creazione nuovo evento",
+    "aggiornamento_evento": "Aggiornamento evento",
+    "eliminazione_evento": "Eliminazione evento",
+    "evento_creato":"Evento creato correttamente",
+    "evento_aggiornato":"Evento aggiornato correttamente",
+    "evento_eliminato":"Evento eliminato correttamente"
+
+  },
+  "pratica": {
+    "elenco_lavorazioni": "Elenco lavorazioni",
+    "dettaglio_pratica": "DETTAGLIO PRATICA:",
+    "dettaglio_task": "DETTAGLIO TASK:",
+    "ultimo_cambio_stato": "Ultimo cambio di stato:",
+    "pratica_annullata": "Pratica annullata:",
+    "oggetto": "Oggetto",
+    "tipologia": "Tipologia",
+    "ultima_modifica": "Ultima modifica",
+    "apertura_pratica": "Apertura pratica",
+    "documenti": "Documenti",
+    "riassunto": "Riassunto",
+    "commenti": {
+      "tab_title": "Commenti",
+      "nuovo_commento": "Lascia un nuovo commento"
+    },
+    "storico_attivita": {
+      "tab_title": "Attivita'",
+      "stato": "Stato",
+      "attivita": "Attivita'",
+      "avvio_task": "Avvio",
+      "completamento_task": "Completamento",
+      "stato_attivita": {
+        "completato": "COMPLETATO",
+        "attivo": "ATTIVO"
+      }
+    },
+    "dati_pratica": {
+      "tab_title": "Dati pratica"
+    },
+    "workflow": {
+      "tab_title": "Workflow",
+      "no_diagram": "Nessun diagramma presente"
+    },
+    "pratiche_associate": {
+      "tab_title": "Relazioni"
+    },
+    "ricerca_pratica": "Ricerca una pratica",
+    "mantieni_assegnazione": "mantieni assegnazione"
+  },
+  "documenti": {
+    "aggiungi_documento": "Aggiungi documento",
+    "da_risorsa_locale_o_rete": "Da risorsa locale e/o di rete",
+    "da_doqui_acta": "Da DoQui ACTA",
+    "modifica_documento": "Modifica documento",
+    "titolo_nome_file": "Titolo/Nome file",
+    "tipologia": "Tipologia",
+    "formato": "Formato",
+    "titolo": "Titolo",
+    "descrizione": "Descrizione",
+    "autore": "Autore",
+    "tipo": "Tipologia",
+    "carica_documento": "Carica documento",
+    "carimento_documento": "Documento caricato correttamente",
+    "aggiornamento_documento": "Informazioni del documento modificate correttamente",
+    "elimina_documento": "Elimina documento",
+    "eliminazione_documento": "Documento eliminato correttamente",
+    "scarica": "Scarica",
+    "scarica_documento": "Scarica documento",
+    "preview_documento": "Preview documento",
+    "scarica_documento_sbustato": "Scarica documento sbustato",
+    "preview_documento_sbustato": "Preview documento sbustato",
+    "scarica_documento_firmato": "Scarica documento firmato",
+    "preview_documento_firmato": "Preview documento firmato",
+    "trascina_qui_il_documento": "Trascina qui il documento",
+    "oppure": "oppure",
+    "selezionalo_cliccando_qui": "selezionalo, cliccando qui",
+    "da_firmare": "Documenti da Firmare",
+    "smistamento": {
+      "Id_classificazione": "Id classificazione",
+      "Indice_class_esteso": "Indice classificazione esteso",
+      "Oggetto_documento": "Oggetto documento",
+      "Numero_reg_protocollo": "N. registrazione protocollo",
+      "Data_reg_protocollo": "Data registrazione protocollo",
+      "Tipo_reg_protocollo": "Tipo protocollo",
+      "Dati_Ricevuta": "Dati ricevuta"
+    },
+    "verifica_firme": {
+      "ignoto": "Errore generico nella convalida della firma.",
+      "verifica_conformita_e_integrita_busta_crittografica": "Busta crittografica non conforme o non integra",
+      "sbustamento_busta_crittografica": "Errore durante lo sbustamento della busta crittografica",
+      "verifica_consistenza_firma": "Firma non consistente",
+      "verifica_validita_certificato": "Certificato non valido",
+      "verifica_certification_authority": "Ente certificatore non conforme",
+      "verifica_lista_di_revoca_crl_aggiornata_non_disponibile": "Lista di revoca certificati non disponibile",
+      "verifica_lista_di_revoca_certificato_presente_nella_crl": "Certificato revocato"
+    },
+    "modals": {
+      "anteprima": {
+        "title": "Anteprima documento"
+      },
+      "seleziona_documenti": {
+        "title": "Seleziona documenti da duplicare",
+        "duplica": "Duplica"
+      }
+    }
+  },
+  "form_logici": {
+    "documenti": "Documenti",
+    "approvazione": "Approvazione",
+    "pianificazione_attivita": "Pianificazione attivita'",
+    "ricerca_utente": "Ricerca utente",
+    "attivita": "Attivita'",
+    "utente": "Utente",
+    "gruppo": "Gruppo",
+    "ordine_priorita_crescente": "Ordine di priorita' crescente",
+    "task_completato": "Task completato",
+    "task_salvato": "Task salvato",
+    "task_completato_correttamente": "Task completato correttamente",
+    "task_salvato_correttamente": "Task salvato correttamente",
+    "collaborazione_richiesta_correttamente": "Richiesta di collaborazione inviata",
+    "collaborazione_in_corso": "Richiesta di collaborazione in attesa.",
+    "collaborazione_terminata": "Collaborazione terminata.",
+    "collaborazione_risposta_correttamente": "Risposta inviata",
+    "header": "Gestione form logici",
+    "funzionalita": "Funzionalità",
+    "parametri": "Parametri",
+    "documenti_facoltativi_non_inseriti": "I documenti delle tipologie ${v1} non sono presenti: Si vuole procedere?",
+    "documenti_facoltativi_non_firmati": "I documenti delle tipologie ${v1} non sono stati firmati: Si vuole procedere?",
+    "max_numero_utenti_una_attivita": "Massimo numero di utenti raggiunto per l'attivita' di ${v1}",
+    "max_numero_utenti_piu_attivita": "Massimo numero di utenti raggiunto per le attivita' di ${v1}",
+    "actions": {
+      "assegna_a_me": "Assegna a me",
+      "conferma_collaborazione": "Termina collaborazione",
+      "aggiungi": "Crea nuovo form logico"
+    },
+    "dialogs": {
+      "assegna_a_me": {
+        "title": "Presa in carico",
+        "warning": "Assegnandoti l'attività ne diventerai l'unico responsabile e nessun altro utente sarà più in grado di lavorarla.",
+        "confirm": "Procedere con la presa in carico?"
+      },
+      "creato": {
+        "titolo": "Form logico creato",
+        "messaggio": "Il form logico ${nome} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Form logico modificato",
+        "messaggio": "Il form logico ${nome} è stato modificato."
+      },
+      "elimina": {
+        "titolo": "Elimina form logico"
+      }
+    },
+    "istanze_funzionalita": {
+      "header": "Gestione istanze funzionalita' dei form logici",
+      "aggiungi": "Crea nuova istanza",
+      "aggiungi_istanza_funzionalita": "Aggiungi istanza di una funzionalita'",
+      "modifica_istanza_funzionalita": "Modifica istanza di una funzionalita'",
+      "codice_funzionalita": "Codice istanza funzionalita'",
+      "salvataggio_istanza_funzionalita_msg": "Istanza di una funzionalita' salvata correttamente",
+      "aggiornamento_istanza_funzionalita_msg": "Istanza di una funzionalita' aggiornata correttamente"
+    },
+    "associazioni": {
+      "associa": "Associa",
+      "associa_pratica": "Associa pratica",
+      "tipo_associazioni": "Tipo di associazioni tra le pratiche",
+      "associazione_riuscita": "Le pratiche sono state associate",
+      "dissociazione_riuscita": "Le pratiche non sono piu' associate",
+      "nessuna_associazione": "Nessuna associazione con altre pratiche"
+    },
+    "creazione_pratica": {
+      "creazione_pratica": "Creazione pratica",
+      "pratica_creata": "Pratica creata",
+      "pratiche_associate": "Pratiche associate",
+      "pratiche_associate_create": "nuove pratiche associate",
+      "pratica_associata_creata": "nuova pratica associata"
+    },
+    "assegnazione_tags": {
+      "tags_pratica": "Tags della pratica",
+      "tags_associabili": "Tags associabili"
+    }
+  },
+  "preferenze": {
+    "impostazioni_firma": "Impostazioni Firma",
+    "impostazioni_firma_fea": "Impostazioni Firma elettronica avanzata",
+    "seleziona":"Seleziona",
+    "ente_certificatore": "Ente Certificatore",
+    "tipo_credenziali_firma": "Tipo Credenziali Firma",
+    "tipo_otp": "Tipo OTP",
+    "profilo_feq": "Profilo FEQ",
+    "scelta_marca_temporale": "Scelta Marca Temporale",
+    "salvataggio_preferenze_ente": "Salvataggio preferenze ente",
+    "salvataggio_preferenze_utente": "Salvataggio preferenze utente",
+    "preferenze_salvataggio_ok": "Preferenze salvate correttamente",
+    "default_message": "Valore impostato dall'Ente",
+    "aggiungi_certificato": "Aggiungi certificato",
+    "crea_certificato": "Crea certificato",
+    "seleziona_certificato": "Seleziona certificato",
+    "gestione_certificati_firma": "Gestione certitificati di firma",
+    "carica_icona_fea": "Carica icona FEA",
+    "ricezione_notifiche": {
+      "titolo": "Ricezione notifiche",
+      "all": "Tutte",
+      "create_task": "Alla creazione di un task",
+      "assign_task": "All'assegnazione di un task",
+      "cancel_task": "All'annullamento di un task",
+      "create_comment": "Alla creazione di un commento",
+      "share_practice": "Alla condivisione di una pratica",
+      "sorted_documents": "Allo smistamento dei documenti",
+      "process_documents": "All'elaborazione di documenti",
+      "header": {
+        "cosmo": "COSMO",
+        "email": "E-MAIL"
+      }
+    },
+    "segnalibri": {
+      "titolo": "Segnalibri"
+    },
+    "posizione_toast": {
+      "titolo": "Posizione delle notifiche",
+      "top_left": "Alto a sinistra",
+      "top_right": "Alto a destra",
+      "bottom_left": "Basso a sinistra",
+      "bottom_right": "Basso a destra",
+      "esempio_notifica": "Esempio di notifica"
+    }
+  },
+  "firma_digitale": {
+    "titolo": "FIRMA DOCUMENTI",
+    "certificato_firma": "Certificato firma",
+    "certificati_salvati": "Certificati salvati",
+    "descrizione": "Descrizione",
+    "username": "Username",
+    "password": "Password",
+    "pin": "Pin",
+    "scadenza": "Scadenza",
+    "eliminazione_certificato": "Eliminazione certificato",
+    "saltavaggio_certificato": "Salvataggio certificato",
+    "eliminazione_certificato_msg": "Certificato eliminato correttamente",
+    "salvataggio_certificato_msg": "Certificato salvato correttamente",
+    "richiedi_otp": "Richiedi OTP",
+    "inserisci_otp_ricevuto": "Inserisci OTP ricevuto",
+    "completamento_firma": "Completamento firma",
+    "documenti_firmati": "{{numeroDocumento}} di {{totaleDocumenti}} firmati",
+    "firma_documenti": "Firma dei documenti",
+    "certificato_non_salvato": "Certificato di firma non salvato. Vuoi salvarlo?",
+    "salva_firma": "SALVA E FIRMA",
+    "firma_senza_salvare": "FIRMA SENZA SALVARE",
+    "firma": "FIRMA",
+    "richiesta_OTP": "Richiesta OTP",
+    "richiesta_OTP_OK": "Richiesta OTP elaborata correttamente",
+    "indicare_nome_certificato": "Indicare il nome del certificato"
+  },
+  "app_esterne": {
+    "header": "Gestione applicazioni esterne",
+    "associazione_applicazioni": "Associazione applicazioni",
+    "gestisci_applicazioni": "Gestisci applicazioni",
+    "gestisci_funzionalita": "Gestisci funzionalita'",
+    "aggiungi_applicazione": "Aggiungi applicazione",
+    "aggiungi_funzionalita": "Aggiungi funzionalita'",
+    "modifica_applicazione": "Modifica applicazione",
+    "modifica_funzionalita": "Modifica funzionalita'",
+    "creazione_funzionalita": "Creazione funzionalita'",
+    "seleziona_app_da_aggiungere": "Seleziona applicazione da aggiungere",
+    "icona": "Icona",
+    "descrizione_applicazione": "Descrizione applicazione",
+    "descrizione": "Descrizione",
+    "url": "Url",
+    "inizio_validita": "Inizio Validita'",
+    "fine_validita": "Fine Validita'",
+    "elimina_app": "Eliminazione applicazione",
+    "elimina_funzionalita": "Eliminazione funzionalita'",
+    "app_associata_utenti": "Attenzione! L'applicazione e' associata a degli utenti. Si e' sicuri di volerla eliminare?",
+    "app_associata_enti": "Attenzione! L'applicazione e' associata a degli enti. Si e' sicuri di volerla eliminare?",
+    "funzionalita_associata_utenti": "Attenzione! La funzionalita' e' associata a degli utenti. Si e' sicuri di volerla eliminare?",
+    "carica_icona": "Carica icona",
+    "salvataggio_applicazione_msg": "Applicazione salvata correttamente",
+    "aggiornamento_applicazione_msg": "Applicazione aggiornata correttamente"
+  },
+  "gruppi": {
+    "aggiungi": "Aggiungi gruppo utenti",
+    "nuovo_gruppo": "Nuovo gruppo",
+    "modifica_gruppo": "Modifica gruppo",
+    "campo_nome": "Nome",
+    "campo_descrizione": "Descrizione",
+    "campo_codice": "Codice",
+    "utenti_gruppo": "Utenti del gruppo",
+    "tipologie_pratiche_gruppo": "Tipologie pratiche del gruppo",
+    "aggiungi_utenti": "Aggiungi utenti",
+    "aggiungi_tipologie_pratiche": "Aggiungi tipologie pratiche",
+    "actions": {
+      "rimuovi": "Rimuovi",
+      "seleziona": "Seleziona",
+      "gestisci_tags": "Gestisci tags",
+      "aggiungi_tags": "Aggiungi tags"
+    },
+    "status": {
+      "selezionato": "Selezionato"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina gruppo"
+      },
+      "creato": {
+        "titolo": "Gruppo creato",
+        "messaggio": "Il gruppo ${nome} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Gruppo modificato",
+        "messaggio": "Il gruppo ${nome} è stato modificato."
+      },
+      "modificata_relazione": {
+        "titolo": "Relazione gruppo, utente e tags modificata",
+        "messaggio": "La relazione tra il gruppo ${nome}, l'utente e i tag è stata modificata"
+      }
+    }
+  },
+  "enti": {
+    "header": "Gestione enti",
+    "actions": {
+      "aggiungi": "Crea nuovo ente"
+    },
+    "anagrafica": "Anagrafica ente",
+    "codice_fiscale": "Codice fiscale",
+    "codice_ipa": "Codice IPA",
+    "nome": "Nome",
+    "utente_admin": "Utenti amministratori",
+    "profilo_default": "Profilo utente di default",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina ente"
+      },
+      "creato": {
+        "titolo": "Ente creato",
+        "messaggio": "L'ente ${nome} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Ente modificato",
+        "messaggio": "L'ente ${nome} è stato modificato."
+      }
+    }
+  },
+  "fruitori": {
+    "header": "Gestione fruitori",
+    "schemi_auth": "Schemi di autenticazione",
+    "endpoints": "Endpoints",
+    "actions": {
+      "aggiungi": "Crea nuovo fruitore",
+      "modifica_endpoints": "Modifica endpoints",
+      "modifica_schemi_auth": "Modifica schemi di autenticazione"
+    },
+    "anagrafica": "Anagrafica fruitore",
+    "api_manager_id": "Api Manager ID",
+    "nome": "Nome",
+    "url": "URL",
+    "autorizzazioni": "Autorizzazioni",
+    "autorizzazioni_concesse": "Autorizzazioni concesse",
+    "autorizzazioni_associabili": "Autorizzazioni disponibili",
+    "enti": "Enti",
+    "enti_associati": "Enti associati",
+    "enti_associabili": "Enti disponibili",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina fruitore"
+      },
+      "creato": {
+        "titolo": "Fruitore creato",
+        "messaggio": "Il fruitore ${nome} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Fruitore modificato",
+        "messaggio": "Il fruitore ${nome} è stato modificato."
+      }
+    }
+  },
+  "processi": {
+    "header": "Deploy processo",
+    "carica_processo": "Carica processo",
+    "enti": "Enti",
+    "tipi_pratiche": "Tipi pratiche",
+    "salvataggio_processo": "Salvataggio processo",
+    "salvataggio_processo_msg": "Processo salvato correttamente"
+  },
+  "tipi_pratiche": {
+    "header": "Gestione tipologie di pratiche",
+    "actions": {
+      "aggiungi": "Crea nuova tipologia di pratica"
+    },
+    "anagrafica": "Anagrafica pratica",
+    "codice": "Codice",
+    "nome": "Nome",
+    "ente": "Ente",
+    "codice_applicazione_stardas": "Codice applicazione Stardas",
+    "process_definition_key": "Process definition key",
+    "case_definition_key": "Case definition key",
+    "responsabile_trattamento_stardas": "Responsabile trattamento Stardas",
+    "codice_fruitore_stardas": "Codice fruitore Stardas",
+    "override_responsabile_trattamento": "Override utente creazione pratica",
+    "override_fruitore_default": "Override fruitore di default",
+    "creabile_da_interfaccia": "Creabile da interfaccia",
+    "creabile_da_servizio": "Creabile da servizio",
+    "creabile_da_gruppo": "Creabile da gruppo",
+    "annullabile": "Annullabile",
+    "condivisibile": "Condivisibile",
+    "assegnabile": "Assegnabile",
+    "registrazione_stilo": "Registrazione Stilo",
+    "tipologia_unita_documentaria_stilo": "Tipologia Unità documentaria di Stilo",
+    "form_visualizzazione_dati_pratica": "Form per visualizzazione dati pratica",
+    "override_help": "Valorizza il responsabile trattamento Stardas con quanto presente all'interno di 'Responsabile trattamento' anche se è valorizzato l'utente creazione pratica",
+    "override_fruitore_help": "In fase di smistamento documento non sarà utilizzato il codice fruitore configurato, ma quello presente all'interno del tipo pratica afferente al documento in fase di smistamento",
+    "creabile_gruppo_help": "TODO: testo da condividere",
+    "gruppo_creatore": "Gruppo creatore",
+    "gruppo_supervisore": "Gruppo supervisore",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina tipologia di pratica",
+        "tab_titolo": "Elimina il dettaglio tab"
+      },
+      "creato": {
+        "titolo": "Tipologia di pratica creata",
+        "messaggio": "La tipologia di pratica ${nome} è stata creata."
+      },
+      "modificato": {
+        "titolo": "Tipologia di pratica modificata",
+        "messaggio": "La tipologia di pratica ${nome} è stata modificata."
+      }
+    },
+    "carica_immagine": "Carica immagine anteprima",
+    "preferenze_firma": "Preferenze firma"
+  },
+  "template_report": {
+    "header": "Template report",
+    "template_padre": "Template padre",
+    "sorgente_template": "Sorgente template",
+    "scarica_template": "Scarica template",
+    "actions": {
+      "aggiungi": "Crea nuovo template"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina template report"
+      },
+      "creato": {
+        "titolo": "Template report creato",
+        "messaggio": "Il template report con codice ${codice} è stata creato."
+      },
+      "modificato": {
+        "titolo": "Template report modificato",
+        "messaggio": "Il template report con codice ${codice} è stata modificato."
+      }
+    }
+  },
+  "custom_form": {
+    "header": "Custom form",
+    "codice": "Codice",
+    "descrizione": "Descrizione",
+    "custom_form": "Custom form",
+    "actions": {
+      "aggiungi": "Crea nuovo custom form"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina custom form"
+      },
+      "creato": {
+        "titolo": "Custom form creato",
+        "messaggio": "Il custom form con codice ${codice} è stata creato."
+      },
+      "modificato": {
+        "titolo": "Custom form modificato",
+        "messaggio": "Il custom form con codice ${codice} è stata modificato."
+      }
+    }
+  },
+  "use_case_profili":{
+    "header": "Profili - casi d'uso",
+    "codice": "Codice",
+    "descrizione": "Descrizione",
+    "use_case_profili": "Profili - casi d'uso",
+    "use_case": "Casi d'uso",
+    "use_case_associabili": "Casi d'uso associabili",
+    "no_use_case_associati": "Nessun caso d'uso associato",
+    "no_use_case_associabili": "Nessun caso d'uso associabile",
+    "actions": {
+      "aggiungi": "Crea nuovo profilo"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina profilo"
+      },
+      "creato": {
+        "titolo": "Profilo creato",
+        "messaggio": "Il profilo ${profilo} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Profilo modificato",
+        "messaggio": "Il profilo ${profilo} è stato modificato."
+      },
+      "nessun_profilo":{
+        "titolo": "Nessun profilo trovato"
+      }
+    }
+
+  },
+  "acta": {
+    "identita_utente": {
+      "title": "Identita' utente",
+      "invia_identita": "Invia identita'"
+    }
+  },
+  "helper": {
+    "header": "Helper",
+    "codice_pagina": "Codice pagina",
+    "codice_tab": "Codice tab",
+    "codice_form": "Codice form",
+    "codice_modale_pagina": "Codice modale pagina",
+    "codice_modale_tab": "Codice modale tab",
+    "custom_form": "Helper",
+    "helper": "Helper",
+    "actions": {
+      "aggiungi": "Crea nuovo helper",
+      "tramite_interfaccia": "Da interfaccia utente",
+      "tramite_import": "Da file"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina helper"
+      },
+      "creato": {
+        "titolo": "Helper creato",
+        "messaggio": "Helper con descrizione ${codice} è stata creato."
+      },
+      "modificato": {
+        "titolo": "Helper modificato",
+        "messaggio": "Helper con descrizione ${codice} è stata modificato."
+      },
+      "non_presente": {
+        "messaggio": "Helper non configurato per la pagina"
+      },
+      "codice_errato": {
+        "messaggio": "Helper con descrizione ${codice} non presente a sistema"
+      }
+    }
+  },
+  "configurazione_ente": {
+    "title": "Configurazione ente",
+    "aggiungi_configurazione": "Aggiungi configurazione",
+    "eliminazione_configurazione": "Elimina configurazione",
+    "aggiornamento_configurazione": "Aggiorna configurazione",
+    "creazione_configurazione": "Creazione configurazione",
+    "crea": "Crea",
+    "modifica": "Modifica",
+    "chiave": "Chiave",
+    "valore": "Valore",
+    "descrizione": "Descrizione"
+  },
+  "compilazione_form": {
+    "title": "Compilazione form"
+  },
+  "esecuzione_multipla": {
+    "messaggio": "Il processo non puo' avanzare di stato: sono presenti altre attività da svolgere prima di completare il task. E' necessario lavorare le pratiche singolarmente.",
+    "errore_firma_fea": "Non è possibile eseguire la firma elettronica avanzata con la firma multipla"
+  },
+  "form_tag": {
+    "header": "Gestione Tag",
+    "codice": "Codice",
+    "descrizione": "Descrizione",
+    "form_tag": "Gestione Tag",
+    "ente": "Ente",
+    "tipo_tag": "Tipo Tag",
+    "actions": {
+      "aggiungi": "Crea nuovo Tag"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina Tag"
+      },
+      "creato": {
+        "titolo": "Tag creato",
+        "messaggio": "Il Tag con codice ${codice} è stata creato."
+      },
+      "modificato": {
+        "titolo": "Tag modificato",
+        "messaggio": "Il Tag con codice ${codice} è stata modificato."
+      }
+    }
+  },
+  "gestione_parametri_di_sistema": {
+
+    "header": "Gestione parametri di sistema",
+    "chiave": "Chiave",
+    "valore": "Valore",
+    "descrizione": "Descrizione",
+    "form_gestione_parametri_di_sistema": "Gestione parametri di sistema",
+    "actions": {
+      "aggiungi": "Crea parametro di sistema"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina Parametro di sistema"
+      },
+      "creato": {
+        "titolo": "Parametro di sistema creato",
+        "messaggio": "Il parametro di sistema con valore ${valore} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Parametro di sistema modificato",
+        "messaggio": "Il parametro di sistema con valore ${codice} è stata modificato."
+      }
+    },
+    "messaggio_riavvio":"<p>Si ricorda che per rendere effettive le modifiche, è necessario effettuare un riavvio del sistema. </br> La richiesta dev’essere effettuata alla seguente casella di posta: <a href='mailto:${email}'>${emailaddress}</a></p>"
+  },
+  "login": {
+    "messaggi": {
+      "accesso_diretto_home_ok": "Login effettuato, verrai rediretto alla homepage"
+    }
+  },
+  "formato_file": {
+    "gestisci_formati_file": "Gestisci formati file",
+    "actions": {
+      "formati_file_aggiunti": "Formati file aggiunti",
+      "formati_file": "Formati file"
+    }
+  },
+  "task_automatici_in_errore": {
+    "header": "Task automatici in errore",
+    "inviato": "Richiesta esecuzione task inviata"
+  },
+  "variabili_filtro": {
+    "header": "Variabili di filtro",
+    "actions": {
+      "aggiungi": "Crea nuova variabile di filtro"
+    },
+    "ente": "Ente",
+	"tipo_pratica": "Tipologia di pratica",
+	"label_filtro": "Label Filtro",
+	"formato_variabile": "Formato Variabile",
+  "formato_variabile_non_disponibile": "Le variabili che hanno un tipo dato json non sono disponibili",
+	"tipo_di_filtro": "Tipo di filtro",
+	"aggiungere_a_risultato_ricerca": "Aggiungere la colonna al risultato della ricerca",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina variabile di filtro"
+      },
+      "creato": {
+        "titolo": "Variabile di filtro creata",
+        "messaggio": "La variabile di filtro ${label} è stata creata."
+      },
+      "modificato": {
+        "titolo": "Variabile di filtro modificata",
+        "messaggio": "La variabile di filtro ${label} è stata modificata."
+      }
+    }
+  },
+  "caricamento_pratiche":{
+    "titolo": "Caricamento pratiche da file",
+    "caricamenti_in_bozza": "Caricamenti in bozza",
+    "errore_caricamento_pratiche": "Caricamento pratiche non andato a buon fine",
+    "carica_pratiche": "Carica file",
+    "carica_pratiche_da_file": "Carica pratiche da file",
+    "nessun_file": "Nessun file contenente delle pratiche è stato caricato",
+    "aggiungi_zip": "Aggiungi file zip",
+    "carica_zip": "Carica file zip",
+    "trascina_zip": "Trascina qui il documento zip",
+    "trascina_pratica": "Trascina qui il documento contenente le pratiche",
+    "oppure": "oppure",
+    "selezionalo_cliccando_qui":"selezionalo, cliccando qui",
+    "annulla_caricamento": "Annulla",
+    "completa_caricamento": "Completa caricamento",
+    "caricato_zip": "File zip caricato correttamente",
+    "caricate_pratiche": "File contenente pratiche caricato correttamente",
+    "errore_caricamento_zip": "Caricamento file zip non andato a buon fine",
+    "caricamento_completato": "Caricamento pratiche tramite file completato con successo",
+    "errore_caricamento_in_bozza": "Si è verificato un errore durante la messa in bozza del caricamento dei file",
+    "errore_completa_caricamento": "Si è verificato un errore durante il completamento del caricamento dei file",
+    "caricamento_non_completato": "Il caricamento dei file non è ancora completato, sei sicuro di voler procedere ugualmente?",
+    "help_pratiche":{
+      "titolo": "Scarica il template per caricare le pratiche.",
+      "colonne_obbligatorie":"Tutte le colonne sono obbligatorie - ad eccezione di quelle che afferiscono alle variabili.",
+      "campi_obbligatori": "I campi delle colonne contrassegnati con * sono obbligatori"
+    },
+    "help_documenti":{
+      "titolo": "Scarica il template per indicare documenti - non modificare il nome.",
+      "descrizione":"Il template opportunamente compilato deve essere inserito in ciascun archivio zip indicato nel file delle pratiche.",
+      "colonne_obbligatorie":"Tutte le colonne sono obbligatorie",
+      "campi_obbligatori": "I campi delle colonne contrassegnati con * sono obbligatori"
+    },
+    "template_pratiche":"Scarica file template per le pratiche",
+    "template_documenti":"Scarica file template per i documenti zip"
+  },
+  "template_fea": {
+    "header": "Template firma elettronica avanzata (FEA)",
+    "descrizione_template": "Descrizione template",
+    "carica_da_template": "Carica da template",
+    "carica_da_foglio_bianco": "Carica da foglio bianco",
+    "pagina": "Pagina",
+    "actions": {
+      "aggiungi": "Crea nuovo template",
+      "conferma_dati_riquadro_firma": "Confermi la posizione attuale della firma nel template?"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina template FEA"
+      },
+      "creato": {
+        "titolo": "Template FEA creata",
+        "messaggio": "Il template ${descrizione} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Template FEA modificato",
+        "messaggio": "Il template FEA ${descrizione} è stata modificato."
+      }
+    }
+  },
+  "firma_fea":{
+    "titolo": "FIRMA DOCUMENTI",
+    "richiesta_OTP": "Richiesta OTP",
+    "richiedi_otp": "Richiedi OTP",
+    "richiesta_OTP_OK": "Richiesta OTP elaborata correttamente",
+    "inserisci_otp_ricevuto": "Inserisci OTP ricevuto",
+    "errore_formato_file": "Non è possibile firmare con FEA documenti con formato diverso da PDF",
+    "errore_file_gia_firmato": "Non è possibile firmare con FEA documenti già firmati",
+    "errore_icona_fea": "Icona per riquadro firma FEA non impostata. Vai alle preferenze ente"
+  },
+  "approvazione_documenti":{
+    "attivita": "Attivita'",
+    "utente_approvatore": "Utente approvatore",
+    "data_approvazione": "Data approvazione"
+  },
+  "sigillo_elettronico":{
+    "header": "Gestione sigilli elettronici",
+    "actions":{
+      "aggiungi":"Aggiungi sigillo elettronico"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina sigillo elettronico"
+      },
+      "creato": {
+        "titolo": "Sigillo elettronico creato",
+        "messaggio": "Il sigillo elettronico ${alias} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Sigillo elettronico modificato",
+        "messaggio": "Il sigillo elettronico ${alias} è stata modificato."
+      }
+    },
+    "alias": "Alias",
+    "user": "Utente",
+    "delegated_domain": "Dominio delegato",
+    "delegated_user": "Utente delegato",
+    "delegated_password": "Password delegata",
+    "otp_pwd": "Password OTP",
+    "tipo_hsm": "Tipo HSM",
+    "tipo_otp_auth": "Tipo autenticazione OTP",
+    "errore_alias_gia_presente": "Alias già associato ad un altro sigillo elettronico"
+  },
+  "upload_file": {
+    "trascina_file": "Trascina qui il file da caricare",
+    "selezionalo_cliccando_qui": "selezionalo, cliccando qui"
+  },
+  "configurazioni_messaggi_notifiche": {
+    "header": "Messaggi notifiche",
+    "actions": {
+      "aggiungi": "Crea nuova configurazione"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina configurazione",
+        "tab_titolo": "Elimina il dettaglio tab"
+      },
+      "creato": {
+        "titolo": "Configurazione creata",
+        "messaggio": "La configurazione per il tipo messaggio '${tipoMessaggio}' è stata creata."
+      },
+      "modificato": {
+        "titolo": "Configurazione modificata",
+        "messaggio": "La configurazione per il tipo messaggio '${tipoMessaggio}' è stata modificata."
+      }
+    },
+    "tipo_messaggio":"Tipo messaggio",
+    "testo":"Testo"
+  }
+}

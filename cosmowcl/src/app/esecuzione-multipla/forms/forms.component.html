@@ -1,0 +1,99 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/esecuzione-multipla'">
+      <span class="fas fa-backspace pr-2"></span> Esecuzione multipla
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">COMPILAZIONE FORM MULTIPLA</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="">
+      <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="">
+      <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError && tasks?.length">
+
+    <div class="row mt-3">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table
+          #table
+          [tableDisplayClass]="'table-sm table-hover variant-primary'"
+          [columns]="columns"
+          [paginationMode]="'CLIENT'"
+          [dataProvider]="dataProvider"
+          [enablePagination]="false"
+          [enableSorting]="true"
+          [enableRowExpansion]="true"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'oggetto_pratica'"
+          [enableSelection]="true"
+          [enableSelectAll]="true"
+          [enableMultiSelect]="true"
+          [rowClassProvider]="rowClassProvider"
+          (selectionChange)="selectionChangeHandler($event)"
+        >
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <div *ngIf="rowErrors[row.attivita.id]" class="clickable">
+                <button class="btn btn-outline-danger btn-sm" (click)="showError(row)">
+                  <span class="fas fa-question"></span>
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- dettaglio riga espansa -->
+          <ng-template #rowDetailTemplate let-row="row">
+            <div class="text-left">
+              <div class="">
+
+                <app-tabs-pratica
+                  [embedded]="true"
+                  [pratica]="row.pratica"
+                ></app-tabs-pratica>
+              </div>
+            </div>
+          </ng-template>
+
+        </cosmo-table>
+      </div>
+    </div>
+
+     <div class="row mt-3" *ngIf="abilitaForm">
+      <button type="button" style="margin: 5px;" class="btn btn-sm btn-primary btn-action"
+      (click)="conferma()">Compila form</button>
+      <div *ngIf="!checkMandareAvanti && !mandareAvantiProcesso" class="mt-2">
+        <p class="alert alert-info">
+          {{ "esecuzione_multipla.messaggio" | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="!abilitaForm">
+      <div class="col-12">
+        <p class="alert alert-info">
+          Seleziona una o pi&ugrave; pratiche di cui compilare i form.
+        </p>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

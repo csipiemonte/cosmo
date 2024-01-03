@@ -1,0 +1,141 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" (click)="goBack()">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+  </div>
+
+  <h2 class="mt-3 mb-5">{{"variabili_filtro.header" | translate}}</h2>
+
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+  </ng-container>
+
+
+  <ng-container *ngIf="!loading && !loadingError" >
+
+    <div class="row mt-3" *ngIf="table">
+      <div class="col-12 col-lg-4 pt-1">
+        <button class="btn btn-primary btn-sm" (click)="aggiungi()">
+          <span class="fas fa-plus-circle mr-2"></span> {{"variabili_filtro.actions.aggiungi" | translate}}
+        </button>
+      </div>
+      <div class="col-12 col-lg-2 text-center">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-right">
+        <!-- EMPTY -->
+      </div>
+    </div>
+
+    <form [formGroup]="filterForm">
+
+
+      <div class="row justify-content-between pt-5">
+
+
+        <div class="col-12 col-lg-4 form-group ">
+
+          <label for="labelFiltro" [class.active]="filterForm?.controls['labelFiltro'].value!==null">Label filtro</label>
+          <input [ngClass]="{'is-invalid': displayInvalid('labelFiltro')}" type="text" id="labelFiltro"
+            name="labelFiltro" class="form-control border" formControlName="labelFiltro" placeholder=" " />
+        </div>
+
+        <div class="col-12  col-lg-4 form-group" *ngIf="!isConfiguratore">
+
+          <label for="ente" [class.active]="filterForm?.controls['ente'].value!==null">{{"variabili_filtro.ente" |
+            translate}}</label>
+
+          <input [ngClass]="{'is-invalid': displayInvalid('ente')}" id="ente" type="text" class="form-control border"
+            placeholder="" [ngbTypeahead]="searchEnti" formControlName="ente" name="ente"
+            (focusout)="focusOutEnte($event.target.value)" [resultFormatter]="formatterEnte"
+            [inputFormatter]="formatterEnte" (focus)="focusEnti$.next($any($event).target.value)"
+            (click)="focusEnti$.next($any($event).target.value)" #instanceEnti="ngbTypeahead" [editable]="false" />
+
+        </div>
+
+        <div class="col-12  col-lg-4 form-group">
+
+          <label for="tipoPratica"
+            [class.active]="filterForm?.controls['tipoPratica'].value!==null">{{"variabili_filtro.tipo_pratica" |
+            translate}}</label>
+
+          <input [ngClass]="{'is-invalid': displayInvalid('tipoPratica')}" id="tipoPratica" type="text"
+            class="form-control border" placeholder="" [ngbTypeahead]="searchTipiPratiche" formControlName="tipoPratica"
+            name="tipoPratica" [resultFormatter]="formatterTipoPratica" [inputFormatter]="formatterTipoPratica"
+            (focusout)="focusOutTipoPratica($event.target.value)"
+            (focus)="focusTipoPratiche$.next($any($event).target.value)"
+            (click)="focusTipoPratiche$.next($any($event).target.value)" #instanceTipiPratiche="ngbTypeahead"
+            [editable]="false" />
+
+
+        </div>
+
+        <div class="col-12  col-lg-4 form-group" *ngIf="isConfiguratore">
+
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-12 text-right">
+          <button type="button" class="btn btn-outline-primary mr-2" (click)="azzera()">AZZERA</button>
+          <button type="button" class="btn btn-primary" (click)="filtra()"
+            [disabled]="!filterForm?.valid">FILTRA</button>
+        </div>
+
+      </div>
+
+
+    </form>
+    <br />
+
+    <div class="row mt-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table #table [tableDisplayClass]="'table-sm table-hover variant-centered'" [columns]="columns"
+          [paginationMode]="'SERVER'" [dataProvider]="dataProvider" [enablePagination]="true" [enableSorting]="true"
+          [enableRowExpansion]="false" [enableMultipleRowExpansion]="false" [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'label'" [itemIdentifier]="'label'" [enableItemTracking]="true"
+          [storeAdapter]="storeAdapter" [enableStorePersistence]="true">
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button" (click)="modifica(row)">
+                <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+              </button>
+              <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="elimina(row)">
+                <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+              </button>
+            </div>
+
+          </ng-template>
+
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="table">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination *ngIf="table" [table]="table"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size *ngIf="table" [table]="table"></cosmo-table-page-size>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,74 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<h2>
+  <i class="fas fa-bell"></i> Notifiche
+  <span *ngIf="unread > 0" class="badge badge-danger badge-pill sup pointer"
+      placement="bottom"
+      [ngbPopover]="popContent"
+      [popoverTitle]="popTitle"
+    >{{unread}}</span>
+</h2>
+
+<ng-template #popContent>
+  <div class="p-4">
+    <button type="button" class="btn btn-primary btn-sm" style="min-width: 8em;"
+      (click)="markAllAsRead()"
+      [disabled]="loading > 0"
+    >
+      Segna tutte come lette
+    </button>
+  </div>
+</ng-template>
+<ng-template #popTitle>Azioni</ng-template>
+
+<div class="card no-after card-bg notifications">
+
+  <ng-container *ngIf="loadingError">
+    <div class="card-body">
+        <app-caricamento-fallito [error]="loadingError" (retry)="reset()"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="card-body">
+        <app-caricamento-in-corso [top]="'140px'"></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <div #notificheList class="card-body" (scroll)="onScroll($event)" [hidden]="loading || loadingError">
+    <div *ngIf="mostraPromptNotificheSistema" class="w-100 text-right">
+      <button type="button" class="btn btn-outline-warning btn-xs mb-3" (click)="abilitaNotificheSistema()">
+        <i class="fas fa-bell mr-2"></i>
+        abilita le notifiche di sistema
+      </button>
+    </div>
+    <ul class="list-unstyled events-list">
+
+      <li *ngFor="let e of elementi" class="{{e.loading ? 'loading' : e.lettura ? '' : 'unread'}}">
+        <button aria-label="Segna come da Leggere / Letto" class="toggle-read">
+          <i *ngIf="!e.loading" class="{{e.lettura ? 'fas' : 'far'}} fa-check-circle" (click)="markAsRead(e)"></i>
+          <i *ngIf="e.loading" class="fas fa-circle-notch fa-spin"></i>
+        </button>
+        <a class="d-block link-nocolor">
+          <p>
+            <span  class="badge badge-{{ e.fruitore?.nomeApp | lowercase}} badge-pill {{ e.loading ? '' : e.lettura ? '': 'badge-primary' }}">{{e.fruitore?.nomeApp}}</span>
+            <span class="time">{{e.arrivo | date: 'dd/MM/yyyy'}} alle {{e.arrivo | date: 'HH:mm:ss'}}</span>
+          </p>
+          <p class="sml">{{e.descrizione}}</p>
+          <br>
+          <p class="sml"><strong>{{e.urlDescrizione}}</strong></p>
+          <p class="sml"><strong><a href="{{e.url}}">{{e.url}}</a></strong></p>
+        </a>
+      </li>
+      <li *ngIf="loadingMore">
+        <app-caricamento-in-corso [top]="'20px'"></app-caricamento-in-corso>
+      </li>
+      <li *ngIf="allLoaded && !loading && !loadingMore && this.currentPage?.info?.totalElements >= 10" class="pt-4" style="font-size: 0.8em;">
+        <a class="btn btn-outline-secondary btn-sm" (click)="goUp()">
+          <span class="fas fa-hand-point-up"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

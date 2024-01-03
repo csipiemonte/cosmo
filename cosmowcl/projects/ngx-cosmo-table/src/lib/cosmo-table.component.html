@@ -1,0 +1,396 @@
+<div class="cosmo-table">
+
+  <!-- MAIN TABLE - WEBKIT MODE -->
+  <ng-container>
+  <div class="table-responsive">
+    <table class="cosmo-table table {{ tableDisplayClass || 'table-hover' }}"
+      cdkDropList
+      id="{{currentTableId}}"
+      [cdkDropListConnectedTo]="dropConnectedTo"
+      (cdkDropListDropped)="handleItemDropped($event)"
+      [cdkDropListData]="currentData"
+      [cdkDropListEnterPredicate]="acceptDropPredicate"
+      [cdkDropListSortingDisabled]="!acceptDrop"
+      [class.nodrop]="!acceptDrop"
+      [class.acceptdrop]="acceptDrop"
+    >
+      <caption class="d-none">{{ 'table.common.accessibility.caption' | translate }}</caption>
+      <thead *ngIf="currentEnableMainHeader" class="">
+        <tr>
+          <th scope="row" *ngIf="rowExpansionEnabledAndPossible && currentEnableManualRowExpansion" class="small-as-possible">
+            <!-- empty header for row expansion -->
+          </th>
+          <th scope="row" *ngIf="currentEnableSelection" class="small-as-possible">
+            <div class="nbi-form-check">
+              <span *ngIf="currentEnableSelectAll && currentEnableMultiSelect && !noResults">
+                <input type="checkbox" [checked]="areAllChecked" (change)="toggleAllChecked()" class="clickable" />
+              </span>
+            </div>
+          </th>
+          <th scope="row" *ngIf="contextFilteringEnabledAndPossible" style="width: 1%;"
+            [class.border-primary]="anyContextFilterChecked" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+              <div class="nbi-form-check clickable" ngbDropdownToggle>
+                <div class="dropdown show d-inline-block float-right">
+                  <div class="dropdown-menu" ngbDropdownMenu>
+                    <h6 class="dropdown-header" ngbDropdownItem>
+                      <span *ngIf="contextFilteringPrompt">
+                        {{ contextFilteringPrompt | translate }}
+                      </span>
+                      <span *ngIf="!contextFilteringPrompt">
+                        {{ 'table.common.messages.context_filter_prompt' | translate }}
+                      </span>
+                    </h6>
+                    <div class="dropdown-item" ngbDropdownItem *ngFor="let filter of currentContextFilters">
+                      <input type="checkbox" [checked]="isContextFilterChecked(filter)"
+                        (change)="toggleContextFilterChecked(filter); $event.stopPropagation();" />
+                        <span class="clickable" (click)="toggleContextFilterChecked(filter); $event.stopPropagation();">
+                        {{ resolveLabel(filter) }}
+                        </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </th>
+          <ng-container *ngFor="let column of visibleColumns">
+            <th scope="col"
+              class="cosmosize-{{ column.size || 'default' }} {{column.headerDisplayClass || ''}}"
+              [class.order-up]="currentEnableSorting && isCurrentSortingColumn(column, 'ASC')"
+              [class.order-down]="currentEnableSorting && isCurrentSortingColumn(column, 'DESC')"
+              [class.border-primary]="currentEnableSorting && isCurrentSortingColumn(column)"
+              [class.clickable]="currentEnableSorting && isSortable(column)"
+              (click)="clickOnColumn(column)"
+            >
+              <span *ngIf="column.actions?.length" class="column-actions-container">
+                <!-- AZIONI COLONNA -->
+                <div class="inline-block inline-block-bottom"
+                  (click)="$event.stopPropagation();"
+                >
+                  <span ngbDropdown [container]="'body'">
+                    <div>
+                      &nbsp;
+                    </div>
+                    <a class="dropdown-toggle" ngbDropdownToggle>
+                      <span class="{{ column.actionsIcon || 'fas fa-cog' }}"></span>
+                      <i class="fas fa-angle-down ml-1 mr-2"></i>
+                    </a>
+                    <span ngbDropdownMenu>
+                      <ng-container *ngFor="let action of column.actions">
+                        <button ngbDropdownItem
+                          class="btn-action-dropdown-item"
+                          *ngIf="isActionVisible(action)"
+                          (click)="clickOnAction(action)"
+                          [disabled]="!isActionAllowed(action)"
+                        >
+                          <span *ngIf="action.icon" class="{{action.iconClass}} action-icon">
+                            <span class="{{action.icon}}"></span>
+                          </span>
+                          <span class="action-label">
+                            {{ resolveLabel(action) }}
+                          </span>
+                        </button>
+                      </ng-container>
+                    </span>
+                  </span>
+                </div>
+              </span>
+              <span *ngIf="isLabelVisibleInTable(column) && hasLabel(column)">
+                {{ resolveLabel(column) }}
+              </span>
+              <ng-container *ngIf="currentEnableSorting && isSortable(column)">
+                <ng-container *ngIf="isCurrentSortingColumn(column); else notCurrentSorting">
+                  <span *ngIf="isCurrentSortingColumn(column, 'ASC')">
+                    <a class="order-btn">
+                      <i class="fas fa-sort-up"></i></a>
+                  </span>
+                  <span *ngIf="isCurrentSortingColumn(column, 'DESC')">
+                    <a class="order-btn">
+                      <i class="fas fa-sort-down"></i></a>
+                  </span>
+                </ng-container>
+                <ng-template #notCurrentSorting>
+                  <a class="order-btn">
+                    <i class="fas fa-sort text-muted"></i></a>
+                </ng-template>
+              </ng-container>
+            </th>
+          </ng-container>
+          <th scope="row" *ngIf="currentExportEnabled" style="width: 1%;" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+              <div class="nbi-form-check clickable" ngbDropdownToggle>
+                <div class="dropdown show d-inline-block float-right">
+                  <span class="fas fa-chevron-down"></span>
+                  <div class="dropdown-menu" ngbDropdownMenu>
+                    <h6 class="dropdown-header">
+                      <span>
+                        {{ 'table.common.messages.export' | translate }}
+                      </span>
+                    </h6>
+                    <div class="dropdown-item" style="font-size: 0.80em;" ngbDropdownItem>
+                      <span class="clickable" (click)="exportXlsx(); $event.stopPropagation();">
+                        <i class="fas fa-file-excel mr-2"></i>
+                        {{ 'table.common.messages.export_xlsx' | translate }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </th>
+
+        </tr>
+      </thead>
+      <tbody
+        *ngIf="!showFetching && !forceReRender"
+      >
+        <tr class="start-row-hook d-none"></tr>
+        <ng-container *ngFor="let dataGroup of groupedData">
+        <ng-container *ngIf="currentGroupingEnabled">
+        <tr class="group-header-row">
+          <td [attr.colspan]="activeColumnsCount">
+            <div class="group-header-row-container">
+              <ng-template *ngIf="groupHeaderTemplate"
+                  [ngTemplateOutlet]="groupHeaderTemplate"
+                  [ngTemplateOutletContext]="{ key: dataGroup.groupKey, data: dataGroup.data }">
+              </ng-template>
+              <span *ngIf="!groupHeaderTemplate">
+                {{ dataGroup.groupKey }}
+              </span>
+            </div>
+          </td>
+        </tr>
+        </ng-container>
+        <ng-container *ngFor="let row of dataGroup.data; let firstRow = first; let rowIndex = index;">
+        <!-- RIGA DI REPLICA HEADER SUPERIORE -->
+        <tr *ngIf="currentEnableRowHeader && currentRowHeaderPosition === 'TOP'" class="row-header row-header-top">
+          <th scope="row" *ngIf="rowExpansionEnabledAndPossible && currentEnableManualRowExpansion" class="small-as-possible">
+            <!-- empty -->
+          </th>
+          <th scope="row" *ngIf="currentEnableSelection" class="small-as-possible">
+            <!-- empty -->
+          </th>
+          <th scope="row" *ngIf="contextFilteringEnabledAndPossible" style="width: 1%;">
+            <!-- empty -->
+          </th>
+          <ng-container *ngFor="let column of visibleColumns">
+            <th scope="col"
+              class="cosmosize-{{ column.size || 'default' }} {{column.headerDisplayClass || ''}}"
+              [class.order-up]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'ASC')"
+              [class.order-down]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'DESC')"
+              [class.border-primary]="firstRow && currentEnableSorting && isCurrentSortingColumn(column)"
+              [class.clickable]="currentEnableSorting && isSortable(column)"
+              (click)="clickOnColumn(column)"
+            >
+              <span *ngIf="firstRow && currentEnableSorting && isCurrentSortingColumn(column)">
+                <span *ngIf="isCurrentSortingColumn(column, 'ASC')">
+                  <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                </span>
+                <span *ngIf="isCurrentSortingColumn(column, 'DESC')">
+                  <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                </span>
+              </span>
+              <span *ngIf="isLabelVisibleInTable(column) && hasLabel(column)" class="row-header-label">
+                {{ resolveLabel(column) }}
+              </span>
+            </th>
+          </ng-container>
+          <th scope="row" *ngIf="currentExportEnabled" style="width: 1%;">
+            <!-- empty -->
+          </th>
+        </tr>
+        <!-- RIGA DI DATI PRINCIPALE -->
+        <tr
+          [class.row-selected]="isChecked(row)"
+          [class.odd]="rowIndex % 2 === 0"
+          class="data-row {{ getClassForRow(row) }}"
+          cdkDrag
+          [cdkDragData]="row"
+          [cdkDragDisabled]="!acceptDrag"
+        >
+          <td *ngIf="rowExpansionEnabledAndPossible && currentEnableManualRowExpansion"
+            class="cosmosize-xxs"
+          >
+            <div style="margin-top: 5px;">
+              <button class="btn btn-link btn-xs btn-action-icon" type="button" *ngIf="!isExpanded(row) && isExpandable(row)" (click)="clickOnRowExpansion(row)">
+                <i class="icon fas fa-plus-circle clickable"></i>
+              </button>
+              <button class="btn btn-link btn-xs btn-action-icon" type="button" *ngIf="isExpanded(row)" (click)="clickOnRowExpansion(row)">
+                <i class="icon fas fa-minus-circle clickable"></i>
+              </button>
+            </div>
+          </td>
+          <td *ngIf="currentEnableSelection">
+            <div class="nbi-form-check">
+              <input [type]="enableMultiSelect ? 'checkbox' : 'radio'" [checked]="isChecked(row)" (change)="toggleChecked(row)" class="clickable"
+                [disabled]="!isItemSelectable(row)"
+              />
+            </div>
+          </td>
+          <td *ngIf="contextFilteringEnabledAndPossible">
+            <!-- empty cell for context filtering -->
+          </td>
+          <ng-container *ngFor="let column of visibleColumns">
+          <td class="cosmosize-{{ column.size || 'default' }} {{column.cellDisplayClass || ''}}">
+            <div *ngIf="currentEnableRowHeader && currentRowHeaderPosition === 'TOP_INNER'" class="row-header-label row-header-label-top-inner">
+              <div
+                class="{{column.headerDisplayClass || ''}}"
+                [class.order-up]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'ASC')"
+                [class.order-down]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'DESC')"
+                [class.border-primary]="firstRow && currentEnableSorting && isCurrentSortingColumn(column)"
+                [class.clickable]="currentEnableSorting && isSortable(column)"
+                (click)="clickOnColumn(column)"
+              >
+                <span *ngIf="firstRow && currentEnableSorting && isCurrentSortingColumn(column)">
+                  <span *ngIf="isCurrentSortingColumn(column, 'ASC')">
+                    <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                  </span>
+                  <span *ngIf="isCurrentSortingColumn(column, 'DESC')">
+                    <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                  </span>
+                </span>
+                <span *ngIf="isLabelVisibleInTable(column) && hasLabel(column); else noLabelTemplate">
+                  {{ resolveLabel(column) }}
+                </span>
+                <ng-template #noLabelTemplate>
+                  &nbsp;
+                </ng-template>
+              </div>
+            </div>
+            <div *ngIf="column.applyTemplate">
+              <ng-template
+                  [ngTemplateOutlet]="cellTemplate"
+                  [ngTemplateOutletContext]="{ row: row, column: column, value: extractValue(row, column) }">
+              </ng-template>
+            </div>
+            <div *ngIf="!column.applyTemplate">
+              {{ extractValue(row, column) }}
+            </div>
+          </td>
+          </ng-container>
+          <td *ngIf="currentExportEnabled">
+            <!-- empty cell for context filtering -->
+          </td>
+          <td class="d-none">
+            <ng-container *ngIf="referencedTable?.dropTemplate">
+            <tr *cdkDragPlaceholder class="drop-container" [hidden]="!(referencedTable?.acceptDrop)">
+              <td></td>
+              <td [attr.colspan]="activeColumnsCount - 1" class="drop-cell">
+                <div class="drop-container">
+                  <ng-template
+                      [ngTemplateOutlet]="referencedTable?.dropTemplate"
+                      [ngTemplateOutletContext]="{ row: row }">
+                  </ng-template>
+                </div>
+              </td>
+            </tr>
+            </ng-container>
+          </td>
+          <td class="d-none">
+            <ng-container *ngIf="dragTemplate">
+            <div *cdkDragPreview class="drag-container">
+              <ng-template
+                [ngTemplateOutlet]="dragTemplate"
+                [ngTemplateOutletContext]="{ row: row }">
+              </ng-template>
+            </div>
+            </ng-container>
+          </td>
+        </tr>
+        <!-- RIGA DI REPLICA HEADER INFERIORE -->
+        <tr *ngIf="currentEnableRowHeader && currentRowHeaderPosition === 'BOTTOM'" class="row-header row-header-bottom">
+          <th scope="row" *ngIf="rowExpansionEnabledAndPossible && currentEnableManualRowExpansion" class="small-as-possible">
+            <!-- empty -->
+          </th>
+          <th scope="row" *ngIf="currentEnableSelection" class="small-as-possible">
+            <!-- empty -->
+          </th>
+          <th scope="row" *ngIf="contextFilteringEnabledAndPossible" style="width: 1%;">
+            <!-- empty -->
+          </th>
+          <ng-container *ngFor="let column of visibleColumns">
+            <th scope="col"
+              class="cosmosize-{{ column.size || 'default' }} {{column.headerDisplayClass || ''}}"
+              [class.order-up]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'ASC')"
+              [class.order-down]="firstRow && currentEnableSorting && isCurrentSortingColumn(column, 'DESC')"
+              [class.border-primary]="firstRow && currentEnableSorting && isCurrentSortingColumn(column)"
+              [class.clickable]="currentEnableSorting && isSortable(column)"
+              (click)="clickOnColumn(column)"
+            >
+              <span *ngIf="firstRow && currentEnableSorting && isCurrentSortingColumn(column)">
+                <span *ngIf="isCurrentSortingColumn(column, 'ASC')">
+                  <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                </span>
+                <span *ngIf="isCurrentSortingColumn(column, 'DESC')">
+                  <button type="button" class="order-btn btn btn-none" (click)="clickOnColumn(column)"><i class="fas fa-long-arrow-alt-up"></i></button>
+                </span>
+              </span>
+              <span *ngIf="isLabelVisibleInTable(column) && hasLabel(column)" class="row-header-label">
+                {{ resolveLabel(column) }}
+              </span>
+            </th>
+          </ng-container>
+          <th scope="row" *ngIf="currentExportEnabled" style="width: 1%;">
+            <!-- empty -->
+          </th>
+        </tr>
+        <!-- RIGA DI ESPANSIONE CONTENUTI -->
+        <tr *ngIf="rowExpansionEnabledAndPossible" [hidden]="!isExpanded(row)" class="detail-row">
+          <td></td>
+          <td [attr.colspan]="activeColumnsCount - 1">
+            <div class="row-expansion-container">
+              <ng-template
+                  [ngTemplateOutlet]="rowDetailTemplate"
+                  [ngTemplateOutletContext]="{ row: row }">
+              </ng-template>
+            </div>
+          </td>
+        </tr>
+
+        </ng-container>
+        </ng-container>
+      </tbody>
+      <ng-container *ngIf="!showFetching && !lastFetchError && noResults">
+      <tbody>
+        <tr class="message-row no-results-row">
+          <td [attr.colspan]="activeColumnsCount" class="text-center">
+            {{ 'table.common.messages.no_results' | translate }}
+          </td>
+        </tr>
+      </tbody>
+      </ng-container>
+      <ng-container *ngIf="showFetching">
+      <tbody>
+        <tr class="message-row fetching-row">
+          <td [attr.colspan]="activeColumnsCount" class="text-center">
+            {{ 'table.common.messages.fetching' | translate }}
+          </td>
+        </tr>
+      </tbody>
+      </ng-container>
+      <ng-container *ngIf="!showFetching && lastFetchError">
+      <tbody>
+        <tr class="message-row no-results-row">
+          <td [attr.colspan]="activeColumnsCount" class="text-left">
+            <div class="row mt-3 mb-3" style="max-width: 50vw;">
+              <div class="col-12 col-sm-8 col-lg-11">
+                  <p class="alert alert-danger">
+                      {{ "common.caricamento_fallito" | translate }}
+                      <span *ngIf="lastFetchError">
+                          <br/>
+                          {{ lastFetchError }}
+                      </span>
+                  </p>
+              </div>
+              <div class="col-12 col-sm-4 col-lg-1">
+                  <a class="btn btn-primary text-white" (click)="reloadFromFailure()">
+                      <span class="fas fa-redo-alt"></span>
+                      {{ "common.riprova" | translate }}
+                  </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      </ng-container>
+    </table>
+  </div>
+  </ng-container>
+
+</div>

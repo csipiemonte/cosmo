@@ -1,0 +1,76 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/amministrazione'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+  </div>
+
+  <h2 class="mt-3 mb-5">{{ "app_esterne.header" | translate }}</h2>
+
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row mt-3">
+      <div class="col-12 col-lg-4 pt-1">
+        <button class="btn btn-primary btn-sm" (click)="aggiungiApplicazione()">
+          <span class="fas fa-plus-circle mr-2"></span> {{ "app_esterne.aggiungi_applicazione" | translate }}
+        </button>
+      </div>
+      <div class="col-12 col-lg-4 text-center">
+        <!-- EMPTY -->
+     </div>
+      <div class="col-12 col-lg-4 text-right">
+        <cosmo-table-search-filter [table]="table" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="applicazioni" [columns]="columns"
+          [enableSorting]="true" [enablePagination]="true" [paginationMode]="'CLIENT'" [defaultPageSize]="10"
+          [possiblePageSize]="[10,20,50,100]" [defaultSortingDirection]="'ASC'" [defaultSortingColumn]="'descrizione'">
+
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+            <div *ngIf="column.name === 'icona'">
+              <img [src]="getLogo(row.icona)" height="35" width="35" />
+            </div>
+
+            <div style="text-align: center !important;" *ngIf="column.name === 'azioni'">
+              <button class="btn btn-action-icon btn-link" (click)="modificaAssociazioneApplicazione(row)">
+                <i class="fas fa-pen"></i>
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button class="btn btn-action-icon btn-link text-danger"
+                (click)="eliminaAssociazioneApplicazione(row)"><span class="fas fa-trash-alt"></span></button>
+            </div>
+          </ng-template>
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="table">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination *ngIf="table" [table]="table"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size *ngIf="table" [table]="table"></cosmo-table-page-size>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

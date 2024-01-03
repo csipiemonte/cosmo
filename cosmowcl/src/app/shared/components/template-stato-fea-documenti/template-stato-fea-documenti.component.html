@@ -1,0 +1,17 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && hasFirma()" class="d-inline ml-3">
+    <span class="icon-esito-verifica-firma "
+      title="Documento Firmato con Firma Elettronica Avanzata">
+      <span *ngIf="hasFirma()">
+        <ng-container>
+          <span class="text-success pointer" (click)="apriModaleDettaglioFirma()">
+            <i class="fas fa-file-signature"></i>
+          </span>
+        </ng-container>
+      </span>
+    </span>
+</div>
+  

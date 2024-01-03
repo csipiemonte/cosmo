@@ -1,0 +1,33 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="d-inline ml-3">
+<span *ngIf="documento" class="icon-esito-verifica-firma d-inline ml-3" title="Info documento">
+  <span class="text-success pointer" placement="left" [ngbPopover]="popContent" popoverClass="very-large-popover"
+    [popoverTitle]="popTitle" [autoClose]="'outside'">
+    <ng-template #popContent>
+      <table>
+        <colgroup>
+          <col span="1" style="width: 30%;">
+          <col span="1" style="width: 90%;">
+        </colgroup>
+          <tr>
+            <td class="bold"> Descrizione </td>
+            <td> {{documento.descrizione ? documento.descrizione : '--' }} </td>
+          </tr>
+          <tr>
+            <td class="bold"> Autore </td>
+            <td> {{documento.autore ? documento.autore : '--' }} </td>
+          </tr>
+          <tr>
+            <td class="bold"> Digest </td>
+            <td> {{getShaFile()}} </td>
+          </tr>
+      </table>
+    </ng-template>
+    <ng-template #popTitle>Informazioni aggiuntive</ng-template>
+    <i class="fas fa-info-circle"></i>
+  </span>
+</span>
+</div>

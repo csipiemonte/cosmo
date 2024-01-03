@@ -1,0 +1,1035 @@
+{
+  "table": {
+    "common": {
+      "accessibility": {
+        "caption": "results table"
+      },
+      "pagination": {
+        "total_elements": "{{ totalElements }} elements in {{ totalPages }} pages",
+        "previous_page": "‹",
+        "first_page": "«",
+        "next_page": "›",
+        "last_page": "»",
+        "current_page_dropdown": "Page {{ page }}",
+        "next_page_next_only_mode": "Load more ..."
+      },
+      "messages": {
+        "pick_action": "Select one action",
+        "filter_prompt": "Filter data",
+        "filter_placeholder": "Search ...",
+        "customize_view_prompt": "Customize view",
+        "add_remove_columns": "Add or remove columns",
+        "select_columns_prompt": "Select columns",
+        "pick_filtering_columns": "Select columns to filter",
+        "pick_all_filtering_columns": "Filter on all columns",
+        "pick_all_visible_columns": "View all columns",
+        "page_size_button": "{{ current }} results per page",
+        "context_filter_prompt": "Pick filters",
+        "actions_button": "Action",
+        "no_results": "no results to display.",
+        "fetching": "fetching data ...",
+        "export": "Export ...",
+        "export_xlsx": "Export as xlsx"
+      }
+    }
+  },
+  "common": {
+    "seleziona": "select",
+    "azioni": "Actions",
+    "nessun_risultato": "No results found for '{{v1}}'",
+    "salva": "Save",
+    "cancella": "Cancel",
+    "indietro": "Back",
+    "si": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "eliminazione_utente_titolo": "Delete user",
+    "eliminazione_messaggio": "Are you sure to delete {{v1}}?",
+    "creazione_utente_titolo": "Create user",
+    "creazione_utente_messaggio": "User ${utenteDaCreare} created",
+    "creazione_utente_messaggio_errore": "Failed to create the user",
+    "aggiornamento_utente_titolo": "Update user",
+    "aggiornamento_utente_messaggio": "User ${utenteDaCreare} updated",
+    "aggiornamento_utente_messaggio_errore": "Failed to update the user",
+    "home": "Home",
+    "lavora": "WORK",
+    "altre_azioni": "Other actions",
+    "filtra": "FILTER",
+    "azzera": "RESET",
+    "aggiungi": "ADD",
+    "utente": "User",
+    "conferma": "Confirm",
+    "vai_alle_preferenze": "Go to preferences",
+    "header": "Header",
+    "carica_footer": "Loading footer",
+    "informazione": "Info",
+    "caricamento_fallito": "Loading failed",
+    "riprova": "Try again",
+    "contatta_assistenza": "ask for assistance",
+    "or": "or",
+    "caricamento_in_corso": "Loading ...",
+    "logo_non_trovato": "Logo not found",
+    "pulisci_campi": "Clear",
+    "firma": "SIGN",
+    "firma_tutti": "SIGN ALL",
+    "annulla": "Cancel",
+    "salva_modifiche": "Save",
+    "elimina": "Delete",
+    "ritorna_alla_home": "HOME",
+    "ritorna_elenco_lavorazioni": "SEARCH",
+    "ritorno_ai_task": "TASK",
+    "ritorna_al_caricamento_pratiche": "UPLOAD PRACTICES",
+    "procedi": "Proceed",
+    "chiudi": "Close",
+    "modifica": "Edit",
+    "dati_non_salvati": "Data not saved",
+    "codice": "Code",
+    "descrizione": "Description",
+    "label": "label",
+    "anagrafica": "Anagraphics",
+    "pratica": "Practice",
+    "scegli": "Choose",
+    "annulla_modifiche": "Clear changes",
+    "obbligatori": "Required",
+    "facoltativi": "Optional",
+    "caricati": "Uploaded",
+    "inseriti": "Inserted",
+    "approvatori": "Approvers",
+    "ricerca": "Search",
+    "cerca": "Search",
+    "gruppo": "Group",
+    "ente": "Ente",
+    "tipo_pratica": "Practice type",
+    "tipo_documento": "Document type",
+    "esporta": "Export",
+    "pulisci_filtri": "Clean filters"
+  },
+  "header": {
+    "cambia_profilo": "Switch profile",
+    "gestisci_utenti": "Manage users",
+    "gestisci_gruppi": "Manage groups",
+    "logout": "Logout",
+    "amministrazione": "Administration",
+    "messaggi": "Messages",
+    "ricerca": "Search",
+    "aiuto": "Help",
+    "intranet": "INTRANET",
+    "cosmo": "cosmo",
+    "preferenze_ente": "Institution preferences",
+    "carica_header": "Load header",
+    "preferenze_utente": "User preferences",
+    "informazioni_utente": "User info",
+    "configurazione_processi": "Configurazione processi"
+  },
+  "footer": {
+    "carica_footer": "Load footer",
+    "carica_footer_sinistra": "Load left footer",
+    "carica_footer_centrale": "Load central footer",
+    "carica_footer_destra": "Load right footer"
+  },
+  "profilazione": {
+    "seleziona_ente": "select organization",
+    "seleziona_profilo": "select profile"
+  },
+  "errori": {
+    "error_title": "An error occured",
+    "error_message": "An error occured: ${message}",
+    "errore_fatale": "A fatal error has occurred",
+    "errore_sconosciuto": "Unknown error",
+    "pagina_non_trovata": "Page not found",
+    "contattare_assistenza": "contact support at",
+    "comunicando_codice_errore": "communicating the error code",
+    "identita_ko": "Identity not verified",
+    "errore_identificazione_utente": "Error during the identification: ${descrizioneErrore}",
+    "non_autorizzato": "You are not authorized",
+    "riesegui_login": "Login again",
+    "utente_non_abilitata": "User not enabled",
+    "utente_non_abilitata_all_accesso": "User no longer enabled to access",
+    "ruolo_non_associato_utenza": "No role associated to the user",
+    "nessun_ruolo_associato_utenza": "Error while selecting roles of {{v1}}",
+    "campo_obbligatorio": "Required field",
+    "email_non_valida": "Invalid email",
+    "codice_fiscale_non_valido": "Fiscal code is invalid",
+    "troppi_caratteri": "Too many characters",
+    "url_non_valido": "Invalid URL",
+    "reperimento_dati": "Error fetching data",
+    "completamento_task": "Error completing task. Please retry",
+    "salvataggio_task": "Error saving task. Please retry",
+    "link_task_non_valido": "Task link is invalid",
+    "dati_inviati_non_completi": "Invalid data",
+    "utente_non_riconosciuto": "User not found: ${codFiscale}",
+    "caricamento_file": "Error uploading file",
+    "caricamento_file_msg": "Error uploading document ${v1}",
+    "aggiornamento_documento_msg": "Error changing document information",
+    "eliminazione_file": "Error removing file",
+    "eliminazione_file_msg": "Error removing document ${v1}",
+    "download_file": "Error downloading file",
+    "download_file_msg": "Error downloading document ${v1}",
+    "preview_file": "Error previewing file",
+    "preview_file_msg": "Error previewing document ${v1}",
+    "grandezza_upload_file_superata": "Error uploading file: exceeded maximum size of {{v1}} kB",
+    "grandezza_pixel_upload_file_superata": "Error uploading file: exceeded maximum size of {{v1}}*{{v1}} pixels",
+    "nuove_configurazioni_ente": "Attention: There are not institution-level preferences. It would be better to configure them before continuing",
+    "impostazioni_firma_non_configurate": "Signature settings are not configured",
+    "user_non_autorizzato_task": "You are not allowed to work on this task",
+    "creazione_pratica": "Errore creating practice",
+    "eliminazione_certificazione_msg": "Error deleting signature certificate ${v1}",
+    "creazione_certificazione_msg": "Error creating signature certificate ${v1}",
+    "aggiornamento_certificazione_msg": "Error updating signature certificate ${v1}",
+    "impossibile_firmare_documenti": "Can't sign documents right now",
+    "impossibile_richiedere_OTP": "Can't request an OTP right now",
+    "errore_associazione_applicazioni": "An error occured associating the applications",
+    "attivita_obbligatorie": "Required tasks: ${v1}",
+    "attivita_facoltative": "Optional tasks: ${v1}",
+    "tipi_doc_obbligatori": "Required documents: ${v1}",
+    "tipi_doc_facoltativi": "Optional documents: ${v1}",
+    "tipi_doc_da_firmare_obbligatori": "Required document signatures: ${v1}",
+    "tipi_doc_da_firmare_facoltativi": "Optional document signatures: ${v1}",
+    "aggiornamento_applicazione": "Error updating the application",
+    "creazione_applicazione": "Error creating the application",
+    "aggiornamento_funzionalita": "Error updating the functionality'",
+    "creazione_funzionalita": "Error creating the functionality'",
+    "aggiornamento_istanza_funzionalita": "Error updating the form logic instance",
+    "creazione_istanza_funzionalita": "Error creating the form logic instance",
+    "formato_file_non_valido": "Invalid file format",
+    "salvataggio_processo": "Error saving the process",
+    "campo_obbligatorio_valore_non_valido": "Required field or invalid value",
+    "creazione_nuovo_evento": "Error creating a new event",
+    "aggiornamento_evento": "Error updating the event",
+    "eliminazione_evento": "Error deleting the event",
+    "cfg_tipi_documenti_obbligatori_errata": "Configuration of required, optional document types not correct for practice type: $ {v1}",
+    "cfg_tipi_documenti_caricabili_errata": "Configuration of uploadable document types not correct",
+    "cfg_tipi_allegati_caricabili_errata": "Configuration of uploadable attachment types not correct",
+    "attivazione_sistema_esterno": "Error activating the external system",
+    "associazione_pratiche": "Error linking the practices",
+    "dissociazione_pratiche": "Errore deleting the link between the practices",
+    "tipi_associazione_selezionabili": "Error in the configuration of types of link between practices",
+    "tipi_associazione_default": "Error in the configuration of the default value of link between practices",
+    "tipologie_pratiche_associabili": "Error in the configuration of types of practices to link",
+    "stati_pratiche_associabili": "Error in the configuration of stats of practices to link",
+    "duplicazione_documenti": "Errore duplicating documents",
+    "creazione_nuova_configurazione_ente": "Error creating a new configuration",
+    "aggiornamento_nuova_configurazione_ente": "Error updating the configuration",
+    "eliminazione_nuova_configurazione_ente": "Error deleting the configuration",
+    "esecuzione_multipla": "Multiple execution",
+    "tag_non_associati_a_utenti": "Tags: ${v1} are not associated with any user / group. The activities related to those tags cannot be processed",
+    "validita_firme": "One or more signatures are not valid",
+    "validita_firme_facoltative": "One or more signatures are not valid. Proceed anyway?",
+    "richiesta_esecuzione_task": "Task execution request has failed",
+    "form_logico_inesistente": "The form logic does not exists",
+    "attesa_elaborazione_documenti": "Waiting for documents to be processed",
+    "helper_non_configurato_correttamente": "Helper non configurato correttamente: verificare che il codice pagina sia presente sia a livello di routing che di database e che i due valori coincidano"
+
+  },
+  "mail": {
+    "oggetto_segnalazione_errore": "[COSMO] assistance request ${ray}"
+  },
+  "utenti": {
+    "cerca_utente": "Search user",
+    "codice_fiscale": "Fiscal code",
+    "nome": "First name",
+    "cognome": "Last name",
+    "aggiungi_utente": "Add user",
+    "anagrafica": "Details",
+    "profili": "Profiles",
+    "email": "Email",
+    "telefono": "Phone number",
+    "inizio_validita": "Validity Start Date",
+    "fine_validita": "Validity End Date",
+    "profili_utente": "User Profiles",
+    "profili_associabili": "Possible Profiles"
+  },
+  "paginazione": {
+    "pagina_x": "{{ v }}",
+    "prima_pagina": "<<",
+    "pagina_precedente": "<",
+    "ultima_pagina": ">>",
+    "pagina_successiva": ">",
+    "elementi_per_pagina": "Items per page "
+  },
+  "eventi": {
+    "modal": {
+      "dettaglio_relativo": "Detail",
+      "del": "of",
+      "creato_il": "Created"
+    },
+    "creazione_evento": "Create new event",
+    "aggiornamento_evento": "Update event",
+    "eliminazione_evento": "Delete event",
+    "evento_creato":"Event crated succesfully",
+    "evento_aggiornato":"Event updated succesfully",
+    "evento_eliminato":"Event deleted succesfully"
+  },
+  "pratica": {
+    "elenco_lavorazioni": "Practice list",
+    "dettaglio_pratica": "PRACTICE DETAIL:",
+    "dettaglio_task": "TASK DETAIL:",
+    "ultimo_cambio_stato": "Last status update:",
+    "pratica_annullata": "Practice cancelled:",
+    "oggetto": "Subject",
+    "tipologia": "Type",
+    "ultima_modifica": "Last update",
+    "apertura_pratica": "Start date",
+    "documenti": "Documents",
+    "riassunto": "Recap",
+    "commenti": {
+      "tab_title": "Comments",
+      "nuovo_commento": "Write a new comment"
+    },
+    "storico_attivita": {
+      "tab_title": "History'",
+      "stato": "Status",
+      "attivita": "Task'",
+      "avvio_task": "Task start",
+      "completamento_task": "Task finish",
+      "stato_attivita": {
+        "completato": "COMPLETED",
+        "attivo": "ACTIVE"
+      }
+    },
+    "dati_pratica": {
+      "tab_title": "Practise Data"
+    },
+    "workflow": {
+      "tab_title": "Workflow",
+      "no_diagram": "Workflow not available at the moment"
+    },
+    "pratiche_associate": {
+      "tab_title": "Relations"
+    },
+    "ricerca_pratica": "Search a practise",
+    "mantieni_assegnazione": "keep assignment"
+  },
+  "documenti": {
+    "aggiungi_documento": "Add document",
+    "da_risorsa_locale_o_rete": "From local",
+    "da_doqui_acta": "From DoQui ACTA",
+    "modifica_documento": "Change document",
+    "titolo_nome_file": "Title/Filename",
+    "tipologia": "Type",
+    "formato": "Format",
+    "titolo": "Title",
+    "descrizione": "Description",
+    "autore": "Author",
+    "tipo": "Type",
+    "carica_documento": "Upload document",
+    "carimento_documento": "Document uploaded succesfully",
+    "aggiornamento_documento": "Document information changed succesfully",
+    "elimina_documento": "Delete document",
+    "eliminazione_documento": "Document deleted succesfully",
+    "scarica": "Download",
+    "scarica_documento": "Download document",
+    "preview_documento": "Preview document",
+    "scarica_documento_sbustato": "Download extracted document",
+    "preview_documento_sbustato": "Preview extracted document",
+    "scarica_documento_firmato": "Download signed document",
+    "preview_documento_firmato": "Preview signed document",
+    "trascina_qui_il_documento": "Drop document here",
+    "oppure": "or",
+    "selezionalo_cliccando_qui": "select it, clicking here",
+    "da_firmare": "Documents to be signed",
+    "smistamento": {
+      "Id_classificazione": "Classification ID",
+      "Indice_class_esteso": "Extended classification ID",
+      "Oggetto_documento": "Document subject",
+      "Numero_reg_protocollo": "Protocol registration number",
+      "Data_reg_protocollo": "Protocol registration date",
+      "Tipo_reg_protocollo": "Protocol type",
+      "Dati_Ricevuta": "Received data"
+    },
+    "verifica_firme": {
+      "ignoto": "Error validating signatures.",
+      "verifica_conformita_e_integrita_busta_crittografica": "Invalid cryptographic envelope",
+      "sbustamento_busta_crittografica": "Error opening cryptographic envelope",
+      "verifica_consistenza_firma": "Signature is not consistent",
+      "verifica_validita_certificato": "Invalid signature certificate",
+      "verifica_certification_authority": "Invalid certification institute",
+      "verifica_lista_di_revoca_crl_aggiornata_non_disponibile": "CRL not available",
+      "verifica_lista_di_revoca_certificato_presente_nella_crl": "Signature ceritification revoked"
+    },
+    "modals": {
+      "anteprima": {
+        "title": "Document preview"
+      },
+      "seleziona_documenti": {
+        "title": "Select documents to duplicate",
+        "duplica": "Duplicate"
+      }
+    }
+  },
+  "form_logici": {
+    "documenti": "Documents",
+    "approvazione": "Approval",
+    "pianificazione_attivita": "Task planning",
+    "ricerca_utente": "Search user",
+    "attivita": "Task'",
+    "utente": "User",
+    "gruppo": "Group",
+    "ordine_priorita_crescente": "Priority order, ascending",
+    "task_completato": "Task completed",
+    "task_salvato": "Task saved",
+    "task_completato_correttamente": "Task completed succesfully",
+    "task_salvato_correttamente": "Task saved succesfully",
+    "collaborazione_richiesta_correttamente": "Cooperation request sent",
+    "collaborazione_in_corso": "Cooperation request pending.",
+    "collaborazione_terminata": "Cooperation finished.",
+    "collaborazione_risposta_correttamente": "Reply sent",
+    "header": "Logic forms management",
+    "funzionalita": "Functionalities",
+    "parametri": "Parameters",
+    "documenti_facoltativi_non_inseriti": "Documents of type ${v1} are missing: do you want to proceed?",
+    "documenti_facoltativi_non_firmati": "Documents of type ${v1} haven't been signed: do you want to proceed?",
+    "max_numero_utenti_una_attivita": "Maximum number of users reached for ${v1}",
+    "max_numero_utenti_piu_attivita": "Maximum number of users reached for ${v1}",
+    "actions": {
+      "assegna_a_me": "Assign to me",
+      "conferma_collaborazione": "End cooperation",
+      "aggiungi": "Create new logic form"
+    },
+    "dialogs": {
+      "assegna_a_me": {
+        "title": "Taking charge",
+        "warning": "By taking charge of the task you will become the only accountable and no other user will be able to work on it.",
+        "confirm": "Do you want to proceed?"
+      },
+      "creato": {
+        "titolo": "Logic form created",
+        "messaggio": "The logic form ${nome} has been created."
+      },
+      "modificato": {
+        "titolo": "Logic form updated",
+        "messaggio": "The logic form ${nome} has been updated."
+      },
+      "elimina": {
+        "titolo": "Delete logic form"
+      }
+    },
+    "istanze_funzionalita": {
+      "header": "Form instances management",
+      "aggiungi": "Create new form instance",
+      "aggiungi_istanza_funzionalita": "Add form instance",
+      "modifica_istanza_funzionalita": "Edit form instance",
+      "codice_funzionalita": "Instance code",
+      "salvataggio_istanza_funzionalita_msg": "Form instance created succesfully",
+      "aggiornamento_istanza_funzionalita_msg": "Form instance updated succesfully"
+    },
+    "associazioni": {
+      "associa": "Link",
+      "associa_pratica": "Link practise",
+      "tipo_associazioni": "Link between practises",
+      "associazione_riuscita": "The practices are linked now",
+      "dissociazione_riuscita": "The practices are not linked anymore",
+      "nessuna_associazione": "No links with other practices"
+    },
+    "creazione_pratica": {
+      "creazione_pratica": "New practise",
+      "pratica_creata": "Practise created",
+      "pratiche_associate": "Practises related",
+      "pratiche_collegate_create": "new practises related",
+      "pratica_collegata_creata": "new practise related"
+    },
+    "assegnazione_tags": {
+      "tags_pratica": "Practice tags",
+      "tags_associabili": "Available tags"
+    }
+  },
+  "preferenze": {
+    "impostazioni_firma": "Signature settings",
+    "impostazioni_firma_fea": "Advanced electronic signature settings",
+    "seleziona":"Select",
+    "ente_certificatore": "Signing institution",
+    "tipo_credenziali_firma": "Credentials type",
+    "tipo_otp": "OTP type",
+    "profilo_feq": "FEQ profile",
+    "scelta_marca_temporale": "Temporal signature choice",
+    "salvataggio_preferenze_ente": "Institution preferences update",
+    "salvataggio_preferenze_utente": "User preferences update",
+    "preferenze_salvataggio_ok": "Preferences updated succesfully",
+    "default_message": "Institution-provided value",
+    "aggiungi_certificato": "Add signature certificate",
+    "crea_certificato": "Create signature certificate",
+    "seleziona_certificato": "Select signature certificate",
+    "gestione_certificati_firma": "Signature certificate management",
+    "carica_icona_fea": "Upload AES icon",
+    "ricezione_notifiche": {
+      "titolo": "Receive notifications",
+      "all": "All",
+      "create_task": "When a task is created",
+      "assign_task": "When a task is assigned to you",
+      "cancel_task": "When a task is canceled",
+      "create_comment": "When there is a new comment",
+      "share_practice": "When a practice is shared with you",
+      "sorted_documents": "When a documents are sorted",
+      "process_documents": "When a document is processed",
+      "header": {
+        "cosmo": "COSMO",
+        "email": "E-MAIL"
+      }
+    },
+    "segnalibri": {
+      "titolo": "Bookmark"
+    },
+    "posizione_toast": {
+      "titolo": "Toast position",
+      "top_left": "Top left",
+      "top_right": "Top right",
+      "bottom_left": "Bottom left",
+      "bottom_right": "Bottom right",
+      "esempio_notifica": "Esempio di notifica"
+    }
+  },
+  "firma_digitale": {
+    "titolo": "SIGN DOCUMENTS",
+    "certificato_firma": "Signature certificates",
+    "certificati_salvati": "Saved certificates",
+    "descrizione": "Description",
+    "username": "Username",
+    "password": "Password",
+    "pin": "Pin",
+    "scadenza": "Expires",
+    "eliminazione_certificato": "Signature certificate removal",
+    "saltavaggio_certificato": "Signature certificate update",
+    "eliminazione_certificato_msg": "Signature certificate removed succesfully",
+    "salvataggio_certificato_msg": "Signature certificate saved succesfully",
+    "richiedi_otp": "Request OTP",
+    "inserisci_otp_ricevuto": "Insert the OTP you received",
+    "completamento_firma": "Signature completion",
+    "documenti_firmati": "{{numeroDocumento}} of {{totaleDocumenti}} signed",
+    "firma_documenti": "Documents signature",
+    "certificato_non_salvato": "The signature certificate was not saved. Do you want to save it?",
+    "salva_firma": "SAVE AND SIGN",
+    "firma_senza_salvare": "SIGN WITHOUT SAVING",
+    "firma": "SIGN",
+    "richiesta_OTP": "Require OTP",
+    "richiesta_OTP_OK": "OTP request sent",
+    "indicare_nome_certificato": "Please provide the certificate name"
+  },
+  "app_esterne": {
+    "header": "External applications management",
+    "associazione_applicazioni": "Applications associations",
+    "gestisci_applicazioni": "Applications management",
+    "gestisci_funzionalita": "Functionalities managment",
+    "aggiungi_applicazione": "Add new application",
+    "aggiungi_funzionalita": "Add new functionality",
+    "modifica_applicazione": "Edit application",
+    "modifica_funzionalita": "Edit functionality",
+    "creazione_funzionalita": "New functionality",
+    "seleziona_app_da_aggiungere": "Select an application to add",
+    "icona": "Icon",
+    "descrizione_applicazione": "Application description",
+    "descrizione": "Description",
+    "url": "URL",
+    "inizio_validita": "Valid from",
+    "fine_validita": "Valid to",
+    "elimina_app": "Application removal",
+    "elimina_funzionalita": "Functionality removal",
+    "app_associata_utenti": "Warning! The application is in use by some user. Do you still want to delete it?",
+    "app_associata_enti": "Warning! The application is in use by some institution. Do you still want to delete it?",
+    "funzionalita_associata_utenti": "Warning! The functionality is in use by some user. Do you still want to delete it?",
+    "carica_icona": "Upload icon",
+    "salvataggio_applicazione_msg": "Application created succesfully",
+    "aggiornamento_applicazione_msg": "Application updated succesfully"
+  },
+  "gruppi": {
+    "aggiungi": "Add new user group",
+    "nuovo_gruppo": "New user group",
+    "modifica_gruppo": "Edit user group",
+    "campo_nome": "Name",
+    "campo_descrizione": "Description",
+    "campo_codice": "Code",
+    "utenti_gruppo": "Group users",
+    "tipologie_pratiche_gruppo": "Group practise types",
+    "aggiungi_utenti": "Add users",
+    "aggiungi_tipologie_pratiche": "Add practise types",
+    "actions": {
+      "rimuovi": "Remove",
+      "seleziona": "Select",
+      "gestisci_tags": "Tags management",
+      "aggiungi_tags": "Add tags"
+    },
+    "status": {
+      "selezionato": "Selected"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete group"
+      },
+      "creato": {
+        "titolo": "User group created",
+        "messaggio": "The user group ${nome} was created."
+      },
+      "modificato": {
+        "titolo": "User group updated",
+        "messaggio": "The user group ${nome} was updated."
+      },
+      "modificata_relazione": {
+        "titolo": "Group, user and tag relationship changed",
+        "messaggio": "The relationship between group $ {name}, user and tags has changed"
+      }
+    }
+  },
+  "enti": {
+    "header": "Institutions management",
+    "actions": {
+      "aggiungi": "Add new institution"
+    },
+    "anagrafica": "Anagraphic",
+    "codice_fiscale": "Fiscal code",
+    "codice_ipa": "IPA code",
+    "nome": "Name",
+    "utente_admin": "Administrators",
+    "profilo_default": "Default user profile",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete institution"
+      },
+      "creato": {
+        "titolo": "Institution created",
+        "messaggio": "The institution ${nome} was created."
+      },
+      "modificato": {
+        "titolo": "institution updated",
+        "messaggio": "The institution ${nome} was updated."
+      }
+    }
+  },
+  "fruitori": {
+    "header": "Clients management",
+    "schemi_auth": "Authentication schemas",
+    "endpoints": "Endpoints",
+    "actions": {
+      "aggiungi": "Add new client",
+      "modifica_endpoints": "Edit endpoints",
+      "modifica_schemi_auth": "Edit authentication schemas"
+    },
+    "anagrafica": "Anagraphic",
+    "api_manager_id": "Api Manager ID",
+    "nome": "Name",
+    "url": "URL",
+    "autorizzazioni": "Scopes",
+    "autorizzazioni_concesse": "Granted scopes",
+    "autorizzazioni_associabili": "Available scopes",
+    "enti": "Institutions",
+    "enti_associati": "Associated institutions",
+    "enti_associabili": "Available institutions",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete client"
+      },
+      "creato": {
+        "titolo": "Client created",
+        "messaggio": "The client ${nome} was created."
+      },
+      "modificato": {
+        "titolo": "Client updated",
+        "messaggio": "The client ${nome} was updated."
+      }
+    }
+  },
+  "processi": {
+    "header": "Process deploy",
+    "carica_processo": "Upload process file",
+    "enti": "Institutions",
+    "tipi_pratiche": "Practice types",
+    "salvataggio_processo": "Process deploy",
+    "salvataggio_processo_msg": "Process deployed succesfully"
+  },
+  "tipi_pratiche": {
+    "header": "Gestione tipologie di pratiche",
+    "actions": {
+      "aggiungi": "Crea nuova tipologia di pratica"
+    },
+    "anagrafica": "Anagrafica pratica",
+    "codice": "Codice",
+    "nome": "Nome",
+    "ente": "Ente",
+    "codice_applicazione_stardas": "Codice applicazione Stardas",
+    "process_definition_key": "Process definition key",
+    "case_definition_key": "Case definition key",
+    "responsabile_trattamento_stardas": "Responsabile trattamento Stardas",
+    "codice_fruitore_stardas": "Codice fruitore Stardas",
+    "override_responsabile_trattamento": "Override utente creazione pratica",
+    "override_fruitore_default": "Override fruitore di default",
+    "creabile_da_interfaccia": "User-created",
+    "creabile_da_servizio": "Service-created",
+    "creabile_da_gruppo": "Group-created",
+    "annullabile": "Cancellable",
+    "condivisibile": "Shareable",
+    "assegnabile": "Assignable",
+    "registrazione_stilo": "Stilo registration",
+    "tipologia_unita_documentaria_stilo": "Stilo documentation unity type",
+    "form_visualizzazione_dati_pratica": "Form for practise data",
+    "override_help": "Valorizza il responsabile trattamento Stardas con quanto presente all'interno di 'Responsabile trattamento' anche se è valorizzato l'utente creazione pratica",
+    "override_fruitore_help": "In fase di smistamento documento non sarà utilizzato il codice fruitore configurato, ma quello presente all'interno del tipo pratica afferente al documento in fase di smistamento",
+    "creabile_gruppo_help": "TODO: testo da condividere",
+    "gruppo_creatore": "Creator group",
+    "gruppo_supervisore": "Supervisor group",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina tipologia di pratica",
+        "tab_titolo": "Elimina il dettaglio tab"
+      },
+      "creato": {
+        "titolo": "Tipologia di pratica creata",
+        "messaggio": "La tipologia di pratica ${nome} è stata creata."
+      },
+      "modificato": {
+        "titolo": "Tipologia di pratica modificata",
+        "messaggio": "La tipologia di pratica ${nome} è stata modificata."
+      }
+    },
+    "carica_immagine": "Upload preview image",
+    "preferenze_firma": "Signature preferences"
+  },
+  "template_report": {
+    "header": "Template report",
+    "template_padre": "Parent template",
+    "sorgente_template": "Source template",
+    "scarica_template": "Download template",
+    "actions": {
+      "aggiungi": "Add template"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete report template"
+      },
+      "creato": {
+        "titolo": "Report template created",
+        "messaggio": "Report template code ${codice} was created."
+      },
+      "modificato": {
+        "titolo": "Report template updated",
+        "messaggio": "Report template code ${codice} was updated."
+      }
+    }
+  },
+  "custom_form": {
+    "header": "Custom form",
+    "codice": "Code",
+    "descrizione": "Description",
+    "custom_form": "Custom form",
+    "actions": {
+      "aggiungi": "Add custom form"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete custom form"
+      },
+      "creato": {
+        "titolo": "Custom form created",
+        "messaggio": "Custom form code ${codice} was created."
+      },
+      "modificato": {
+        "titolo": "Custom form updated",
+        "messaggio": "Custom form code ${codice} was updated."
+      }
+    }
+  },
+  "use_case_profili": {
+    "header": "Profile - use case",
+    "codice": "Code",
+    "descrizione": "Description",
+    "use_case_profili": "Profile - use case",
+    "use_case": "Use case",
+    "use_case_associabili": "Available use cases",
+    "no_use_case_associati": "No related use cases",
+    "no_use_case_associabili": "No available use case",
+    "actions": {
+      "aggiungi": "Add new profile"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete profile"
+      },
+      "creato": {
+        "titolo": "Profile created",
+        "messaggio": "Profile ${profile} was created."
+      },
+      "modificato": {
+        "titolo": "Profile updated",
+        "messaggio": "Profile ${profile} was updated."
+      },
+      "nessun_profilo":{
+        "titolo": "No profiles found"
+      }
+    }
+  },
+  "acta": {
+    "identita_utente": {
+      "title": "User profile",
+      "invia_identita": "Send user profile"
+    }
+  },
+  "helper": {
+    "header": "Helper",
+    "codice_pagina": "Page code",
+    "codice_tab": "Tab code",
+    "codice_form": "Form code",
+    "codice_modale_pagina": "Modal page code",
+    "codice_modale_tab": "Modal tab code",
+    "helper": "Helper",
+    "actions": {
+      "aggiungi": "Add helper",
+      "tramite_interfaccia": "From UI",
+      "tramite_import": "From file"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete helper"
+      },
+      "creato": {
+        "titolo": "Helper created",
+        "messaggio": "Helper ${codice} was created."
+      },
+      "modificato": {
+        "titolo": "Helper updated",
+        "messaggio": "Helper ${codice} was updated."
+      },
+      "non_presente": {
+        "messaggio": "Helper not configured for the page"
+      },
+      "codice_errato": {
+        "messaggio": "Helper ${codice} was not found"
+      }
+    }
+  },
+  "configurazione_ente": {
+    "title": "Configurazione ente",
+    "aggiungi_configurazione": "Add configuration",
+    "eliminazione_configurazione": "Delete configuration",
+    "aggiornamento_configurazione": "Update configuration",
+    "creazione_configurazione": "Create configuration",
+    "crea": "Create",
+    "modifica": "Update",
+    "chiave": "Key",
+    "valore": "Value",
+    "descrizione": "Description"
+  },
+  "compilazione_form": {
+    "title": "Form compilation"
+  },
+  "esecuzione_multipla": {
+    "messaggio": "The process cannot move forward: there are other activities to be carried out before completing the task. It is necessary to work the practises individually.",
+    "errore_firma_fea": "It is not possible to do multiple signature with AES "
+  },
+  "form_tag": {
+    "header": "Gestione Tag",
+    "codice": "Code",
+    "descrizione": "Description",
+    "form_tag": "Tags Management",
+    "ente": "Ente",
+    "tipo_tag": "Tag Type",
+    "actions": {
+      "aggiungi": "Add Tag"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete Tag"
+      },
+      "creato": {
+        "titolo": "Tag created",
+        "messaggio": "Tag code ${codice} was created."
+      },
+      "modificato": {
+        "titolo": "Tag updated",
+        "messaggio": "Tag code ${codice} was updated."
+      }
+    }
+  },
+
+  "gestione_parametri_di_sistema": {
+
+    "header": "System parameter management",
+    "chiave": "Key",
+    "valore": "value",
+    "descrizione": "Description",
+    "form_gestione_parametri_di_sistema": "System parameter management",
+    "actions": {
+      "aggiungi": "Add System parameter"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete System parameter"
+      },
+      "creato": {
+        "titolo": "System parameter created",
+        "messaggio": "System parameter value ${valore} was created."
+      },
+      "modificato": {
+        "titolo": "System parameter updated",
+        "messaggio": "System parameter value ${codice} was updated."
+      }
+    },
+    "messaggio_riavvio":"Si ricorda che per rendere effettive le modifiche, è necessario effettuare un riavvio del sistema. La richiesta dev’essere effettuata alla seguente casella di posta: ${email}"
+  },
+  "login": {
+    "messaggi": {
+      "accesso_diretto_home_ok": "Login successful, you will be redirected to the homepage"
+    }
+  },
+  "formato_file": {
+    "gestisci_formati_file": "Manage file formats",
+    "actions": {
+      "formati_file_aggiunti": "File formats added",
+      "formati_file": "File formats"
+    }
+  },
+  "task_automatici_in_errore": {
+    "header": "Failed automatic tasks",
+    "inviato": "Task execution request sent"
+  },
+   "variabili_filtro": {
+    "header": "Filter variables",
+    "actions": {
+      "aggiungi": "Create new filter variable"
+    },
+    "ente": "Institution",
+	"tipo_pratica": "Practice types",
+	"label_filtro": "Filter label",
+	"formato_variabile": "Variable format",
+  "formato_variabile_non_disponibile": "Variables with json data type are not allowed",
+	"tipo_di_filtro": "Filter type",
+	"aggiungere_a_risultato_ricerca": "Add the column to the search result",
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete filter variable"
+      },
+      "creato": {
+        "titolo": "Filter variable created",
+        "messaggio": "The filter variable ${label} has been created."
+      },
+      "modificato": {
+        "titolo": "Filter variable changed",
+        "messaggio": "The filter variable ${label} has been changed."
+      }
+    }
+  },
+  "caricamento_pratiche":{
+    "titolo": "Upload practices from files",
+    "errore_caricamento_pratiche": "An error occurred during the uploading",
+    "carica_pratiche": "Upload File",
+    "carica_pratiche_da_file": "Upload practices from files",
+    "caricamenti_in_bozza": "Draft uploadings",
+    "nessun_file": "No file with practices has been uploaded",
+    "aggiungi_zip": "Add zip file",
+    "carica_zip": "Upload zip file",
+    "trascina_zip": "Drag here your zip file",
+    "trascina_pratica": "Drag here your file with practices",
+    "oppure": "or",
+    "selezionalo_cliccando_qui":"select it, clicking here",
+    "annulla_caricamento": "Cancel",
+    "completa_caricamento": "Complete uploading",
+    "caricato_zip": "Zip file uploaded succesfully",
+    "caricate_pratiche": "File with practices uploaded succesfully",
+    "errore_caricamento_zip": "An error occurred during the uploading",
+    "caricamento_completato": "Uploading practices from file has completed succesfully",
+    "errore_caricamento_in_bozza": "An error occurred during the start of the uploading",
+    "errore_completa_caricamento": "An error occurred during the completion of the uploading",
+    "caricamento_non_completato": "The uploding is not completed, do you still want to get back?",
+    "help_pratiche":{
+      "titolo": "Download this template for uploading practices.",
+      "colonne_obbligatorie":"All columns are required - except the columns which refers to variables.",
+      "campi_obbligatori": "All fields of columns with * are required"
+    },
+    "help_documenti":{
+      "titolo": "Download this template to list files that you want to upload - don't change the file name.",
+      "descrizione":"The tamplate must be added in each zip file.",
+      "colonne_obbligatorie":"All columns are required",
+      "campi_obbligatori": "All fields of columns with * are required"
+    },
+    "template_pratiche":"Download template file for practices",
+    "template_documenti":"Download template file for zip file"
+  },
+  "template_fea": {
+    "header": "Advanced electronic signature template (AES)",
+    "descrizione_template": "Template description",
+    "carica_da_template": "Upload from template",
+    "carica_da_foglio_bianco": "Upload from model",
+    "pagina": "Page",
+    "actions": {
+      "aggiungi": "Add new template (AES)",
+      "conferma_dati_riquadro_firma": "Confermi la posizione attuale della firma nel template?"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Elimina template FEA"
+      },
+      "creato": {
+        "titolo": "Template FEA creata",
+        "messaggio": "Il template ${descrizione} è stato creato."
+      },
+      "modificato": {
+        "titolo": "Template FEA modificato",
+        "messaggio": "Il template FEA ${descrizione} è stata modificato."
+      }
+    }
+  },
+  "firma_fea":{
+    "titolo": "SIGN DOCUMENTS",
+    "richiesta_OTP": "Require OTP",
+    "richiedi_otp": "Request OTP",
+    "richiesta_OTP_OK": "OTP request sent",
+    "inserisci_otp_ricevuto": "Insert the OTP you received",
+    "errore_formato_file": "All files must be PDF",
+    "errore_file_gia_firmato": "Is it not possible to sign with AES files which are already signed",
+    "errore_icona_fea": "AES icon is not sat. Go to institution preferences."
+  },
+  "approvazione_documenti":{
+    "attivita": "Task",
+    "utente_approvatore": "Approval user",
+    "data_approvazione": "Approval date"
+  },
+  "sigillo_elettronico":{
+    "header": "Electronic seals",
+    "actions":{
+      "aggiungi":"Add electronic seal"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete electronic seal"
+      },
+      "creato": {
+        "titolo": "Electronic seal has been created",
+        "messaggio": "Electronic seal ${alias} has been created."
+      },
+      "modificato": {
+        "titolo": "Electronic seal has been edited",
+        "messaggio": "Electronic seal ${alias} has been edited."
+      }
+    },
+    "alias": "Alias",
+    "user": "User",
+    "delegated_domain": "Delegated domain",
+    "delegated_user": "Delegated user",
+    "delegated_password": "Delegated password",
+    "otp_pwd": "OTP password",
+    "tipo_hsm": "HSM type",
+    "tipo_otp_auth": "OTP authentication type",
+    "errore_alias_gia_presente": "It's already present an electronic seal with this alias"
+  },
+  "upload_file": {
+    "trascina_file": "Drag here the file to upload",
+    "selezionalo_cliccando_qui": "select it, clicking here"
+  },
+  "configurazioni_messaggi_notifiche": {
+    "header": "Notfication messages",
+    "actions": {
+      "aggiungi": "Create new configuration"
+    },
+    "dialogs": {
+      "elimina": {
+        "titolo": "Delete configuration"
+      },
+      "creato": {
+        "titolo": "Configuration created",
+        "messaggio": "Configuration for message type '${tipoMessaggio}' has been created."
+      },
+      "modificato": {
+        "titolo": "Configuration modified",
+        "messaggio": "Configuration for message type '${tipoMessaggio}' has been modified."
+      },
+      "tipo_messaggio":"Message type",
+      "testo":"Text"
+    }
+  }
+}

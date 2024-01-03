@@ -1,0 +1,28 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && hasFirma(documento)" class="d-inline ml-3">
+  <span class="icon-esito-verifica-firma "
+    title="{{ getEsitoVerificaFirma(documento)?.descrizione || 'Documento non firmato' }}">
+    <span *ngIf="hasFirma(documento)">
+      <ng-container *ngIf="esitoVerificaFirma(documento); else verificaFirmaFallita">
+        <span class="text-success pointer" (click)="apriModaleDettaglioFirma(documento)">
+          <i class="fas fa-award"></i>
+        </span>
+      </ng-container>
+      <ng-template #verificaFirmaFallita>
+        <span class="text-danger pointer" (click)="apriModaleDettaglioFirma(documento)">
+          <i class="fas fa-times"></i>
+        </span>
+      </ng-template>
+    </span>
+  </span>
+</div>
+
+<ng-template #popContent>
+  <app-dettaglio-verifica-firme [layout]="'large'" [firme]="documento.contenutoEffettivo?.infoVerificaFirme">
+  </app-dettaglio-verifica-firme>
+
+</ng-template>
+<ng-template #popTitle>Informazioni firma</ng-template>

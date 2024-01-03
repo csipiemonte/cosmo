@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with in-memory pagination</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 text-right pr-3">
+      <cosmo-table-page-size
+        [table]="table"
+      ></cosmo-table-page-size>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table
+        [data]="users"
+        [columns]="columns"
+        [enablePagination]="true"
+        [paginationMode]="'CLIENT'"
+        [defaultPageSize]="5"
+        [possiblePageSize]="[5,10,20]"
+        [defaultSortingColumn]="'firstName'"
+        [enablePageSizeSelect]="true"
+      ></cosmo-table>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table-pagination
+        [table]="table"
+      ></cosmo-table-pagination>
+    </div>
+  </div>
+
+</div>

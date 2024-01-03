@@ -1,0 +1,253 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "fruitori.header" | translate }}
+    </button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "fruitori.header" | translate }}</h2>
+    </div>
+  </div>
+
+  <form [formGroup]="fruitoreForm" (ngSubmit)="onSubmit()" *ngIf="fruitoreForm">
+
+    <hr/>
+    <div class="row pt-3 pb-3">
+      <div class="col">
+        <h3 class="form-section-header" 
+          [ngClass]="{'is-invalid': displayInvalid('anagrafica') }"
+        >
+          <span class="{{ displayInvalid('anagrafica') ? 'fas fa-exclamation-circle mr-2' : '' }}"></span>
+          {{ "fruitori.anagrafica" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="row" formGroupName="anagrafica">
+      <div class="col">
+        <div class="row mt-5">
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.nomeApp'), 'is-invalid': displayInvalid('anagrafica.nomeApp')}" for="nomeApp">
+              {{"fruitori.nome" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.nomeApp') }"
+              type="text" id="nomeApp" name="nomeApp" formControlName="nomeApp" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.nomeApp')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.nomeApp')">
+              <p *ngIf="hasError('anagrafica.nomeApp', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.nomeApp', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('anagrafica.nomeApp', 'conflict')">Esiste gi&agrave; un fruitore con questo nome</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.apiManagerId'), 'is-invalid': displayInvalid('anagrafica.apiManagerId')}" for="apiManagerId">
+              {{"fruitori.api_manager_id" | translate}}
+            </label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.apiManagerId') }"
+              type="text" id="apiManagerId" name="apiManagerId" formControlName="apiManagerId" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.apiManagerId')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.apiManagerId')">
+              <p *ngIf="hasError('anagrafica.apiManagerId', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.apiManagerId', 'conflict')">
+                Questo codice &egrave; gi&agrave; assegnato al fruitore {{ getError('anagrafica.apiManagerId', 'conflict')?.otherName }}
+              </p>
+            </div>
+
+          </div>
+          <div class="col-lg-5 col-sm-12 form-group">
+            <label [ngClass]="{'active': hasValue('anagrafica.url'), 'is-invalid': displayInvalid('anagrafica.url')}"
+              for="url">{{"fruitori.url" | translate}}</label>
+            <input
+              [ngClass]="{ 'is-invalid': displayInvalid('anagrafica.url') }"
+              type="text" id="url" name="url" formControlName="url" class="form-control"
+            />
+            <div class="input-icon-container" *ngIf="displayValidating('anagrafica.url')">
+              <span class="fas fa-circle-notch fa-spin"></span>
+            </div>
+            <div class="invalid-feedback" *ngIf="displayInvalid('anagrafica.url')">
+              <p *ngIf="hasError('anagrafica.url', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+              <p *ngIf="hasError('anagrafica.url', 'maxlength')">Troppi caratteri</p>
+              <p *ngIf="hasError('anagrafica.url', 'pattern')">Formato della URL non valida</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4" />
+    
+    <h3>{{"fruitori.autorizzazioni" | translate}}</h3>
+
+    <div class="row justify-content-between mt-3">
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"fruitori.autorizzazioni_concesse" | translate}}</span>
+        <div [ngStyle]="{'border-color': '#5c6f82'}" cdkDropList
+          #autorizzazioniUtentiList="cdkDropList" [cdkDropListData]="autorizzazioni" [cdkDropListConnectedTo]="[autorizzazioniSuDBList]"
+          class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" 
+            *ngFor="let auth of autorizzazioni" 
+            cdkDrag
+          >
+            <div class="w-100">
+              <div class="row">
+                <div class="col-10">
+                  <p class="text">
+                    <span class="fas fa-key mr-2"></span>
+                    {{auth.descrizione}}
+                  </p>
+                </div>
+                <div class="col-2 text-right">
+                  <!-- EMPTY -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="example-box empty-tip" *ngIf="!(autorizzazioni?.length)">
+            <div>
+              <p class="text">
+                <span class="fas fa-times mr-2"></span>
+                <em>Nessuna autorizzazione concessa.</em>
+                <br/>
+                <em class="a-bit-smaller">Trascina qui una autorizzazione dall'elenco sulla destra per concederla a questo fruitore.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--
+        <div style="color: #d9364f;font-size: 0.777rem;" *ngIf="dragAndDropIsTouched && autorizzazioni.length==0">
+          <p>
+            {{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+        -->
+      </div>
+      <div class="col-12 col-lg-1 text-center">
+        <span class="d-none d-lg-block pt-5">
+          <span class="fas fa-exchange-alt"></span>
+        </span>
+      </div>
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"fruitori.autorizzazioni_associabili" | translate}}</span>
+        <div cdkDropList #autorizzazioniSuDBList="cdkDropList" [cdkDropListData]="autorizzazioniDisponibili"
+          [cdkDropListConnectedTo]="[autorizzazioniUtentiList]" class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let authDisponibile of autorizzazioniDisponibili" cdkDrag>
+            <div>
+              <p class="text">
+                <span class="fas fa-key mr-2"></span>
+                {{authDisponibile.descrizione}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4" />
+    
+    <h3>{{"fruitori.enti" | translate}}</h3>
+
+    <div class="row justify-content-between mt-3">
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"fruitori.enti_associati" | translate}}</span>
+        <div [ngStyle]="{'border-color': dragAndDropIsTouched && enti.length==0 ? '#d9364f' : '#5c6f82'}" cdkDropList
+          #entiUtentiList="cdkDropList" [cdkDropListData]="enti" [cdkDropListConnectedTo]="[entiSuDBList]"
+          class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" 
+            *ngFor="let ente of enti" 
+            cdkDrag
+          >
+            <div class="w-100">
+              <div class="row">
+                <div class="col-10">
+                  <p class="text">
+                    <span class="fas fa-university mr-2"></span>
+                    {{ente.nome}}
+                  </p>
+                </div>
+                <div class="col-2 text-right">
+                  <!-- EMPTY -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="example-box empty-tip" *ngIf="!(enti?.length)">
+            <div>
+              <p class="text">
+                <span class="fas fa-times mr-2"></span>
+                <em>Nessun ente associato.</em>
+                <br/>
+                <em class="a-bit-smaller">Trascina qui un ente dall'elenco sulla destra per associarlo a questo fruitore.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div style="color: #d9364f;font-size: 0.777rem;" *ngIf="dragAndDropIsTouched && enti.length==0">
+          <p>
+            {{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-1 text-center">
+        <span class="d-none d-lg-block pt-5">
+          <span class="fas fa-exchange-alt"></span>
+        </span>
+      </div>
+      <div class="col-6 col-lg-5">
+        <span class="mb-3">{{"fruitori.enti_associabili" | translate}}</span>
+        <div cdkDropList #entiSuDBList="cdkDropList" [cdkDropListData]="entiDisponibili"
+          [cdkDropListConnectedTo]="[entiUtentiList]" class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let enteDisponibile of entiDisponibili" cdkDrag>
+            <div>
+              <p class="text">
+                <span class="fas fa-university mr-2"></span>
+                {{enteDisponibile.nome}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pt-5">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="submit" class="btn btn-sm btn-success btn-action" [disabled]="!formValid">
+          {{"common.salva" | translate}}
+        </button>
+      </div>
+    </div>
+    
+    <div class="row pt-4" *ngIf="debug && fruitoreForm">
+      <div class="col-12">
+        <app-debug title="form" [value]="fruitoreForm.getRawValue()"></app-debug>
+        <app-debug *ngIf="isNuovo" title="payload creazione" [value]="buildPayloadCreazione()"></app-debug>
+        <app-debug *ngIf="!isNuovo" title="payload modifica" [value]="buildPayloadModifica()"></app-debug>
+      </div>
+    </div>
+    
+  </form>
+
+</div>

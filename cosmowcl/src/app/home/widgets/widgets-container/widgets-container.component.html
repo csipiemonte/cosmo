@@ -1,0 +1,66 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="d-flex flex-row-reverse">
+  <a class="nav-icon" (click)="toggleEditMode()" [class.orange]="editMode">
+    <span class="fas fa-clone "></span>
+  </a>
+</div>
+
+<div cdkDropListGroup>
+  <div *ngIf="editMode && modificabile" class="mb-5">
+    <ng-container *ngIf="disabledWidgetsMatrix.length > 0; else notDisabledWidgets">
+      <div class="flex-row" *ngFor="let row of disabledWidgetsMatrix">
+        <div cdkDropList  [cdkDropListOrientation]="mediumOrMobilePortrait ? 'vertical':'horizontal'"
+          [ngClass]="{'drag-container-md': mediumOrMobilePortrait, 'drag-container': !mediumOrMobilePortrait}"
+          (cdkDropListDropped)="dropDisabilitato($event, false)" [cdkDropListDisabled]="!editMode" [cdkDropListData]="row">
+          <ng-container *ngFor="let widgetConfig of row">
+            <div cdkDrag class="drag-element-disabled col-lg-1 col-md-3">
+              <span>{{widgetConfig.descrizione}}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #notDisabledWidgets>
+      <div cdkDropList [cdkDropListOrientation]="mediumOrMobilePortrait ? 'vertical':'horizontal'"
+          [ngClass]="{'drag-container-md': mediumOrMobilePortrait, 'drag-container': !mediumOrMobilePortrait}"
+          (cdkDropListDropped)="dropDisabilitato($event, true)" [cdkDropListDisabled]="!editMode" [cdkDropListData]="firstElement">
+          <p class="text ml-5">
+            <span class="fas fa-times mr-2"></span>
+            <em>Nessun widget disabilitato.</em>
+          </p>
+        </div>
+    </ng-template>
+
+    <hr>
+  </div>
+  <ng-container *ngIf="enabledWidgetsMatrix.length > 0; else notEnabledWidgets">
+    <div class="flex-row" *ngFor="let row of enabledWidgetsMatrix">
+      <div cdkDropList [cdkDropListOrientation]="mediumOrMobilePortrait ? 'vertical':'horizontal'"
+        [ngClass]="{'drag-container-md': mediumOrMobilePortrait, 'drag-container': !mediumOrMobilePortrait}"
+        (cdkDropListDropped)="dropAbilitato($event, false)" [cdkDropListDisabled]="!editMode" [cdkDropListData]="row">
+        <ng-container *ngFor="let widgetConfig of row">
+          <div cdkDrag [ngClass]="getWidgetClass(widgetConfig)" [class.edit-mode]="editMode">
+            <div *ngIf="editMode && modificabile" [ngClass]="'mediumOrMobilePortrait' ? 'overlap-md' : 'overlap'">
+              <i class="fas fa-times-circle" (click)="disabilitaWidget(widgetConfig)"></i>
+            </div>
+            <ng-container appWidgetsContainer [widgetSize]="widgetConfig.colsMin" [widgetComponent]="widgetConfig.widget">
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #notEnabledWidgets>
+    <div cdkDropList [cdkDropListOrientation]="mediumOrMobilePortrait ? 'vertical':'horizontal'"
+        [ngClass]="{'drag-container-md': mediumOrMobilePortrait, 'drag-container': !mediumOrMobilePortrait}"
+        (cdkDropListDropped)="dropAbilitato($event, true)" [cdkDropListDisabled]="!editMode" [cdkDropListData]="firstElement">
+        <p class="text ml-5">
+          <span class="fas fa-times mr-2"></span>
+          <em>Nessun widget abilitato.</em>
+        </p>
+      </div>
+  </ng-template>
+</div>

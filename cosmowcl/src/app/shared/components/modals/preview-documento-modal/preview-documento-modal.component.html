@@ -1,0 +1,41 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header">
+    <h5 class="modal-title" id="modal-title">Preview Documento {{contenuto?.nomeFile && contenuto?.nomeFile!==undefined ? contenuto?.nomeFile : ""}}</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>&nbsp; &nbsp;&nbsp; &nbsp;
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+</div>
+<div class="modal-body" >
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso [top]="'6em'" [bottom]="'4em'"></app-caricamento-in-corso>
+  </ng-container>
+  <ng-container *ngIf="loadingError">
+    <p class="alert alert-danger">{{loadingError}}</p>
+  </ng-container>
+  <ng-container *ngIf="!loading && !loadingError">
+    <app-visualizzatore-pdf
+    [pdfSrc]="body"
+    [textLayer]="textLayer"
+    [ignoreKeyboard]="true"
+    [ignoreKeys]="ignoreKeys"
+    [riquadroFirma]="riquadroFirma"
+    [zoom]="zoom"
+    [showZoomButtons]="showZoomButtons"
+    [pageViewMode]="pageViewMode"
+    [templateType]="templateType">
+  </app-visualizzatore-pdf>
+  </ng-container>
+</div>
+<div class="modal-footer"></div>
+
+
+

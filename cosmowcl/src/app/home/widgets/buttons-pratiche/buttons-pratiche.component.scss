@@ -1,0 +1,19 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+.mb-7 {
+    margin-bottom: 70px !important;
+}
+
+
+
+@media only screen and (max-width: 400px) {
+ .mobile-first { padding:  10px;}
+}
+
+.dropdown-toggle::after{
+  display:none;
+}
+
+

@@ -1,0 +1,168 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span> home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      aggiungi modifica gruppo
+    </button>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="loading">
+    <div class="row mt-5 text-center">
+      <div class="col-12">
+        <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+      </div>
+    </div>
+  </ng-container>
+
+    <ng-container *ngIf="!loading">
+
+    <!-- TABELLA TAGS UTENTE -->
+    <strong class="">{{ 'gruppi.actions.gestisci_tags' | translate }}</strong>
+    <div class="row mt-3" *ngIf="tableTagUtenteAggiunti">
+      <div class="col-12 col-lg-8">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right pt-2">
+        <cosmo-table-search-filter *ngIf="tableTagUtenteAggiunti" [table]="tableTagUtenteAggiunti" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12 table-container mobile-first">
+          <cosmo-table
+            #tableTagUtenteAggiunti
+            [tableDisplayClass]="'table-sm table-hover variant-centered'"
+            [columns]="columnsTagUtente"
+            [paginationMode]="'CLIENT'"
+            [data]="tagUtente"
+            [enablePagination]="true"
+            [enableSorting]="true"
+            [enableRowExpansion]="false"
+            [defaultSortingDirection]="'ASC'"
+            [defaultSortingColumn]="'codice'"
+            [itemIdentifier]="'codice'"
+            [enableItemTracking]="true"
+          >
+            <!-- celle custom -->
+            <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+              <!-- cella ICONA DETTAGLIO -->
+              <div *ngIf="column.name === 'azioni'">
+                <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="rimuoviTag(row)">
+                  <em class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></em>
+                </button>
+              </div>
+
+            </ng-template>
+          </cosmo-table>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="tableTagUtenteAggiunti">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination *ngIf="tableTagUtenteAggiunti" [table]="tableTagUtenteAggiunti"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size *ngIf="tableTagUtenteAggiunti" [table]="tableTagUtenteAggiunti"></cosmo-table-page-size>
+      </div>
+    </div>
+    <br>
+    <!-- TABELLA TAG ENTE -->
+    <strong class="">{{ 'gruppi.actions.aggiungi_tags' | translate }}</strong>
+
+    <div class="row mt-3" *ngIf="tableTagEnte">
+      <div class="col-12 col-lg-8">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right pt-2">
+        <cosmo-table-search-filter *ngIf="tableTagEnte" [table]="tableTagEnte" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table #tableTagEnte
+          [tableDisplayClass]="'table-sm table-hover variant-centered'"
+          [columns]="columnsTagEnte"
+          [paginationMode]="'SERVER'"
+          [dataProvider]="dataProviderTagEnte"
+          [enablePagination]="true"
+          [enableSorting]="true"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'codice'"
+          [itemIdentifier]="'codice'"
+          [enableItemTracking]="true">
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <div *ngIf="!isTagSelezionato(row); else notSelectedTemplate">
+                <button class="btn btn-primary btn-xs btn-seleziona" type="button"
+                  title="{{ 'gruppi.actions.seleziona' | translate }}" (click)="selezionaTag(row)">
+                  {{ 'gruppi.actions.seleziona' | translate }}
+                </button>
+              </div>
+              <ng-template #notSelectedTemplate>
+                <button class="btn btn-primary btn-xs btn-seleziona" type="button"
+                  title="{{ 'gruppi.status.selezionato' | translate }}" [disabled]="true">
+                  {{ 'gruppi.status.selezionato' | translate }}
+                </button>
+              </ng-template>
+            </div>
+
+          </ng-template>
+        </cosmo-table>
+      </div>
+    </div>
+    <div class="row mt-3" *ngIf="tableTagEnte">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination *ngIf="tableTagEnte" [table]="tableTagEnte"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size *ngIf="tableTagEnte" [table]="tableTagEnte"></cosmo-table-page-size>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- RIGA PULSANTI AZIONI -->
+  <div class="row mt-5">
+    <div class="col-2 text-left">
+      <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+        {{"common.indietro" | translate}}
+      </button>
+    </div>
+    <div class="col-10 text-right">
+      <button type="submit" class="btn btn-sm btn-success btn-action" (click)="salva()">
+        {{"common.salva" | translate}}
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-sm btn-danger btn-action" (click)="pulisciCampi()">
+        {{"common.annulla_modifiche" | translate}}
+      </button>
+    </div>
+  </div>
+
+</div>

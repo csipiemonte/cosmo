@@ -1,0 +1,11 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<li class="nav-item" role="presentation" *ngIf="condizioneLista">
+  <a *ngIf="condizioneElemento" class="nav-link" [attr.aria-selected]="tabAttivo === nomeTabAttivo" id="id"
+    aria-controls="ariaControls" [ngClass]="{'active': tabAttivo === nomeTabAttivo}"
+    (click)="activateTabInner($event, nomeTabAttivo)">
+    {{descrizioneTab}}
+  </a>
+</li>

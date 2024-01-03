@@ -1,0 +1,29 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+  
+    <div class="modal-body">
+      <p class="alert alert-warning mt-3 mb-5">
+            <strong role="status">Sembra che tu sia inattivo. </strong>
+            <span class="mt-3">
+                <br/>
+                <br/>
+                Se continui ad essere inattivo perderai la priorit&agrave; sul task corrente che potr&agrave; essere preso in carico da altri utenti.
+            </span>
+            <span *ngIf="timingOut" class="mt-3">
+                <br/>
+                <br/>
+                Se vuoi continuare a lavorare su questo task, basta che tu muova il mouse o prema un tasto qualunque entro {{ timeout }} secondi.
+            </span>
+            <span *ngIf="!timingOut" class="mt-3">
+                <br/>
+                <br/>
+                <i class="fas fa-user-check mr-2"></i>
+                Sei tornato attivo.
+            </span>
+      </p>
+    </div>
+  </div>
+  

@@ -1,0 +1,129 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+  <div class="container">
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">{{"firma_digitale.certificato_firma" | translate}}</h2>
+      </div>
+    </div>
+     <br>
+    <form [formGroup]="certificatoFirmaForm" *ngIf="certificatoFirmaForm">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+          <label [ngClass]="{'active': certificatoFirmaForm?.controls['descrizione'].value}" for="descrizione">
+            {{"firma_digitale.descrizione" | translate}}
+          </label>
+          <input
+            [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['descrizione'].touched && certificatoFirmaForm?.controls['descrizione'].invalid }"
+            type="text" id="descrizione" name="username" formControlName="descrizione" class="form-control border">
+          <div class="invalid-feedback"
+            *ngIf="certificatoFirmaForm?.controls['descrizione'].touched && certificatoFirmaForm?.controls['descrizione'].invalid">
+            <p *ngIf="certificatoFirmaForm?.controls['descrizione']?.hasError('required')">
+              {{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+        </div>
+        <div class="it-datepicker-wrapper col-lg-4 col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="scadenza">
+              {{"firma_digitale.scadenza" | translate}}</label>
+            <input class="form-control border it-date-datepicker" id="scadenza" name="scadenza" formControlName="scadenza"
+              type="date" placeholder="gg/mm/aaaa">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+          <label [ngClass]="{'active': certificatoFirmaForm?.controls['username'].value}" for="username">
+            {{"firma_digitale.username" | translate}}
+          </label>
+          <input
+            [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['username'].touched && certificatoFirmaForm?.controls['username'].invalid }"
+            type="text" id="username" name="username" formControlName="username" class="form-control border">
+          <div class="invalid-feedback"
+            *ngIf="certificatoFirmaForm?.controls['username'].touched && certificatoFirmaForm?.controls['username'].invalid">
+            <p *ngIf="certificatoFirmaForm?.controls['username']?.hasError('required')">
+              {{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+
+          <div class="input-group" >
+          <label [ngClass]="{'active': certificatoFirmaForm?.controls['pin'].value}" for="pin">
+            {{"firma_digitale.pin" | translate}}
+          </label>
+            <input style="position: static;"
+              [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['pin'].touched && certificatoFirmaForm?.controls['pin'].invalid }"
+              [type]="showPin ? 'text' : 'password'" id="pin" name="pin" formControlName="pin" class="form-control border border-right-0">
+            <div class="input-group-append  border border-left-0">
+              <span class="input-group-text border-bottom-0">
+                <i class="fa" [ngClass]="{ 'fa-eye-slash': !showPin, 'fa-eye': showPin }" (click)="mostrarePin()" ></i>
+              </span>
+          </div>
+          <div class="invalid-feedback"
+            *ngIf="certificatoFirmaForm?.controls['pin'].touched && certificatoFirmaForm?.controls['pin'].invalid">
+            <p *ngIf="certificatoFirmaForm?.controls['pin']?.hasError('required')">
+              {{"errori.campo_obbligatorio" | translate}}</p>
+          </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12 form-group" *ngIf="canManagePasswordField">
+
+          <div class="input-group" >
+          <label [ngClass]="{'active': certificatoFirmaForm?.controls['password'].value}" for="password">
+            {{"firma_digitale.password" | translate}}
+          </label>
+            <input style="position: static;"
+              [ngClass]="{ 'is-invalid': certificatoFirmaForm?.controls['password'].touched && certificatoFirmaForm?.controls['password'].invalid }"
+              [type]="showPassword ? 'text' : 'password'" id="password" name="password" formControlName="password" class="form-control border border-right-0">
+            <div class="input-group-append  border border-left-0">
+              <span class="input-group-text border-bottom-0">
+                <i class="fa" [ngClass]="{ 'fa-eye-slash': !showPassword, 'fa-eye': showPassword }" (click)="mostrarePassword()" ></i>
+              </span>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <h4>{{"preferenze.impostazioni_firma" | translate }}</h4>
+        </div>
+        <div class="col-12">
+          <app-impostazioni-firma
+            #impostazioniFirma
+            [obbligatorietaCampi]="false"
+            [profiliFeqAbilitati]="[]"
+            (enteCertificatoreSelezionato) = "enteCertificatoreSelezionato($event)">
+          </app-impostazioni-firma>
+
+          <div class="row">
+            <div class="col-2 text-left">
+              <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+                {{"common.indietro" | translate}}
+              </button>
+            </div>
+            <div class="col-10 text-right">
+              <button type="submit" class="btn btn-sm btn-success" [disabled]="disabilitaSalvaCertificato()" (click)="aggiornaSalvaCertificato()">
+                {{"common.salva" | translate}}
+              </button>
+              &nbsp;
+              <button type="button" class="btn btn-sm btn-danger" (click)="resetCertificato()">
+                {{"common.annulla_modifiche" | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>

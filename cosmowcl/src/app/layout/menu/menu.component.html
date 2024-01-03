@@ -1,0 +1,53 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<button class="hamburger hamburger--spring leftnav-hamburger" [class.is-sticky]="sticky" tabindex="0" type="button" data-toggle="collapse"
+  data-target="#collapsingLeftNav" (click)="toggleMenu()" [class.is-active]="menuOpen">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+</button>
+<section class="nav-left" [@openClose]="menuOpen ? 'open' : 'closed'">
+  <div class="nav-left-container">
+
+      <div class="nav-item dropdown mobile-first" style="z-index: 95;">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" title="Mostra menu operatore"
+            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-pen nav-icon"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="userDropdown">
+            <a class="dropdown-item" [routerLink]="'/login'" routerLinkActive="active">{{"header.cambia_profilo" | translate}}</a>
+            <a *appHasUseCase="'MG_USERS'" class="dropdown-item"
+              [routerLink]="['./gestisci-utenti']">{{"header.gestisci_utenti" | translate}}
+            </a>
+            <a *appHasUseCase="'ADMIN_ENTE'" class="dropdown-item" [routerLink]="['./gestisci-gruppi']">
+              {{"header.gestisci_gruppi" | translate}}
+            </a>
+            <a class="dropdown-item" [routerLink]="['./informazioni-utente']" routerLinkActive="active">{{"header.informazioni_utente" | translate}}</a>
+            <a class="dropdown-item" [routerLink]="['./preferenze-utente']" routerLinkActive="active">{{"header.preferenze_utente" | translate}}</a>
+            <a *appHasUseCase="'ADMIN_ENTE'" class="dropdown-item"
+              [routerLink]="['./preferenze-ente']">{{"header.preferenze_ente" | translate}}</a>
+            <a *appHasUseCase="'CONF'" class="dropdown-item" [routerLink]="'/configurazione'">{{"header.configurazione_processi" | translate}}</a>
+            <span class="divider"></span>
+            <a class="dropdown-item" (click)=logout() style="cursor: pointer;">
+              <i class="fas fa-sign-out-alt"></i><span>   {{"header.logout" | translate}}</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mobile-first" style="z-index: 95;">
+        <button id="button-intranet" (click)="openIntranet()"
+                class="btn btn-sm btn-primary d-flex mt-3 mb-3 mb-md-0 mt-md-0  ml-lg-2 justify-content-end btn-icon"
+                type="button"><span class="icon icon-fa"><i class="fas fa-external-link-alt"></i></span>
+                </button>
+              </div>
+
+        <div class="nav-item">
+          <p class="text-left" style="padding: 5px; padding-bottom: 0px;">APP</p>
+        </div>
+
+
+        <app-app-esterne></app-app-esterne>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<ng-container *ngIf="render">
+  <div class="container-full px-4 py-5 table-actions table-actions--header" *ngIf="headerFilteringEnabledAndPossible" >
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="header-filter-container">
+          <ng-container *ngFor="let filter of currentHeaderFilters">
+          <ng-container *ngIf="isHeaderFilterChecked(filter); else notChecked"> 
+            <span 
+              class="header-filter checked" 
+              (click)="toggleHeaderFilterChecked(filter)"
+            >
+              <span class="header-filter-checkbox checked">
+                <span class="fas fa-check-square"></span>
+              </span>
+              <span class="header-filter-label checked">
+                {{ resolveLabel(filter) }}
+              </span>
+            </span>
+          </ng-container>
+          <ng-template #notChecked>
+          <span 
+            class="header-filter unchecked" 
+            (click)="toggleHeaderFilterChecked(filter)">
+            <span class="header-filter-checkbox unchecked">
+              <span class="fas fa-square"></span>
+            </span>
+            <span class="header-filter-label unchecked">
+              {{ resolveLabel(filter) }}
+            </span>
+          </span>
+          </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

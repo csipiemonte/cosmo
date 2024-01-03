@@ -1,0 +1,25 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="loadingError">
+  <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+</ng-container>
+<ng-container *ngIf="loading">
+  <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+</ng-container>
+
+<ng-container *ngIf="!loading && !loadingError">
+
+  <br>
+  <div class="container" *ngIf="pratica">
+    <app-info-pratica [pratica]="pratica" [isDettaglio]="true"></app-info-pratica>
+  </div>
+
+  <app-tabs-pratica
+    [pratica]="pratica"
+    [codiceForm]="codiceForm"
+    [tabAttivo]="tabAttivo"
+    (tabActivated)="tabActivated($event)"
+  ></app-tabs-pratica>
+</ng-container>

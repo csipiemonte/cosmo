@@ -1,0 +1,110 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <div class="row mb-4">
+      <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+        <span class="fas fa-backspace pr-2"></span>Home
+      </button>
+      <span class="breadcrumb-divider"> / </span>
+      <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+        Informazioni utente
+      </button>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="">Informazioni utente</h2>
+      </div>
+    </div>
+    <br>
+
+    <!-- GRUPPI -->
+    <h3>Gruppi dell'utente</h3>
+    <div class="row mt-3" *ngIf="gruppiTable">
+      <div class="col-12 col-lg-4 pt-1">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-center">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right">
+        <cosmo-table-search-filter [table]="gruppiTable" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table #gruppiTable [tableDisplayClass]="'table-sm table-hover variant-centered'"
+          [columns]="gruppiColumns" [paginationMode]="'SERVER'" [dataProvider]="gruppiDataProvider"
+          [enablePagination]="true" [enableSorting]="true" [enableRowExpansion]="false"
+          [defaultSortingDirection]="'ASC'" [defaultSortingColumn]="'nome'" [itemIdentifier]="'id'">
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="gruppiTable">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination [table]="gruppiTable"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size [table]="gruppiTable"></cosmo-table-page-size>
+      </div>
+    </div>
+
+    <br>
+    <hr>
+    <br>
+
+    <!-- TAGS -->
+    <h3>Tag dell'utente</h3>
+    <div class="row mt-3" *ngIf="tagsTable">
+      <div class="col-12 col-lg-4 pt-1">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-center">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-4 text-right">
+        <cosmo-table-search-filter [table]="tagsTable" [enableSearchIn]="false">
+        </cosmo-table-search-filter>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table #tagsTable [tableDisplayClass]="'table-sm table-hover variant-centered'" [columns]="tagsColumns"
+          [paginationMode]="'SERVER'" [dataProvider]="tagsDataProvider" [enablePagination]="true" [enableSorting]="true"
+          [enableRowExpansion]="false" [defaultSortingDirection]="'ASC'" [defaultSortingColumn]="'descrizione'"
+          [itemIdentifier]="'tipoTag'">
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="tagsTable">
+      <div class="col-12 col-lg-3">
+        <!-- EMPTY -->
+      </div>
+      <div class="col-12 col-lg-6 text-center">
+        <cosmo-table-pagination [table]="tagsTable"></cosmo-table-pagination>
+      </div>
+      <div class="col-12 col-lg-3 text-right pt-2">
+        <cosmo-table-page-size [table]="tagsTable"></cosmo-table-page-size>
+      </div>
+    </div>
+  </ng-container>
+</div>

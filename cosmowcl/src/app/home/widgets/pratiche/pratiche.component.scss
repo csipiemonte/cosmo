@@ -1,0 +1,317 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+@import 'variables';
+@import 'typography';
+
+.card-monitoring {
+  transition: all .5 ease;
+  min-height: 83px;
+  border-left: 5px solid #000;
+  margin-bottom: 1rem !important;
+}
+
+.card-stilo {
+  border-color: $rp_stilo;
+}
+
+.card-pratica {
+  border-color: $rp_pratica;
+}
+
+.card-pec {
+  border-color: $rp_pec;
+}
+
+.card .dropdown-menu {
+  min-width: 250px;
+  font-size: .8rem;
+}
+
+.dropdown-toggle::after{
+  display:none;
+}
+
+.dropdown a[aria-expanded="false"] .span-expanded{
+  display:none;
+}
+
+.dropdown a[aria-expanded="true"] .span-noexpanded{
+  display:none;
+}
+
+.dropdown-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.dropdown-menu-left {
+  top: 0;
+  right: 50% !important;
+  left: auto !important;
+}
+
+//.card .dropdown-menu-left {top: 0; right: 100% !important; left: auto !important; color:$rp_lightblue; cursor: pointer}
+.card .dropdown-menu .link-list-wrapper ul li a span {
+  color: $rp_text_color;
+}
+
+.card-monitoring .fas,
+.card-monitoring .far {
+  color: $rp_lightblue;
+}
+
+.card-monitoring .card-body {
+  padding: 8px 10px;
+}
+
+.card-monitoring h2 {
+  text-transform: uppercase;
+  font-size: .9rem;
+  height: 28px;
+}
+
+.card-monitoring h2,
+.card-monitoring hr {
+  margin: 3px 0;
+}
+
+.monitoring-badge {
+  font-weight: normal;
+  margin-top: 5px;
+  font-size: .6rem;
+  margin-bottom: 1px;
+}
+
+.card-left-icon {
+  color: $rp_darkblue;
+  font-size: 30px;
+  line-height: 40px !important;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid $rp_darkblue;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+}
+
+.card-monitoring .media button {
+  width: 14px;
+  height: 24px;
+}
+
+.card-monitoring .media button i {
+  display: none;
+}
+
+.card-monitoring:hover .media button i,
+.card-monitoring .media button:focus i {
+  display: inline-block;
+}
+
+.card-monitoring .media .btn-notifications i {
+  display: inline-block;
+}
+
+.card-monitoring:hover .media .btn-notifications {
+  display: inline-block;
+  margin-right: 0;
+}
+
+.card-monitoring .expanded {
+  display: none;
+  padding-top: 20px;
+}
+
+.card-monitoring.is-open .expanded {
+  display: block;
+}
+
+.notifications {
+  min-height: 398px;
+  max-height: 398px;
+}
+
+.notifications ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notifications ul li {
+  position: relative;
+  padding: 10px 20px;
+  border-bottom: 1px solid $rp_darkblue;
+}
+
+.notifications ul li:last-child {
+  border-bottom: 0;
+}
+
+.notifications ul li.unread {
+  background: $rp_extralightblue;
+}
+
+.notifications ul li:hover a {
+  color: $rp_text_color;
+}
+
+.notifications ul li p {
+  margin: 0 0 5px;
+}
+
+.notifications .badge {
+  text-transform: uppercase;
+  font-size: 0.6rem;
+}
+
+.notifications .card-body {
+  min-height: 378px;
+  max-height: 378px;
+  overflow: auto;
+}
+
+.notifications .time {
+  font-size: 0.7rem;
+  margin-left: 5px;
+}
+
+.notifications .toggle-read {
+  position: absolute;
+  color: #14233a;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  top: 10px;
+  right: 10px;
+}
+
+.notifications ul li.unread .badge-stilo {
+  color: $rp_stilo;
+  background: #FFF;
+}
+
+.notifications ul li.unread .badge-pec {
+  color: $rp_pec;
+  background: #FFF;
+}
+
+.notifications ul li.unread .badge-pratica {
+  color: $rp_pratica;
+  background: #FFF;
+}
+
+.fas-hands{
+  font-family: 'Font Awesome 5 Free', 'Titillium Web', Geneva, Tahoma,sans-serif;
+}
+
+
+@media screen and (min-width:992px) {
+  .notifications .toggle-read {
+    display: none;
+  }
+
+  .notifications .toggle-read.show-toggle {
+    display: block;
+  }
+
+  .notifications li:hover .toggle-read {
+    display: block;
+  }
+}
+
+
+@media screen and (max-width: 768px) and (orientation: portrait) {
+
+  body {
+    font-size: 15px;
+  }
+
+  .mobile-first {
+    padding: 0px !important;
+  }
+
+  .dropdown-menu.mobile-first {
+    min-width: max-content !important;
+  }
+
+  table#tabellapratica th:nth-child(1),
+  td:nth-child(1),
+  th:nth-child(4),
+  td:nth-child(4),
+  th:nth-child(5),
+  td:nth-child(5) {
+    display: none;
+  }
+
+  table#dateEntry {
+    width: max-content;
+  }
+}
+
+@media screen and (max-width: 991px){
+  .table-container.mobile-first {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+}
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .mobile-first {
+    padding: 5px !important;
+  }
+
+  table#tabellapratica th:nth-child(1),
+  td:nth-child(1),
+  th:nth-child(4),
+  td:nth-child(4),
+  th:nth-child(5),
+  td:nth-child(5) {
+    display: none;
+  }
+
+  table#dateEntry {
+    width: max-content;
+  }
+
+  .dropdown-menu.mobile-first {
+    min-width: max-content !important;
+  }
+}
+
+
+
+
+#monitoringSettings {
+  min-width: 800px;
+  padding: 0;
+  margin: 0;
+}
+
+#leftNavSettings {
+  border: 0 !important;
+}
+
+.dnd-sortable-list {
+  text-align: left;
+}
+
+.dnd-sortable-list .list-group-item {
+  position: relative;
+  cursor: grab;
+}
+
+.nav-tabs {  border-bottom-color:#b1b1b3;  }
+.nav-tabs .nav-item { text-transform: uppercase;}
+
+
+/* PORTING A COSMO TABLE */
+
+.icon, .btn-action-icon {
+  color: #185aa6;
+}
+
+.list-item {
+  cursor: pointer;
+}

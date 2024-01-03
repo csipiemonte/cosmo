@@ -1,0 +1,95 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mt-3 mb-3">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" (click)="goBack()">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+    <span class="breadcrumb-divider">/</span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      Deploy di processo
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">{{ "processi.header" | translate }}</h2>
+    </div>
+  </div>
+  <div style="margin: 50px 0px;">
+
+    <div class="row">
+      <div class="col-lg-2 col-md-4 col-sm-5" style="width: auto !important;">
+        <button type="button" (click)="inputIcona.click()" class="file-upload btn btn-outline-primary btn-sm">
+          <span>{{ 'processi.carica_processo' | translate | uppercase }}</span>
+          <input type="file" accept=".bar" class="upload" #inputIcona id="processo" name="processo"
+            (change)="onFileChanged($event.target.files)" (click)="inputIcona.value = null" required>
+        </button>
+        <input type="text" hidden>
+      </div>
+      <div class="col-lg-10 col-md-8 col-sm-7" style="margin:auto; width: auto !important;">
+        <span>{{nomeFile}}</span>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="errore">
+        <p>{{errore}}</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-between form-group">
+
+      <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+
+        <label [ngClass]="{'active':isConfiguratore}" for="ente" >{{"processi.enti" | translate}}</label>
+
+        <input [ngClass]="{'is-invalid':erroreEnte}" id="ente" type="text" class="form-control border" placeholder=""
+          (blur)="checkEnte()" [(ngModel)]="enteSelezionato"  [ngbTypeahead]="searchEnti" [disabled]="isConfiguratore"
+          [resultFormatter]="formatterEnte" [inputFormatter]="formatterEnte"
+          (focus)="focusEnti$.next($any($event).target.value)" (click)="clickEnti$.next($any($event).target.value)"
+          #instanceEnti="ngbTypeahead" (ngModelChange)="getTipiPratiche()" [editable]="false" />
+
+        <div class="errore" *ngIf="erroreEnte">
+          <p> {{erroreEnte}}</p>
+        </div>
+
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+        <label for="tipo_pratica">{{"processi.tipi_pratiche" | translate}}</label>
+
+        <input [ngClass]="{'is-invalid':erroreTipoPratica}" id="tipo_pratica" type="text" class="form-control border"
+          placeholder="" [disabled]="!enteSelezionato || !enteSelezionato.id" (blur)="checkTipoPratica()" (focus)="erroreTipoPratica=null"
+          [(ngModel)]="tipoPraticaSelezionata" [ngbTypeahead]="searchTipiPratiche"
+          [resultFormatter]="formatterTipoPratica" [inputFormatter]="formatterTipoPratica"
+          (focus)="focusTipoPratiche$.next($any($event).target.value)"
+          (click)="clickTipoPratiche$.next($any($event).target.value)" #instanceTipoPratiche="ngbTypeahead"
+          [editable]="false" />
+
+        <div class="errore" *ngIf="erroreTipoPratica">
+          <p> {{erroreTipoPratica}}</p>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-3 col-sm-12 form-group">
+      </div>
+    </div>
+    <div class="row" style="margin-top: 80px;">
+      <div class="col-2 text-left">
+        <button type="button" class="btn btn-sm btn-primary" (click)="tornaIndietro()">
+          {{"common.indietro" | translate}}
+        </button>
+      </div>
+      <div class="col-10 text-right">
+        <button type="button" class="btn btn-sm btn-success" [disabled]="disabilitaSalva()" (click)="salva()">
+          {{"common.salva" | translate}}
+        </button>
+        &nbsp;
+        <button type="button" class="btn btn-sm btn-danger" (click)="pulisciCampi()">
+          {{"common.pulisci_campi" | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

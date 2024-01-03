@@ -1,0 +1,363 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<section class="tabs-and-panel mt-auto">
+  <div class="container-fluid mobile-first">
+    <div class="row">
+      <div class="col-12">
+        <ul class="nav nav-tabs" id="tab-navigation" role="tablist">
+          <li class="nav-item" role="presentation"><a class="nav-link active" id="mywork-tab" data-toggle="tab"
+              href="#mywork" role="tab" aria-controls="mywork" aria-selected="true">My
+              Work</a></li>
+          <!--
+          <li class="nav-item" role="presentation"><a class="nav-link" id="monitoraggio-tab" data-toggle="tab"
+              href="#monitoraggio" role="tab" aria-controls="monitoraggio" aria-selected="false">Monitoraggio</a></li>
+          <li class="nav-item" role="presentation"><a class="nav-link" id="reportistica-tab" data-toggle="tab"
+              href="#reportistica" role="tab" aria-controls="reportistica" aria-selected="false">Reportistica</a></li>
+          -->
+        </ul>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="tab-content" id="tab-content">
+          <!-- CONTENT MY WORK: Start -->
+          <div class="tab-pane p-4 fade show active mobile-first" id="mywork" role="tabpanel" aria-labelledby="mywork-tab">
+            <div class="row">
+              <div class="col-12 text-right">
+                <p><span class="lastUpdate">Dati aggiornati al {{lastUpdate |  date: 'dd MM yyyy'}}, ore {{ lastUpdate | date: 'HH:mm '}}</span>
+                  <button (click)="RefreshDataSource()" class="btn btn-sm btn-outline-primary ml-3">
+                    <i *ngIf="!refreshingPratiche" class="fas fa-sync-alt mr-1"></i>
+                    <i *ngIf="refreshingPratiche" class="fas fa-sync fa-spin"></i>
+                    Aggiorna</button></p>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <!-- PREFERITI PIU RECENTI : Start -->
+              <div class="col-lg-6">
+                <app-pratiche titolo="Preferite" [kindOfPractice]="praticheConsts.PREFERITE" ></app-pratiche>
+              </div>
+              <!-- PREFERITI PIU RECENTI : End -->
+
+              <!-- ULTIME CONDIVISE : Start -->
+              <div class="col-lg-6">
+                <app-pratiche titolo="Condivise con me" [kindOfPractice]="praticheConsts.IN_EVIDENZA"></app-pratiche>
+              </div>
+              <!-- ULTIME CONDIVISE : End -->
+
+            </div>
+            <!-- ULTIME LAVORATE : Start -->
+            <div class="row mt-5">
+              <div class="col">
+                <app-pratiche titolo="Da lavorare" [kindOfPractice]="praticheConsts.IN_LAVORAZIONE" size="large"> </app-pratiche>
+              </div>
+            </div>
+            <!-- ULTIME LAVORATE : End -->
+
+          </div>
+          <!-- CONTENT MY WORK: End -->
+
+
+
+          <!-- CONTENT MONITORAGGIO: Start -->
+          <div class="tab-pane p-4 fade" id="monitoraggio" role="tabpanel" aria-labelledby="monitoraggio-tab">
+            <div class="row mb-5">
+              <div class="col-12 text-right">
+                <span class="lastUpdate">Dati aggiornati al 13 Dicembre 2020, ore 13:30</span>
+                <button class="btn btn-sm btn-outline-primary ml-3"><i class="fas fa-sync-alt mr-1"></i>
+                  Aggiorna</button>
+                <div class="btn-group d-inline-block">
+                  <button class="btn btn-sm btn-outline-primary ml-3" data-toggle="dropdown" aria-expanded="false"
+                    aria-controls="monitoringSettings"><i class="fas fa-cog mr-1"></i> Applicazioni
+                    Visualizzate</button>
+                  <form id="monitoringSettings" class="dropdown-menu dropdown-menu-right dnd-sortable-list">
+                    <section class="card card-bg no-after">
+                      <div class="card-header">
+                        <div class="row">
+                          <div class="col-8">
+                            <h5 class="h5">Applicazioni visualizzate</h5>
+                            <small class="text-muted">Ordina gli elementi trascinandoli.
+                              Quando hai finito, premi il tasto "Salva".</small>
+
+                          </div>
+                          <div class="col-4 text-right">
+                            <button type="submit" class="btn btn-primary btn-sm mt-4">salva</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card-body">
+                        <div class="row">
+                          <!-- colonne 2 intestazioni -->
+                          <div class="col-sm-6">
+                            <h6 class="h6">MOSTRA</h6>
+                          </div>
+                          <div class="col-sm-6">
+                            <h6 class="h6">NASCONDI</h6>
+                          </div>
+
+                          <!-- colonne 4 campi -->
+                          <div class="col-sm-3">
+                            <ul class="list-group list-group--primary">
+                              <li class="list-group-item">Campo 1 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 2 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 3 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 4 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 5 <div class="drag-icon">
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-sm-3">
+                            <ul class="list-group list-group--primary">
+                              <li class="list-group-item">Campo 6 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 7 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 8 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 9 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 10 <div class="drag-icon">
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-sm-3">
+                            <ul class="list-group">
+                              <li class="list-group-item">Campo 11 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 12 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 13 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 14 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 15 <div class="drag-icon">
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-sm-3">
+                            <ul class="list-group">
+                              <li class="list-group-item">Campo 16 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 17 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 18 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 19 <div class="drag-icon">
+                                </div>
+                              </li>
+                              <li class="list-group-item">Campo 20 <div class="drag-icon">
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div> <!-- /.row -->
+                      </div>
+                    </section>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="card card-monitoring card-bg card-stilo no-after" tabindex="0">
+                  <div class="card-body">
+                    <div class="media">
+                      <i class="card-left-icon fas fa-edit align-self-center mr-3"></i>
+                      <div class="media-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <h2 class="mt-0">Stilo</h2>
+                          </div>
+                          <div class="col-6 text-right">
+                            <button class="btn btn-action-icon" title="Notifiche"><i class="fas fa-bell"></i><span
+                                class="sr-only">Notifiche</span></button>
+                            <div class="btn-group">
+                              <button class="btn btn-action-icon dropdown-toggle ml-2" title="Visualizza Menu"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i><span class="sr-only">Visualizza Menu</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <div class="link-list-wrapper">
+                                  <ul class="link-list">
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Notifiche</span></a></li>
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Indicatori</span></a></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                          <div class="col-10">
+                            <span class="badge badge-light badge-pill monitoring-badge"><strong>28</strong>
+                              Atti in lavorazione</span>
+                          </div>
+                          <div class="col-2 text-right">
+                            <button class="btn btn-action-icon dropdown-toggle mt-2 expandCard"
+                              title="Espandi Contenuto" type="button"><i class="fas fa-expand"></i><span
+                                class="sr-only">Espandi
+                                Contenuto</span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="expanded text-center">
+                      <img src="https://via.placeholder.com/500x500" class="img-fluid" alt="Placeholder Image" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div class="card card-monitoring card-bg card-pratica no-after">
+                  <div class="card-body">
+                    <div class="media">
+                      <i class="card-left-icon fas fa-edit align-self-center mr-3"></i>
+                      <div class="media-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <h2 class="mt-0">Pratica</h2>
+                          </div>
+                          <div class="col-6 text-right">
+                            <button class="btn btn-action-icon btn-notifications" title="Notifiche"><i
+                                class="fas fa-bell"><span class="badge badge-danger badge-pill sup">1</span></i><span
+                                class="sr-only">1 Notifica</span></button>
+                            <div class="btn-group">
+                              <button class="btn btn-action-icon dropdown-toggle ml-2" title="Visualizza Menu"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                  class="fas fa-ellipsis-v"></i><span class="sr-only">Visualizza Menu</span></button>
+                              <div class="dropdown-menu">
+                                <div class="link-list-wrapper">
+                                  <ul class="link-list">
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Notifiche</span></a></li>
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Indicatori</span></a></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                          <div class="col-10">
+                            <span class="badge badge-light badge-pill monitoring-badge"><strong>28</strong>
+                              Atti in lavorazione</span>
+                          </div>
+                          <div class="col-2 text-right">
+                            <button class="btn btn-action-icon dropdown-toggle mt-2 expandCard"
+                              title="Espandi Contenuto" type="button"><i class="fas fa-expand"></i><span
+                                class="sr-only">Espandi
+                                Contenuto</span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="expanded text-center">
+                      <img src="https://via.placeholder.com/500x500" class="img-fluid" alt="Placeholder Image" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-lg-4">
+                <div class="card card-monitoring card-bg card-pec no-after">
+                  <div class="card-body">
+                    <div class="media">
+                      <i class="card-left-icon fas fa-edit align-self-center mr-3"></i>
+                      <div class="media-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <h2 class="mt-0">PEC</h2>
+                          </div>
+                          <div class="col-6 text-right">
+                            <button class="btn btn-action-icon btn-notifications" title="Notifiche"><i
+                                class="fas fa-bell"><span class="badge badge-danger badge-pill sup">1</span></i><span
+                                class="sr-only">1 Notifica</span></button>
+                            <div class="btn-group">
+                              <button class="btn btn-action-icon dropdown-toggle ml-2" title="Visualizza Menu"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                  class="fas fa-ellipsis-v"></i><span class="sr-only">Visualizza Menu</span></button>
+                              <div class="dropdown-menu">
+                                <div class="link-list-wrapper">
+                                  <ul class="link-list">
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Notifiche</span></a></li>
+                                    <li><a class="list-item" href="#"><span>Gestisci
+                                          Indicatori</span></a></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                          <div class="col-10">
+                            <span class="badge badge-light badge-pill monitoring-badge"><strong>28</strong>
+                              Atti in lavorazione</span>
+                          </div>
+                          <div class="col-2 text-right">
+                            <button class="btn btn-action-icon dropdown-toggle mt-2 expandCard"
+                              title="Espandi Contenuto" type="button"><i class="fas fa-expand"></i><span
+                                class="sr-only">Espandi
+                                Contenuto</span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="expanded text-center">
+                      <img src="https://via.placeholder.com/500x500" class="img-fluid" alt="Placeholder Image" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- CONTENT MONITORAGGIO: End -->
+
+
+
+
+
+          <div class="tab-pane p-4 fade" id="reportistica" role="tabpanel" aria-labelledby="reportistica-tab">
+            Contenuto Reportistica</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

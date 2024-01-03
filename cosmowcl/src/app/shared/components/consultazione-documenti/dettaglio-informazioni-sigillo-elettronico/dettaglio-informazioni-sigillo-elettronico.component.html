@@ -1,0 +1,62 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+                (click)="modal.dismiss('click_on_back_arrow')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            &nbsp; Informazioni sigillo elettronico
+        </h5>
+        <div *ngIf="helper">
+          <app-helper
+            [helper] = "helper"
+            [type] = "'MODAL'">
+          </app-helper>
+        </div>
+    </div>
+
+    <div class="modal-body" style="overflow-x: auto;">
+            <ng-container *ngIf="render">
+                <table class="table table-sm">
+                    <thead>
+                        <th scope="col" *ngIf="!small"></th>
+                        <th scope="col">Firmatario</th>
+                        <th scope="col">Data apposizione</th>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let info of firme">
+                            <tr>
+                                <!-- TIPOLOGIA FIRMA -->
+                                <td style="width: 1px;" *ngIf="!small">
+                                    <span *ngIf="info.data"
+                                        title="Sigillo elettronico">
+                                        <i class="fas fa-file-signature icon-tipo-firma"></i>
+                                    </span>
+                                </td>
+                                <!-- FIRMA -->
+                                <td>
+                                    {{ info.firmatario || info.codiceFiscaleFirmatario || '--' }}
+                                </td>
+                                <!-- DATA -->
+                                <td>
+                                    <ng-container *ngIf="info.dataApposizione">
+                                        {{ info.dataApposizione | date:'dd/MM/yyyy HH:mm:ss' }}
+                                    </ng-container>
+                                    <ng-container *ngIf="!info.dataApposizione">
+                                        --
+                                    </ng-container>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </ng-container>
+    </div>
+
+
+</div>

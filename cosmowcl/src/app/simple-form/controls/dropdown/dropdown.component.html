@@ -1,0 +1,19 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="controls && formField.id" [formGroup]="controls">
+    <span [ngClass]="{'required': formField.required}" class="fixed-label">
+        {{formField.name}}
+    </span>
+    <select *ngIf="formField.readOnly" [formControlName]="formField.id" [attr.name]="formField.id" [attr.id]="formField.id"
+        [attr.required]="formField.required ? true : null" class="form-control" [attr.disabled]="formField.readOnly">
+        <option *ngFor="let option of formField.options; let i = index" [ngValue]="i == 0 ? '': option.name">
+            {{option.name}}</option>
+    </select>
+    <select *ngIf="!formField.readOnly" [formControlName]="formField.id" [attr.name]="formField.id" [attr.id]="formField.id"
+        [attr.required]="formField.required ? true : null" class="form-control">
+        <option *ngFor="let option of formField.options; let i = index" [ngValue]="i == 0 ? '': option.name">
+            {{option.name}}</option>
+    </select>
+</ng-container>

@@ -1,0 +1,25 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="controls && formField.id">
+  <h3 [ngClass]="{ 'is-invalid': controls?.controls[formField.id].touched && controls?.controls[formField.id].invalid, 'required': formField.required}">
+    {{formField.name}}
+  </h3>
+  <app-ricerca-utente #ricerca [(ngModel)]="selectedUser" [gruppi]="false" [utenteCorrente]="true" class="w-100"
+   (change)="addUser()" [disabled]="formField.readOnly" (focusout)="focusOut()">
+  </app-ricerca-utente>
+
+  <ng-container *ngIf="allUsers.length === 0; else conUtenti">
+    <span *ngIf="isFieldRequired" class="invalid-info">{{"errori.campo_obbligatorio" | translate}}</span>
+  </ng-container>
+  <ng-template #conUtenti>
+    <span *ngFor="let user of allUsers" >
+      {{user.utente.nome}} {{user.utente.cognome}}
+      <span *ngIf="!formField.readOnly" class="fas fa-times-circle ml-1 mr-3" (click)="removeUser(user)"></span>
+    </span>
+  </ng-template>
+
+
+</ng-container>
+

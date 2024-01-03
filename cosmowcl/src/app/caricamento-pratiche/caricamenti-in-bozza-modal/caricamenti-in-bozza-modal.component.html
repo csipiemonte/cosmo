@@ -1,0 +1,95 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="row w-100 mb-3">
+        <div class="col-md-6 col-12">
+          <h5 class="modal-title">
+            <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+            (click)="modal.dismiss('click_on_back_arrow')">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            &nbsp; {{ "caricamento_pratiche.caricamenti_in_bozza"| translate }}
+          </h5>
+        </div>
+      </div>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+    <ng-container *ngIf="loadingError">
+      <div class="px-4 py-4">
+        <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <div class="px-4 py-4">
+        <app-caricamento-in-corso></app-caricamento-in-corso>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && !loadingError">
+
+        <div class="modal-body">
+            <div class="row mt-5">
+                <div class="col-12 table-container mobile-first">
+                  <cosmo-table
+                  #table
+                  [tableDisplayClass]="'table-sm table-hover variant-primary'"
+                  [dataProvider]="dataProviderCaricamentoInBozza"
+                  [columns]="columnsCaricamentoInBozza"
+                  [enableSorting]="false"
+                  [enablePagination]="true"
+                  [paginationMode]="'SERVER'"
+                  [enableRowExpansion]="false"
+                  [defaultPageSize]="10"
+                  [possiblePageSize]="[5,10]"
+                  [itemIdentifier]="'nomeFile'"
+                  [enableItemTracking]="true"
+                  >
+
+                  <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+                    <!-- cella ICONA DETTAGLIO -->
+                    <div *ngIf="column.name === 'azioni'">
+                      <button class="btn btn-link btn-xs btn-action-icon mr-3" type="button" (click)="continuaCaricamento(row)">
+                        <i class=" fas fa-pen" title="{{ 'common.modifica' | translate }}"></i>
+                      </button>
+                      <button class="btn btn-link btn-xs btn-action-icon text-danger" type="button" (click)="elimina(row)">
+                        <i class=" fas fa-trash-alt" title="{{ 'common.elimina' | translate }}"></i>
+                      </button>
+                    </div>
+
+                  </ng-template>
+
+                  </cosmo-table>
+
+                </div>
+            </div>
+
+          <div class="row mt-3" *ngIf="table">
+              <div class="col-12 col-lg-3">
+                <!-- EMPTY -->
+              </div>
+            <div class="col-12 col-lg-6 text-center">
+              <cosmo-table-pagination *ngIf="table"
+              [table]="table"
+              ></cosmo-table-pagination>
+            </div>
+            <div class="col-12 col-lg-3 text-right pt-2">
+              <cosmo-table-page-size *ngIf="table"
+              [table]="table"
+              ></cosmo-table-page-size>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="modal-footer mt-5 mb-5"></div>
+    </ng-container>
+</div>

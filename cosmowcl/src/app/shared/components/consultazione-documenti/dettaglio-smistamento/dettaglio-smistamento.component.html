@@ -1,0 +1,110 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<span *ngIf="documentoDTO.smistamento" [ngSwitch]="documentoDTO.smistamento.codiceStato"
+    class="icon-esito-verifica-firma d-inline ml-3" title="{{ documentoDTO.smistamento.descrizioneStato }}">
+    <ng-container *ngSwitchCase="'SMISTATO'">
+        <span class="text-success pointer" placement="left" [ngbPopover]="popContent"
+            popoverClass="very-large-popover" [popoverTitle]="popTitle"
+            [autoClose]="'outside'"
+            *ngIf="documentoDTO.smistamento.infoAggiuntive?.length > 0; else noPopoverSmistato">
+            <ng-template #popContent>
+                <table>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 60%;">
+                        <col span="1" style="width: 10%;">
+                    </colgroup>
+                    <tr *ngFor="let infoAggiuntiva of documentoDTO.smistamento.infoAggiuntive">
+                        <th scope="col" class="bold">
+                            {{'documenti.smistamento.' + infoAggiuntiva.chiave | translate | uppercase}}
+                        </th>
+                        <td>
+                            {{infoAggiuntiva.valore}}
+                        </td>
+                        <td>
+                            <span class="input-group-text pointer" (click)="copyInfo(infoAggiuntiva.chiave)">
+                                <span class="{{ findInfo(infoAggiuntiva.chiave).copied ? 'fas fa-check' : 'fas fa-copy' }}"></span>
+                              </span>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #popTitle>Informazioni aggiuntive</ng-template>
+            <i class="fas fa-file"></i>
+        </span>
+        <ng-template #noPopoverSmistato>
+            <span class="text-success">
+                <i class="fas fa-file"></i>
+            </span>
+        </ng-template>
+    </ng-container>
+    <span class="text-success" *ngSwitchCase="'IN_SMISTAMENTO'">
+        <i class="fas fa-file-export"></i>
+    </span>
+    <span class="text-success" *ngSwitchCase="'DA_SMISTARE'">
+        <i class="fas fa-file-import"></i>
+    </span>
+    <span class="text-info" *ngSwitchCase="'SMISTATO_PARZIALMENTE'">
+      <i class="fas fa-file-export fa-pulse"></i>
+    </span>
+    <ng-container *ngSwitchCase="'ERR_SMISTAMENTO'">
+        <span class="text-danger pointer" placement="left" [ngbPopover]="popContent"
+            popoverClass="very-large-popover" [popoverTitle]="popTitle"
+            [autoClose]="'outside'">
+            <ng-template #popContent>
+                <span class="text-danger">
+                    <p>Errore smistamento:</p>
+                    <p>Codice Esito: {{ documentoDTO.smistamento.codiceEsito }}</p>
+                    <p>{{ documentoDTO.smistamento.descrizioneEsito }}</p>
+                </span>
+                <table>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 70%;">
+                    </colgroup>
+                    <tr *ngFor="let infoAggiuntiva of documentoDTO.smistamento.infoAggiuntive">
+                        <th scope="col" class="bold">
+                            {{'documenti.smistamento.' + infoAggiuntiva.chiave | translate | uppercase}}
+                        </th>
+                        <td>
+                            {{infoAggiuntiva.valore}}
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #popTitle>Informazioni aggiuntive</ng-template>
+            <i class="fas fa-file-excel"></i>
+        </span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ERR_CALLBACK'">
+        <span class="text-danger pointer" placement="left" [ngbPopover]="popContent" popoverClass="very-large-popover"
+            [popoverTitle]="popTitle">
+            <ng-template #popContent>
+                <span
+                    [ngClass]="{'text-success': documentoDTO.smistamento.codiceEsito === '000', 'text-danger': documentoDTO.smistamento.codiceEsito !== '000' }">
+                    <p>Errore callback:</p>
+                    <p>Codice Esito: {{ documentoDTO.smistamento.codiceEsito }}</p>
+                    <p>{{ documentoDTO.smistamento.descrizioneEsito }}</p>
+                </span>
+                <table>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 70%;">
+                    </colgroup>
+                    <tr *ngFor="let infoAggiuntiva of documentoDTO.smistamento.infoAggiuntive">
+                        <th scope="col" class="bold">
+                            {{'documenti.smistamento.' + infoAggiuntiva.chiave | translate | uppercase}}
+                        </th>
+                        <td>
+                            {{infoAggiuntiva.valore}}
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #popTitle>Informazioni aggiuntive</ng-template>
+            <i class="fas fa-file-excel"></i>
+        </span>
+    </ng-container>
+</span>

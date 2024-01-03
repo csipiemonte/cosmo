@@ -1,0 +1,402 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span> Home
+    </button>
+  </div>
+  <h2><em class="fas fa-cogs"></em>{{ 'header.preferenze_utente' | translate }}</h2>
+  <br>
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso></app-caricamento-in-corso>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <!-- GESTIONE CERTIFICATI DI FIRMA -->
+    <button class="btn btn-outline-dark shadow-none text-button" type="button" data-toggle="collapse"
+      aria-expanded="false" data-target="#certificatiFirma" aria-controls="certificatiFirma">
+      {{ "preferenze.gestione_certificati_firma" | translate }} &nbsp;
+      <span class="span-noexpanded fas fa-angle-down"></span>
+      <span class="span-expanded fas fa-angle-up"></span>
+    </button>
+    <div class="collapse" id="certificatiFirma" style="margin-left: 50px;">
+      <ng-container *ngIf="!loadingCertificatiError">
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6">
+            <button class="btn btn-primary btn-sm" (click)="aggiungiCertificato()">
+              <span class="fas fa-plus-circle"></span> {{ "preferenze.aggiungi_certificato" | translate }}
+            </button>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <cosmo-table-search-filter [table]="table" [enableSearchIn]="false">
+            </cosmo-table-search-filter>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-12 text-right pr-3">
+            <cosmo-table-page-size [table]="table"></cosmo-table-page-size>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+
+            <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="certificatiFirma"
+              [columns]="certificatiColumns" [enableSorting]="true" [enablePagination]="true"
+              [paginationMode]="'CLIENT'" [defaultPageSize]="10" [possiblePageSize]="[10,20,50,100]"
+              [defaultSortingDirection]="'ASC'" [defaultSortingColumn]="'descrizione'">
+
+
+              <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+                <div style="text-align: center !important;" *ngIf="column.name === 'azioni'">
+                  <button class="btn btn-action-icon btn-link" (click)="modificaCertificato(row)">
+                    <i class="fas fa-pen"></i>
+                  </button>
+                  &nbsp;&nbsp;&nbsp;
+                  <button class="btn btn-action-icon btn-link text-danger" (click)="eliminaCertificato(row)"><span
+                      class="fas fa-trash-alt"></span></button>
+                </div>
+
+              </ng-template>
+            </cosmo-table>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col-sm-12">
+            <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loadingCertificatiError">
+        <app-caricamento-fallito [error]="loadingCertificatiError"></app-caricamento-fallito>
+      </ng-container>
+    </div>
+    <hr>
+
+    <!-- GESTIONE RICEZIONE NOTIFICHE -->
+    <button class="btn btn-outline-dark shadow-none text-button" type="button" data-toggle="collapse"
+      aria-expanded="false" data-target="#ricezioneNotifiche" aria-controls="ricezioneNotifiche">
+      {{ "preferenze.ricezione_notifiche.titolo" | translate }} &nbsp;
+      <span class="span-noexpanded fas fa-angle-down"></span>
+      <span class="span-expanded fas fa-angle-up"></span>
+    </button>
+    <div class="collapse" id="ricezioneNotifiche" style="margin-left: 50px;">
+      <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2 header" style="margin-left: 15px;">
+          {{ "preferenze.ricezione_notifiche.header.cosmo" | translate }}
+        </div>
+        <div class="col-md-2 header">
+          {{ "preferenze.ricezione_notifiche.header.email" | translate }}
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-5">
+          <!-- Tutte le notifiche -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAll">{{ "preferenze.ricezione_notifiche.all" | translate }}
+                <input
+                type="checkbox" 
+                id="toggleAll" 
+                [(ngModel)]="all"
+                [disabled]="creaTask && assegnaTask && annullaTask && commento
+                && condividiPratica"
+                (change)="turnThemAllOn($event.target.id, all)"
+                >
+                <span class="lever"></span>
+                  </label>
+            </div>
+          </div>
+          <!-- Creazione task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCreazioneTask" >
+                {{ "preferenze.ricezione_notifiche.create_task" | translate }}
+                <input type="checkbox" id="toggleCreazioneTask" [(ngModel)]="creaTask" 
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Assegnazione task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAssegnazioneTask" >
+                {{ "preferenze.ricezione_notifiche.assign_task" | translate }}
+                <input type="checkbox" id="toggleAssegnazioneTask" [(ngModel)]="assegnaTask"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Annullamento task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAnnullamentoTask" >
+                {{ "preferenze.ricezione_notifiche.cancel_task" | translate }}
+                <input type="checkbox" id="toggleAnnullamentoTask" [(ngModel)]="annullaTask"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Creazione commento -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCreazioneCommento" >
+                {{ "preferenze.ricezione_notifiche.create_comment" | translate }}
+                <input type="checkbox" id="toggleCreazioneCommento" [(ngModel)]="commento"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Condivisione pratica -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCondivisionePratica" >
+                {{ "preferenze.ricezione_notifiche.share_practice" | translate }}
+                <input type="checkbox" id="toggleCondivisionePratica" [(ngModel)]="condividiPratica"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Smistamento documenti-->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleSmistamentoDocumenti" >
+                {{ "preferenze.ricezione_notifiche.sorted_documents" | translate }}
+                <input type="checkbox" id="toggleSmistamentoDocumenti" [(ngModel)]="smistamentoDocumenti"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Elaborazione documenti-->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleElaborazioneDocumenti" >
+                {{ "preferenze.ricezione_notifiche.process_documents" | translate }}
+                <input type="checkbox" id="toggleElaborazioneDocumenti" [(ngModel)]="elaborazioneDocumenti"
+                (change)="turnThemAllVarCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="col-2">
+          <!-- Tutte le notifiche -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAllEmail">
+                <input 
+                  type="checkbox" 
+                  class="form-check-input position-static" 
+                  id="toggleAllEmail"
+                  [(ngModel)]="allEmail" 
+                  [disabled]="creaTaskEmail && assegnaTaskEmail && annullaTaskEmail && commentoEmail && condividiPraticaEmail" 
+                  (change)="turnThemAllOn($event.target.id, allEmail)">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Creazione task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCreazioneTaskEmail">
+                <input type="checkbox" class="form-check-input position-static" id="toggleCreazioneTaskEmail"
+                  [(ngModel)]="creaTaskEmail" (change)="turnThemAllVarEmailCosmo()">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Assegnazione task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAssegnazioneTaskEmail">
+                <input type="checkbox" class="form-check-input position-static" id="toggleAssegnazioneTaskEmail"
+                 [(ngModel)]="assegnaTaskEmail" (change)="turnThemAllVarEmailCosmo()">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Creazione task -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleAnnullamentoTaskEmail">
+                <input type="checkbox" class="form-check-input position-static" id="toggleAnnullamentoTaskEmail"
+                 [(ngModel)]="annullaTaskEmail" (change)="turnThemAllVarEmailCosmo()">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Creazione commento -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCreazioneCommentoEmail" >
+                <input type="checkbox" class="form-check-input position-static" id="toggleCreazioneCommentoEmail"
+                 [(ngModel)]="commentoEmail" (change)="turnThemAllVarEmailCosmo()">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Condivisione pratica -->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleCondivisionePraticaEmail">
+                <input type="checkbox" class="form-check-input position-static" id="toggleCondivisionePraticaEmail"
+                 [(ngModel)]="condividiPraticaEmail" (change)="turnThemAllVarEmailCosmo()">
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+           <!-- Smistamento documenti-->
+           <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleSmistamentoDocumentiEmail" >
+                <input type="checkbox" class="form-check-input position-static" id="toggleSmistamentoDocumentiEmail" [(ngModel)]="smistamentoDocumentiEmail"
+                (change)="turnThemAllVarEmailCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Elaborazione documenti-->
+          <div class="form-check">
+            <div class="toggles">
+              <label class="label" for="toggleElaborazioneDocumentiEmail" >
+                <input type="checkbox" class="form-check-input position-static" id="toggleElaborazioneDocumentiEmail" [(ngModel)]="elaborazioneDocumentiEmail"
+                (change)="turnThemAllVarEmailCosmo()"
+                >
+                <span class="lever"></span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-right">
+          <button type="button" class="btn btn-sm btn-success" (click)="salvaRicezioneNotifiche()">
+            {{"common.salva" | translate}}
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-sm btn-danger" (click)="resetRicezioneNotifiche()">
+            {{"common.annulla_modifiche" | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div>
+
+
+      <!-- GESTIONE POSIZIONE TOAST -->
+      <button class="btn btn-outline-dark shadow-none text-button" type="button" data-toggle="collapse"
+        aria-expanded="false" data-target="#posizione-toast" aria-controls="posizione-toast">
+        {{ "preferenze.posizione_toast.titolo" | translate }} &nbsp;
+        <span class="span-noexpanded fas fa-angle-down"></span>
+        <span class="span-expanded fas fa-angle-up"></span>
+      </button>
+      <div class="collapse" id="posizione-toast" style="margin-left: 50px;">
+        <div class="window-border" >
+          <div class="row justify-content-between" style="margin-left: 0px">
+            <div class="col form-check" style="text-align: start">
+              <button class="btn btn-sm" [ngClass]="posizioneToast === 'TOP-LEFT' ? 'btn-primary' : 'btn-light'" (click)="setPosition('TOP-LEFT')">{{ "preferenze.posizione_toast.top_left" | translate }}</button>
+            </div>
+
+            <div class="col form-check"style="text-align: end">
+              <button class="btn btn-sm" [ngClass]="posizioneToast === 'TOP-RIGHT' ? 'btn-primary' : 'btn-light'"   (click)="setPosition('TOP-RIGHT')">{{ "preferenze.posizione_toast.top_right" | translate }}</button>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="row justify-content-between" style="margin-left: 0px">
+            <div class="col form-check" style="text-align: start">
+              <button class="btn btn-sm" [ngClass]="posizioneToast === 'BOTTOM-LEFT' ? 'btn-primary' : 'btn-light'" (click)="setPosition('BOTTOM-LEFT')">{{ "preferenze.posizione_toast.bottom_left" | translate }}</button>
+            </div>
+
+            <div class="col form-check" style="text-align: end">
+              <button class="btn btn-sm" [ngClass]="posizioneToast === 'BOTTOM-RIGHT' ? 'btn-primary' : 'btn-light'" (click)="setPosition('BOTTOM-RIGHT')">{{ "preferenze.posizione_toast.bottom_right" | translate }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-12 text-right">
+            <button type="button" class="btn btn-sm btn-success" (click)="salvaPosizioneToast()">
+              {{"common.salva" | translate}}
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-danger" (click)="resetPosizioneToast()">
+              {{"common.annulla_modifiche" | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+    <!-- GESTIONE SEGNALIBRI -->
+    <div>
+      <button class="btn btn-outline-dark shadow-none text-button" type="button" data-toggle="collapse"
+        aria-expanded="false" data-target="#segnalibri" aria-controls="segnalibri">
+        {{ "preferenze.segnalibri.titolo" | translate }} &nbsp;
+        <span class="span-noexpanded fas fa-angle-down"></span>
+        <span class="span-expanded fas fa-angle-up"></span>
+      </button>
+      <div class="collapse" id="segnalibri" style="margin-left: 50px;">
+
+        <cosmo-table #table [tableDisplayClass]="'table-sm table-hover'" [data]="segnalibri"
+          [columns]="segnalibriColumns" [paginationMode]="'CLIENT'" [defaultPageSize]="10"
+          [possiblePageSize]="[10,20,50,100]" [enableSorting]="true" [defaultSortingDirection]="'ASC'">
+
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <button class="btn btn-action-icon btn-link text-danger" (click)="eliminaSegnalibro(row)"><span
+                  class="fas fa-trash-alt"></span>
+              </button>
+
+            </div>
+          </ng-template>
+        </cosmo-table>
+      </div>
+    </div>
+  </ng-container>
+
+
+</div>
+<router-outlet></router-outlet>

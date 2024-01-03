@@ -1,0 +1,116 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+@import 'variables';
+@import 'typography';
+
+.events { min-height:383px; }
+.date { padding-bottom:0; margin-bottom:0; color:$rp_lightblue; font-size:0.8rem; }
+.event-today .date { font-weight:bold; }
+.add-event { font-size:0.9rem; }
+.add-event .fas { margin-right:5px; }
+.it-datepicker-wrapper .datepicker-calendar { box-shadow:none; border:0; background:transparent; padding:0; margin-top:0; }
+.events-list { height:100%; border-top:1px solid #eaeaea;  max-height:268px; overflow: auto; padding-right:25px; }
+.events-list li { padding:10px 0px; border-bottom:1px solid $rp_darkblue; }
+.events-list li:last-child { border-bottom:0; }
+.events-list p { margin-bottom: 0; font-size:0.8rem; }
+.events-list a { color:$rp_text_color; }
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .datepicker-month { text-transform: capitalize;}
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap { color:$rp_lightblue; }
+.day.highlight { color:$rp_lightblue !important; font-weight:bold; border-bottom:1px solid $rp_darkblue; }
+.day.highlight span { position:relative; }
+.day.highlight span:after { transition:all 0.3s ease; position: absolute; display:block; content:""; width:60%; height:3px; background:$rp_lightblue; bottom:0; left:20%; }
+.day.highlight.focus span:after { background:transparent; }
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .icon-right, .it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .icon-left { border-color:transparent; }
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .icon-right:before { display:inline-block; text-align:center;  content:"\f105"; font-family:"Font Awesome 5 Free"; font-variant:normal; font-weight:900; }
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .icon-left:before { display:inline-block; text-align:center;  content:"\f104"; font-family:"Font Awesome 5 Free"; font-variant:normal; font-weight:900; }
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .datepicker-month-fast-next,
+.it-datepicker-wrapper .datepicker-calendar .datepicker-month-wrap .datepicker-month-fast-prev { display:none !important; }
+.centered { margin-right: 5em; margin-top: 1em;}
+@media screen and (min-width:768px) {
+    .events-list { border-top:0;  padding-left:20px; }
+}
+
+.mobile-first {
+  padding-bottom: 12px;
+ }
+
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 100%;
+  }
+  .custom-day.focused {
+    background-color: $rp_darkblue;
+    color:$rp_extralight;
+    font-weight: bold;
+
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s; /* Firefox < 16 */
+         animation: fadein 1s;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+  }
+  .custom-day.user-event {
+      background-color: $rp_extralight;
+      border: 2px dashed $rp_lightblue;
+      -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s; /* Firefox < 16 */
+         animation: fadein 1s;
+  }
+  .custom-day.group-event {
+      background-color: $rp_lightgreen;
+      -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s; /* Firefox < 16 */
+         animation: fadein 1s;
+  }
+  .custom-day.multi-event {
+    background-color: $rp_lightgreen;
+    border: 2px solid $rp_orange;
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s; /* Firefox < 16 */
+         animation: fadein 1s;
+}
+.custom-day.selected {
+  background-color: $rp_darkblue;
+  color:$rp_extralight;
+  font-weight: bold;
+
+}
+.custom-day.today {
+  border: 2px solid $rp_darkblue;
+}
+li.media.pointer {
+  cursor: pointer;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.btn-today {
+  width:auto;
+  position: relative;
+}

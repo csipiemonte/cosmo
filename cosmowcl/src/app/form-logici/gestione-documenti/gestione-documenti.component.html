@@ -1,0 +1,60 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container" *ngIf="idPratica">
+  <app-messaggi-controlli-obbligatori [messaggiObbligatori]="messaggiObbligatori"></app-messaggi-controlli-obbligatori>
+
+  <div class="btn-group mb-4" *ngIf="!readOnly">
+    <ng-container *ngIf="abilitaRicercaActa">
+      <button class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{"documenti.aggiungi_documento" | translate}} <span class="fas fa-angle-down ml-1"></span>
+      </button>
+      <div class="dropdown-menu">
+        <div class="link-list-wrapper">
+          <ul class="link-list">
+            <li><a class="list-item add-doc-item" (click)="aggiungiDocumento(idPratica)"><span>{{"documenti.da_risorsa_locale_o_rete" | translate}}</span></a></li>
+            <li><a class="list-item add-doc-item" (click)="aggiungiDocumentoActa()"><span>{{"documenti.da_doqui_acta" | translate}}</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!abilitaRicercaActa">
+      <button class="btn btn-sm btn-primary" (click)="aggiungiDocumento(idPratica)">
+        {{"documenti.aggiungi_documento" | translate}}
+      </button>
+    </ng-container>
+
+  </div>
+
+  <div>
+    <app-consultazione-documenti
+      #consultazioneDocumenti
+      [idPratica]="idPratica"
+      [pratica]="pratica"
+      [soloLettura]="readOnly"
+      [identificativo]="'gestione-documenti'"
+      [daFirmare]="daFirmare"
+      [infoTask]="task"
+      [verificaDataDocObbligatori]="verificaDataDocObbligatori"
+      [listaDocObbligatori]="listaDocObbligatori"
+      [tipiDocNonEliminabili]="tipiDocNonEliminabili"
+      [tipiAllNonEliminabili]="tipiAllNonEliminabili"
+      [tipiDocCaricabili]="tipiDocCaricabili"
+      [tipiAllCaricabili]="tipiAllCaricabili"
+      [verificaValiditaFirme]="controlloValiditaFirme"
+      [codiceModaleAnteprima]="'anteprima-documento-gestione'"
+      [codiceModalePreview]="'preview-documento-gestione'"
+      [codiceModaleAnteprima]="'anteprima-documento-gestione'"
+      [codiceModalePreview]="'preview-documento-gestione'"
+      [codiceModaleInfoSigillo]="'info-sigillo-gestione'"
+      [codiceModaleInfoFea]="'info-fea-gestione'"
+      [codiceModaleInfoFirma]="'info-firma-gestione'"
+      (firmeUtenteValide)="areAllDocsSignaturesValid($event)"
+      (messaggiObbligatori)="sendMessages($event)"
+      (totDocumenti)=getTotDocumentiCaricati($event)
+      (attesaElaborazioneDocumenti)="areAllDocsProcessed($event)">
+    </app-consultazione-documenti>
+  </div>
+
+</div>

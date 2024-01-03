@@ -1,0 +1,150 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+    <span class="breadcrumb-divider"> / </span>
+    <button type="button" class="btn btn-link btn-xs clickable" (click)="tornaIndietro()">
+      {{ "use_case_profili.header" | translate }}
+    </button>
+  </div>
+
+  <h2 class="mt-3 mb-5">{{"use_case_profili.header" | translate}}</h2>
+
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+
+    <form [formGroup]="profiloForm" (ngSubmit)="salva()"  *ngIf="profiloForm">
+
+      <div class="row justify-content-between">
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('codice'), 'is-invalid': displayInvalid('codice')}" for="codice">
+            {{"use_case_profili.codice" | translate}}
+          </label>
+          <input [ngClass]="{ 'is-invalid': displayInvalid('codice') }"
+            type="text" id="codice" name="codice" formControlName="codice" class="form-control"/>
+
+          <div class="invalid-feedback" *ngIf="displayInvalid('codice')">
+            <p *ngIf="hasError('codice', 'required')">{{"errori.campo_obbligatorio" | translate}}</p>
+            <p *ngIf="hasError('codice', 'maxlength')">Troppi caratteri</p>
+            <p *ngIf="hasError('codice', 'conflict')">
+              Questo codice &egrave; gi&agrave; assegnato al profilo {{ getError('codice', 'conflict')?.other?.descrizione }}
+            </p>
+
+          </div>
+          <div class="input-icon-container" *ngIf="displayValidating('codice')">
+            <span class="fas fa-circle-notch fa-spin"></span>
+          </div>
+      </div>
+
+
+        <div class="col-lg-5 col-sm-12 form-group">
+          <label [ngClass]="{'active': hasValue('descrizione'), 'is-invalid': displayInvalid('descrizione')}" for="descrizione">
+             {{"use_case_profili.descrizione" | translate}}</label>
+          <input [ngClass]="{ 'is-invalid': displayInvalid('descrizione') }"
+            type="text" id="descrizione" name="descrizione" formControlName="descrizione" class="form-control">
+          <div class="invalid-feedback" *ngIf="displayInvalid('descrizione')">
+            <p *ngIf="profiloForm?.controls['descrizione']?.hasError('maxlength')">Troppi caratteri</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-between mt-3">
+        <div class="col-6 col-lg-5">
+          <span class="mb-3">{{"use_case_profili.use_case" | translate}}</span>
+          <div cdkDropList #useCasesProfiliList="cdkDropList" [cdkDropListData]="useCases"
+            [cdkDropListConnectedTo]="[useCasesSuDBList]" class="example-list mt-3" (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let useCase of useCases" cdkDrag>
+              <div class="w-100">
+                <div class="row">
+                  <div class="col-10">
+                    <p class="text">
+                      <span class="fas fa-user-lock mr-2"></span>
+                      {{useCase.descrizione}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-box empty-tip" *ngIf="!(useCases?.length)">
+              <div>
+                <p class="text">
+                  <span class="fas fa-times mr-2"></span>
+                  <em>{{"use_case_profili.no_use_case_associati" | translate}}</em>
+                  <br />
+                  <em class="a-bit-smaller">Trascina qui un caso d'uso dall'elenco sulla destra per associarlo al
+                    profilo.</em>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-1 text-center">
+          <span class="d-none d-lg-block pt-5">
+            <span class="fas fa-exchange-alt"></span>
+          </span>
+        </div>
+        <div class="col-6 col-lg-5">
+          <span class="mb-3">{{"use_case_profili.use_case_associabili" | translate}}</span>
+          <div cdkDropList #useCasesSuDBList="cdkDropList" [cdkDropListData]="useCasesDisponibili"
+            [cdkDropListConnectedTo]="[useCasesProfiliList]" class="example-list mt-3"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let useCaseDisponibile of useCasesDisponibili" cdkDrag>
+              <div>
+                <p class="text">
+                  <span class="fas fa-user-lock mr-2"></span>
+                  {{useCaseDisponibile.descrizione}}
+                </p>
+              </div>
+            </div>
+
+            <div class="example-box empty-tip" *ngIf="!(useCasesDisponibili?.length)">
+              <div>
+                <p class="text">
+                  <span class="fas fa-times mr-2"></span>
+                  <em>{{"use_case_profili.no_use_case_associabili" | translate}}</em>
+                  <br />
+                  <em class="a-bit-smaller">Nessun caso d'uso associabile al profilo selezionato.</em>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-2 text-left">
+          <button type="button" class="btn btn-sm btn-primary btn-action" (click)="tornaIndietro()">
+            {{"common.indietro" | translate}}
+          </button>
+        </div>
+        <div class="col-10 text-right">
+          <button type="submit" class="btn btn-sm btn-success btn-action"
+            [disabled]="!profiloForm?.valid">
+            {{"common.salva" | translate}}
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-sm btn-danger btn-action" (click)="pulisciCampi()">
+            {{"common.annulla_modifiche" | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</div>

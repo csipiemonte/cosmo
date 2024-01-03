@@ -1,0 +1,155 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="row w-100 mb-3">
+      <div class="col-md-6 col-12">
+        <h5 class="modal-title">
+          <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+            (click)="modal.dismiss('click_on_back_arrow')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          &nbsp; {{ (documento ? "documenti.modifica_documento" : "documenti.aggiungi_documento") | translate }}
+        </h5>
+      </div>
+      <div class="col-md-6 col-12 text-right">
+        <span *ngIf="parent">
+          {{ parent.titolo || parent.contenutoEffettivo?.nomeFile }}  &nbsp; &nbsp;
+        </span>
+      </div>
+    </div>
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+  </div>
+  <ng-container *ngIf="loadingError">
+    <div class="px-4 py-4">
+      <app-caricamento-fallito [error]="loadingError" [canRetry]="false"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="px-4 py-4">
+      <app-caricamento-in-corso></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError">
+    <div class="modal-body">
+      <div>
+
+        <form [formGroup]="documentoForm" *ngIf="documentoForm">
+
+          <div class="row justify-content-between">
+            <div class="col-lg-6 col-sm-12 form-group">
+              <label [ngClass]="{'active': documentoForm?.controls['titolo'].value}" for="titolo">
+                {{"documenti.titolo" | translate}}
+              </label>
+              <input type="text" id="titolo" name="titolo" formControlName="titolo" class="form-control" maxlength="255">
+            </div>
+            <div class="col-lg-6 col-sm-12 form-group">
+              <label [ngClass]="{'active': documentoForm?.controls['autore'].value}" for="autore">
+                {{"documenti.autore" | translate}}
+              </label>
+              <input type="text" id="autore" name="autore" formControlName="autore" class="form-control" maxlength="100">
+            </div>
+            <div class="col-sm-12 form-group">
+              <label [ngClass]="{'active': documentoForm?.controls['tipologia'].value}" for="tipologia">
+                {{"documenti.tipologia" | translate}}
+              </label>
+              <select id="tipologia" name="tipologia" class="form-control border"
+                formControlName="tipologia" (change)="controlliSceltaTipologia()"
+                [class.border-warning]="displayErrors('tipologia')"
+              >
+                <option [ngValue]="tipologia" *ngFor="let tipologia of tipologieDocumento">{{ tipologia.descrizione }}</option>
+              </select>
+              <p *ngIf="erroreConfigurazione && !this.documento" class="alert alert-danger mt-3 mb-3">
+                {{erroreConfigurazione}}
+              </p>
+            </div>
+          </div>
+
+          <div class="row form-group">
+              <label [ngClass]="{'active': documentoForm?.controls['descrizione'].value}"
+                for="descrizione">{{"documenti.descrizione" | translate}}</label>
+              <textarea id="descrizione" name="descrizione" formControlName="descrizione" class="form-control textarea"
+                rows="3"></textarea>
+          </div>
+
+          <div class="row" *ngIf="!documento">
+            <div class="uploadfilecontainer"
+              *ngIf="!file"
+              appGestioneDocumenti
+              (click)="uploading ? nop() : fileInput.click();"
+              (fileDropped)="uploading ? nop() : uploadFile($event)">
+              <input hidden type="file" id="file" name="file" #fileInput
+                (change)="uploading ? nop() : uploadFile($event.target.files); $event.target.value='';">
+              <div class="content">
+                <h3>{{"documenti.trascina_qui_il_documento" | translate}}</h3>
+                <p>{{"documenti.oppure" | translate}}</p>
+                <h3>{{"documenti.selezionalo_cliccando_qui" | translate}}</h3>
+              </div>
+            </div>
+            <div *ngIf="file" class="file" [ngClass]="{'error': !dimensioniFileCorrette||(file && file.size===0) }">
+              <div class="text-left">
+                <span class="fas fa-paperclip fa-1x mr-3"></span>
+                <span>{{ file.name }}</span>
+                <br/>
+                <small>
+                  <span *ngIf="fileMimeDescription">
+                    {{ fileMimeDescription }}
+                  </span>
+                  <span *ngIf="file.size">
+                    ({{ file.size
+                    ? (file.size /1024>1024 ? ((file.size/(1024*1024)).toFixed() + ' MB')
+                    : ((file.size/(1024)).toFixed() + ' kB') )
+                    : ''}})
+                  </span>
+                </small>
+              </div>
+              <button class="btn btn-action-icon btn-link text-danger" (click)="cancellaFile()"
+                [disabled]="uploading">
+                <span class="fas fa-trash-alt"></span>
+              </button>
+            </div>
+            <div *ngIf="file && !dimensioniFileCorrette" class="error-text">
+              <p>Dimensione del file superiore al massimo previsto di {{documentoForm.getRawValue().tipologia?.dimensioneMassima || '--' }} MB</p>
+            </div>
+            <div *ngIf="file && file.size===0" class="error-text">
+              <p>Il file inserito è vuoto</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row mt-3 mb-3" *ngIf="uploading">
+        <div class="col-12">
+          <p *ngIf="uploadingDesc">{{ uploadingDesc }}</p>
+          <div class="progress w-100">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+              [attr.aria-valuenow]="uploadingProgress" aria-valuemin="0" aria-valuemax="100"
+              [ngStyle]="{
+                'width': '' + uploadingProgress + '%'
+              }"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="text-right">
+        <button type="button" style="margin: 5px;" (click)="annullaCaricamento()" *ngIf="uploading"
+          class="btn btn-sm btn-outline-danger">Annulla caricamento</button>
+
+        <button type="button" style="margin: 5px;" (click)="pulisciCampi()" [disabled]="uploading"
+          class="btn btn-sm btn-danger">{{"common.pulisci_campi" | translate}}</button>
+        <button type="button" style="margin: 5px;" [disabled]="disableButton()"
+          class="btn btn-sm btn-primary" (click)="documento ? modificaDocumento() : aggiungiDocumento()">
+          {{(documento ? "documenti.modifica_documento" : "documenti.carica_documento") | translate}}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

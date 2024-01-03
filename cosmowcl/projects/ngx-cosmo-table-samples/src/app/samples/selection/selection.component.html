@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with row selection. Emits event on selection change.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+        [enableSelection]="true"
+        [enableSelectAll]="true"
+        [enableMultiSelect]="true"
+        (selectionChange)="selectionChangeHandler($event)"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mt-5" *ngIf="selectedUsers && selectedUsers.length > 0">
+    <div class="col-sm-12">
+      <p>Selected users:</p>
+      <ul class="list-group">
+        <li *ngFor="let user of selectedUsers" class="list-group-item">
+          {{ user.name.first }} {{ user.name.last }}
+          <br/>
+          <small>{{ user.email }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

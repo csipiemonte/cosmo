@@ -1,0 +1,31 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row w-100 mt-3 mb-3">
+    <div class="col-12 col-sm-8">
+        <p class="alert alert-danger">
+            <span *ngIf="!(errorMessage?.length)">
+                {{ "common.caricamento_fallito" | translate }}
+                <br/>
+            </span>
+            <span *ngIf="errorMessage">
+                {{ errorMessage }}
+            </span>
+        </p>
+    </div>
+    <div class="col-12 col-sm-4">
+        <ng-container *ngIf="showRetry">
+            <a class="btn btn-primary text-white" (click)="doRetry()">
+                <span class="fas fa-redo-alt"></span>
+                {{ "common.riprova" | translate }}
+            </a>
+            <br/>
+        </ng-container>
+        <small>
+            <a class="btn btn-link p-0 mt-2" href="{{ linkAssistenza }}">
+                {{ "common.contatta_assistenza" | translate }}
+            </a>
+        </small>
+    </div>
+</div>

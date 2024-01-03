@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with custom cell rendering.</p>
+      <p>Supports both data-extractor and templating pattern.</p>
+      <p>The column with the picture demonstrates custom templating without a column label.</p>
+      <p>The column 'Full Name' demonstrates sample manipulation with a 'valueExtractor' field on the column declaration.</p>
+      <p>The column 'Status' demonstrates custom templating with a column label.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+        [rowClassProvider]="rowClassProvider"
+      >
+        <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+          <!-- Custom rendering for 'picture' column -->
+          <div *ngIf="column.name === 'picture32'">
+            <img [src]="value" alt="row image" />
+          </div>
+
+          <!-- Custom rendering for 'status' column -->
+          <div *ngIf="column.name === 'status'">
+            <span *ngIf="value" class="badge badge-success"> ACTIVE </span>
+            <span *ngIf="!value" class="badge badge-danger"> INACTIVE </span>
+          </div>
+        </ng-template>
+      </cosmo-table>
+    </div>
+  </div>
+</div>

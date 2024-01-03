@@ -1,0 +1,68 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<h2><i class="fas fa-calendar-alt"></i> Eventi</h2>
+<div class="card card-bg no-after events">
+  <div class="card-body">
+
+    <ng-container *ngIf="loadingError">
+        <div class="">
+            <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <div class="">
+            <app-caricamento-in-corso [top]="'140px'"></app-caricamento-in-corso>
+        </div>
+    </ng-container>
+    <div class="btn-primary btn-sm text-center" style="width: 263px; height: 40px;" [hidden]="loading || loadingError">
+      <a (click)="tornaAdOggi()"
+          data-toggle="tooltip"
+          title="Vai ad oggi"
+          class="text-white">
+        <span class="fas fa-calendar-day"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ today }}
+      </a>
+    </div>
+    <div class="row" [hidden]="loading || loadingError">
+      <div class="col-xl-5 mobile-first">
+
+        <ngb-datepicker #dp [(ngModel)]="date" (dateSelect)="onDateSelection($event)" [dayTemplate]="t"
+        class="centered it-datepicker-wrapper" (navigate)="navigate($event.next)" (focusout)="focus()"></ngb-datepicker>
+
+        <ng-template #t let-date let-focused="focused"  let-today="today">
+          <span class="custom-day"
+                [class.focused]="focused"
+                [class.today]="today"
+                [class.user-event]="hasUserEvent(date)"
+                [class.group-event]="hasGroupEvent(date)"
+                [class.multi-event]="hasMultiEvent(date)">
+            {{ date.day }}
+          </span>
+        </ng-template>
+      </div>
+      <div class="col-xl-7">
+        <div class="card-header bg-transparent text-right no-border no-padding pb-4 add-event"><a (click)="newEventModal()"
+            class="btn btn-outline-primary btn-sm"><span class="fas fa-calendar-plus"></span> Aggiungi</a></div>
+
+        <ul #eventiList class="list-unstyled events-list" (scroll)="onScroll($event)">
+
+          <li class="media pointer" *ngFor="let prossimoEvento of prossimiEventi" (click)="openModal(prossimoEvento)">
+            <i class="fas align-self-center mr-3" [ngClass]="{'fa-user': 'UTENTE_CORRENTE' === prossimoEvento.tipoAssegnazione, 'fa-users': 'GRUPPO' === prossimoEvento.tipoAssegnazione}"></i>
+            <div class="media-body">
+              <p class="date">{{prossimoEvento.dataScadenza.getDate()}} {{I18N_VALUES[i18n?.language].months[prossimoEvento.dataScadenza.getMonth()]}}</p>
+              <p><a>{{prossimoEvento.nome}}</a></p>
+            </div>
+          </li>
+          <li class="media pointer" *ngIf="!(prossimiEventi?.length)">
+            <i class="fas fa-calendar-times align-self-center mr-3"></i>
+            <div class="media-body">
+              <p>nessun evento in programma nei prossimi giorni</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text">
+            <span class="{{ 
+                internalControlValue && internalControlValue.utente && internalControlValue.nuovo ? 'fas fa-user-plus' : 
+                internalControlValue && internalControlValue.utente ? 'fas fa-user' : 
+                internalControlValue && internalControlValue.gruppo ? 'fas fa-users' : 
+                'fas fa-search' 
+            }}">
+            </span>
+        </span>
+    </div>
+    <input
+        #instance="ngbTypeahead"
+        #nativeControl
+        type="text"
+        class="form-control"
+        [placeholder]="placeholder"
+        autocomplete="off" 
+        [ngbTypeahead]="inputSearch"
+        [editable]="false"
+        [resultTemplate]="template"
+        [inputFormatter]="inputFormatter"
+        [(ngModel)]="internalControlValue"
+        [disabled]="isDisabled"
+        [class.disabled]="isDisabled"
+        (focusout)="inputFocusOut($event)"
+        (focus)="focus$.next($any($event).target.value)"
+        (click)="click$.next($any($event).target.value)"
+        (change)="change($event)"
+        (selectItem)="selectItem($event)"
+        (blur)="blur($event)"
+    />
+</div>
+<ng-template #template let-r="result" let-t="term">
+    <ng-container *ngIf="r.utente">
+        <span class="{{ r.nuovo ? 'fas fa-user-plus' : 'fas fa-user' }} mr-2"></span>
+        <ngb-highlight [result]="(r.utente.nome || '') + ' ' + (r.utente.cognome || '')" [term]="t"></ngb-highlight>
+        <span *ngIf="r.nuovo">(nuovo utente)</span>
+    </ng-container>
+    <ng-container *ngIf="r.gruppo">
+        <span class="fas fa-users mr-2"></span>
+        <ngb-highlight [result]="r.gruppo.descrizione" [term]="t"></ngb-highlight>
+    </ng-container>
+</ng-template>

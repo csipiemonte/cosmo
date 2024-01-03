@@ -1,0 +1,123 @@
+<ng-container *ngIf="render">
+  <div class="search-filter-container">
+    <form (submit)="applySelectedFilter()">
+      <div class="form-inline">
+        <!-- QUERY INPUT GROUP -->
+        <div class="input-group" style="width: {{ currentEnableSearchIn ? '65%' : '95%' }};">
+          <input type="text"
+            class="form-control"
+            [class.border-primary]="searchQueryActive && !searchQueryMalformed"
+            [class.border-warning]="searchQueryMalformed"
+            name="selectedSearchQuery"
+            placeholder="{{ 'table.common.messages.filter_placeholder' | translate }}"
+            aria-label="Search"
+            [ngModel]="localQueryOrEffectiveQueryOnTable"
+            (ngModelChange)="selectedSearchQuery = $event"
+            (focusout)="searchQueryFocusOut()"
+            (keyup)="onSearchQueryChanged($event)"
+          >
+          <div class="input-group-append">
+            <button class="btn"
+                [class.btn-outline-primary]="!searchQueryNeedApply || !searchQueryActive"
+                [class.btn-outline-primary]="searchQueryNeedApply && searchQueryActive"
+                [class.border-primary]="searchQueryActive && !searchQueryMalformed"
+                [class.border-warning]="searchQueryMalformed"
+                type="submit" (click)="applySelectedFilter()"
+                ><i class="fas fa-search"></i>
+              </button>
+            </div>
+        </div>
+
+        <!-- SEARCH IN -->
+        <div class="input-group" style="width: 30%; margin-left: 1em;" *ngIf="currentEnableSearchIn">
+
+          <!-- DROPDOWN IN WEBKIT MODE -->
+          <ng-container *ngIf="!compatibilityModeForDropDowns">
+          <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'" >
+            <button class="btn btn-outline-primary"
+              [class.border-primary]="searchQueryActive && !searchQueryMalformed"
+              [class.border-warning]="searchQueryMalformed"
+              [class.btn-outline-primary]="!(selectedSearchQuery && noFilteringColumnshecked)"
+              [class.btn-warning]="selectedSearchQuery && noFilteringColumnshecked"
+              type="button" ngbDropdownToggle>
+              <span class="d-none d-lg-inline">
+                Search in
+              </span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu">
+              <div ngbDropdownItem class="dropdown-item">
+                <h6 class="dropdown-header">{{ 'table.common.messages.pick_filtering_columns' | translate }}</h6>
+              </div>
+              <button ngbDropdownItem class="dropdown-item">
+                <div class="nbi-form-group clickable">
+                  <div class="nbi-form-check">
+                    <input type="checkbox" [checked]="allFilteringColumnsChecked"
+                      (change)="toggleAllFilteringColumnsChecked(); $event.stopPropagation();" />
+                    <span  (click)="toggleAllFilteringColumnsChecked(); $event.stopPropagation();">
+                      {{ 'table.common.messages.pick_all_filtering_columns' | translate }}
+                    </span>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+              </button>
+              <ng-container *ngFor="let column of parsedColumns">
+              <button ngbDropdownItem class="dropdown-item"
+                [class.disabled]="!isFilterable(column)"
+                *ngIf="hasLabel(column) && (isFilterable(column) || configFilteringShowUnfilterableColumns)">
+                <div class="nbi-form-group clickable">
+                  <div class="nbi-form-check">
+                    <input type="checkbox" [checked]="isColumnCheckedForFiltering(column)" *ngIf="isFilterable(column)"
+                      (change)="toggleFilteringColumnChecked(column); $event.stopPropagation();" />
+                    <input type="checkbox" [checked]="false" *ngIf="!isFilterable(column)" [disabled]="true" />
+                    <span  (click)="toggleFilteringColumnChecked(column); $event.stopPropagation();">
+                      {{ resolveLabel(column) }}
+                    </span>
+                  </div>
+                </div>
+              </button>
+              </ng-container>
+            </div>
+          </div>
+          </ng-container>
+
+          <!-- DROPDOWN IN IE11 COMPATIBILITY MODE -->
+          <ng-container *ngIf="compatibilityModeForDropDowns">
+          <div class="" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+            <button class="btn btn-outline-primary"
+              [class.border-primary]="searchQueryActive && !searchQueryMalformed"
+              [class.border-warning]="searchQueryMalformed"
+              [class.btn-outline-primary]="!(selectedSearchQuery && noFilteringColumnshecked)"
+              [class.btn-warning]="selectedSearchQuery && noFilteringColumnshecked"
+              type="button" ngbDropdownToggle>
+              <span class="d-none d-lg-inline">
+                Search in
+              </span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu">
+              <div ngbDropdownItem class="dropdown-item">
+                <h6 class="dropdown-header">{{ 'table.common.messages.pick_filtering_columns' | translate }}</h6>
+              </div>
+              <button ngbDropdownItem (click)="toggleAllFilteringColumnsChecked()">
+                <fa-icon [icon]="'check-square'" *ngIf="allFilteringColumnsChecked"></fa-icon>
+                <fa-icon [icon]="'square'" *ngIf="!allFilteringColumnsChecked"></fa-icon>
+                {{ 'table.common.messages.pick_all_filtering_columns' | translate }}
+                <div class="dropdown-divider"></div>
+              </button>
+              <ng-container *ngFor="let column of parsedColumns">
+              <button ngbDropdownItem [class.disabled]="!isFilterable(column)" (click)="toggleFilteringColumnChecked(column)"
+                *ngIf="hasLabel(column) && (isFilterable(column) || configFilteringShowUnfilterableColumns)">
+                <fa-icon [icon]="'check-square'" *ngIf="isFilterable(column) && isColumnCheckedForFiltering(column)"></fa-icon>
+                <fa-icon [icon]="'square'" *ngIf="isFilterable(column) && !isColumnCheckedForFiltering(column)"></fa-icon>
+                <fa-icon [icon]="'square'" *ngIf="!isFilterable(column)"></fa-icon>
+                {{ resolveLabel(column) }}
+              </button>
+              </ng-container>
+            </div>
+          </div>
+          </ng-container>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</ng-container>

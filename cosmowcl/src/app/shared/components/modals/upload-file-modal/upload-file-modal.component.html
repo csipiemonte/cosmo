@@ -1,0 +1,70 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">{{title}}</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <ng-container>
+    <div class="modal-body">
+      <div>
+          <div class="row">
+              <div class="uploadfilecontainer"
+                  *ngIf="!file"
+                  appUploadFile
+                  (click)="fileInput.click();"
+                  (fileDropped)="uploadFile($event)">
+                  <input  hidden type="file" id="file" name="file" #fileInput
+                  (change)="uploadFile($event.target.files); $event.target.value='';">
+                  <div class="content">
+                    <h3>{{"upload_file.trascina_file"  | translate}}</h3>
+                    <p>{{"common.or" | translate}}</p>
+                    <h3>{{"upload_file.selezionalo_cliccando_qui" | translate}}</h3>
+                  </div>
+              </div>
+              <div *ngIf="file" class="file" [ngClass]="{'error': errorSize || (file && file.size===0) || errorType }">
+                  <div class="text-left">
+                      <span class="fas fa-paperclip fa-1x mr-3"></span>
+                      <span *ngIf="file.name">{{ file.name }}</span>
+                      <br/>
+                      <small>
+                      <span *ngIf="file.size">
+                          ({{ file.size
+                          ? (file.size /1024>1024 ? ((file.size/(1024*1024)).toFixed() + ' MB')
+                          : ((file.size/(1024)).toFixed() + ' kB') )
+                          : ''}})
+                      </span>
+                      </small>
+                  </div>
+                  <button class="btn btn-action-icon btn-link text-danger" (click)="pulisciCampi()">
+                      <span class="fas fa-trash-alt"></span>
+                  </button>
+              </div>
+              <div *ngIf="file && file.size===0" class="error-text">
+                  <p>Il file inserito è vuoto</p>
+              </div>
+              <div *ngIf="errorSize" class="error-text">
+                <p>Il file inserito ha dimesioni superiori a quelle consentite, ovvero {{ (maxSize/1024 > 1024 ? (maxSize/(1024*1024)).toFixed() + 'MB' : (maxSize/1024).toFixed() + 'kB') }} </p>
+              </div>
+              <div *ngIf="errorType" class="error-text">
+                <p>Il file inserito non è di tipo corretto</p>
+              </div>
+          </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="text-right">
+          <button type="button" style="margin: 5px;" [disabled]="!file || errorSize || errorType"
+            class="btn btn-sm btn-primary" (click)="importa()">
+            {{ "caricamento_pratiche.carica_pratiche" | translate}}
+          </button>
+        </div>
+      </div>
+  </ng-container>
+</div>

@@ -1,0 +1,90 @@
+/*
+ * Copyright CSI-Piemonte - 2023
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+:host ::ng-deep {
+  @import "~bootswatch/dist/cosmo/_variables.scss";
+  @import "~bootstrap/scss/bootstrap.scss";
+  @import "~bootswatch/dist/cosmo/_bootswatch.scss";
+  @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+  @import "~@fortawesome/fontawesome-free/scss/solid.scss";
+  @import "~@fortawesome/fontawesome-free/scss/regular.scss";
+  @import "~@fortawesome/fontawesome-free/scss/v4-shims.scss";
+}
+
+:host ::ng-deep .form-group label {
+  position: inherit;
+  font-weight: 500;
+  overflow: inherit;
+  padding: 0;
+  line-height: 0;
+  font-size: inherit;
+  white-space: normal;
+  display: initial;
+}
+
+:host ::ng-deep .form-check {
+  margin-top: 0;
+}
+
+:host ::ng-deep .form-check [type="checkbox"] {
+  position: inherit;
+  left: 0;
+}
+
+:host ::ng-deep .form-check [type="radio"] {
+  position: inherit;
+  left: 0;
+}
+
+:host ::ng-deep .oldgen .form-group label {
+  font-weight: 800;
+}
+
+:host ::ng-deep .oldgen .card-body .form-control {
+  border: 2px solid #696969;
+  border-radius: 5px;
+}
+
+:host ::ng-deep .oldgen .card-body .form-control[disabled] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+:host ::ng-deep .oldgen .card-body  {
+  background-color: #d4e1f4;
+}
+
+:host ::ng-deep .oldgen .card-body .bg-light {
+  background-color: #e9ecef !important;
+  opacity: 1 !important;
+}
+
+:host ::ng-deep .oldgen .mb-2.card.border::after {
+  display:none;
+}
+
+:host ::ng-deep .choices__input.choices__input--cloned {
+  padding:  0 0 0 5px;
+}
+
+:host ::ng-deep .datagrid-table tbody td {
+  vertical-align: middle;
+}
+
+:host ::ng-deep .datagrid-table tbody td div{
+  align-items: center;
+  justify-items: center;
+}
+
+:host ::ng-deep .check-centered{
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 0px;
+}
+
+:host ::ng-deep .form-control[disabled] {
+  background-color: #e9ecef;
+  opacity: 1;
+}

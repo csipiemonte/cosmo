@@ -1,0 +1,42 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/home'">
+      <span class="fas fa-backspace pr-2"></span>Home
+    </button>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <app-caricamento-in-corso></app-caricamento-in-corso>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError && appDaAssociare">
+    <div class="row">
+      <h3>{{title}}</h3>
+      <a *ngIf="funzionalitaBool" class="nav-link app-button link" role="button"
+        [routerLink]="'../../'+appDaAssociare.id + '/funzionalita'">
+        <span>
+          {{ 'app_esterne.gestisci_funzionalita' | translate }}
+        </span>
+      </a>
+    </div>
+
+    <app-gestisci-funzionalita
+    [descrizioneApp]="descrizioneApp"
+    [iconaApp]="iconaApp"
+    [descrizioneFunzionalita]="descrizioneFunzionalita"
+    [url]="url"
+    [inizioValidita]="inizioValidita"
+    [showInfoApp]="true"
+    (salvaEmitter)="salva($event)"
+    (backEmitter)="tornaIndietro()"
+    ></app-gestisci-funzionalita>
+  </ng-container>
+</div>

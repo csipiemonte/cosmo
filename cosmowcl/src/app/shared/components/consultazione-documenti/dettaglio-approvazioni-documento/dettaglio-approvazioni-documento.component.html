@@ -1,0 +1,35 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="d-inline ml-3">
+<span title="Approvazioni documento" class="icon-esito-verifica-firma d-inline" *ngIf="documentoDTO" >
+        <span  class="text-success pointer" placement="left" [ngbPopover]="popContent"
+            popoverClass="very-large-popover" [popoverTitle]="popTitle"
+            [autoClose]="'outside'" *ngIf="documentoDTO.approvazioni?.length>0"
+        >
+                <ng-template #popContent>
+                    <table>
+
+                        <tr>
+                            <th> {{ 'approvazione_documenti.attivita' | translate }} </th>
+                            <th> {{ 'approvazione_documenti.utente_approvatore' | translate }} </th>
+                            <th> {{ 'approvazione_documenti.data_approvazione' | translate }} </th>
+                        </tr>
+                        <tr *ngFor="let approvazione of documentoDTO.approvazioni">
+                            <td> {{ approvazione.nomeAttivita }} </td>
+                            <td> {{ approvazione.nomeUtente }} {{ approvazione.cognomeUtente }}</td>
+                            <td> {{ approvazione.dataApprovazione | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #popTitle>Informazioni aggiuntive</ng-template>
+                <span class="text-success">
+                    <i class="fas fa-check-circle"></i>
+                </span>
+
+
+        </span>
+
+</span>
+</div>

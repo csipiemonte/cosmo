@@ -1,0 +1,183 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container">
+  <div class="row mb-4">
+    <button type="button" class="btn btn-link btn-xs mr-2 clickable" [routerLink]="'/esecuzione-multipla'">
+      <span class="fas fa-backspace pr-2"></span> Esecuzione multipla
+    </button>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="">FIRMA MULTIPLA</h2>
+    </div>
+  </div>
+
+  <ng-container *ngIf="loadingError">
+    <div class="">
+      <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="">
+      <app-caricamento-in-corso [top]="'30px'"></app-caricamento-in-corso>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !loadingError && tasks?.length && !erroreFea">
+
+    <div class="row mt-3">
+      <div class="col-12 table-container mobile-first">
+        <cosmo-table
+          #table
+          [tableDisplayClass]="'table-sm table-hover variant-primary'"
+          [columns]="columns"
+          [paginationMode]="'CLIENT'"
+          [dataProvider]="dataProvider"
+          [enablePagination]="false"
+          [enableSorting]="true"
+          [enableRowExpansion]="true"
+          [defaultSortingDirection]="'ASC'"
+          [defaultSortingColumn]="'oggetto_pratica'"
+          [enableSelection]="true"
+          [enableSelectAll]="true"
+          [enableMultiSelect]="true"
+          [rowClassProvider]="rowClassProvider"
+          [selectableStatusProvider]="selectableStatusProvider"
+          (selectionChange)="selectionChangeHandler($event)"
+        >
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+
+            <!-- cella ICONA DETTAGLIO -->
+            <div *ngIf="column.name === 'azioni'">
+              <div *ngIf="caricamentoInCorso">
+                <span class="fas fa-spinner fa-spin ml-3"></span>
+              </div>
+              <div *ngIf="!caricamentoInCorso && rowErrors[row.attivita.id]">
+                <button class="btn btn-outline-danger btn-sm" disabled>
+                  <span class="fas fa-times" data-toggle="tooltip" title="{{rowErrors[row.attivita.id]}}"></span>
+                </button>
+              </div>
+              <div *ngIf="!caricamentoInCorso && !rowErrors[row.attivita.id]">
+                <button class="btn btn-outline-success btn-sm" disabled>
+                  <span class="fas fa-check" data-toggle="tooltip" title="Firmabile"></span>
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- dettaglio riga espansa -->
+          <ng-template #rowDetailTemplate let-row="row">
+            <div class="text-left">
+              <div class="mt-3">
+                <section>
+                  <div class="container mobile-first">
+                    <div class="row">
+                      <div class="col-12">
+                        <ul class="nav nav-tabs" id="tab-navigation" role="tablist">
+                          <li class="nav-item" role="presentation">
+                            <a class="nav-link" [attr.aria-selected]="tabAttivo === 'docs'" id="docs-tab" aria-controls="docs"
+                              [ngClass]="{'active': tabAttivo === 'docs'}" (click)="activateTabInner($event, 'docs')">
+                              {{'pratica.documenti' | translate}}
+                            </a>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <a class="nav-link" [attr.aria-selected]="tabAttivo === 'comments'" id="comments-tab"
+                              aria-controls="comments" [ngClass]="{'active': tabAttivo === 'comments'}"
+                              (click)="activateTabInner($event, 'comments')">
+                              {{'pratica.commenti.tab_title' | translate}}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="tab-content" id="tab-content" *ngIf="row.pratica">
+                          <!-- CONTENT DOCUMENTI: Start -->
+                          <div *ngIf="lazyLoaded['docs']" class="tab-pane px-4 fade show" id="docs" role="tabpanel"
+                                aria-labelledby="docs-tab" [ngClass]="{'active show': tabAttivo === 'docs'}">
+                            <div *ngIf="rowErrors[row.attivita.id]">
+                              <app-messaggi-controlli-obbligatori [messaggiObbligatori]="messaggiObbligatori"></app-messaggi-controlli-obbligatori>
+                            </div>
+                            <app-consultazione-documenti #docs
+                              [idPratica]="row.pratica?.id"
+                              [soloLettura]="true"
+                              [embedded]="true"
+                              [daFirmare]="true"
+                              [esecuzioneMultipla]="true"
+                              [identificativo]="'firma-documenti'"
+                              [infoTask]="row.attivita"
+                              [soloFirmabili]="true"
+                              [listaDocDaFirmareObbl]="listaDocDaFirmareObbligatori"
+                              (messaggiObbligatori) = "sendMessages($event)"
+                              (firmabile) = isFirmabile($event)
+                            >
+                            </app-consultazione-documenti>
+                          </div>
+                          <!-- CONTENT DOCUMENTI: End -->
+
+                          <!-- CONTENT COMMENTI: Start -->
+                          <div *ngIf="lazyLoaded['comments']" class="tab-pane px-4 py-5 fade" id="comments" role="tabpanel"
+                                aria-labelledby="comments-tab" [ngClass]="{'active show': tabAttivo === 'comments'}">
+                            <app-commenti [pratica]="row.pratica">
+                            </app-commenti>
+                          </div>
+                          <!-- CONTENT COMMENTI: End -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+
+              </div>
+            </div>
+          </ng-template>
+
+        </cosmo-table>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="abilitaForm">
+      <div class="col-12">
+        <app-approvazione-rifiuto
+          [mostraConferma]="true"
+          [approvazione]="approvazione"
+          [note]="note"
+          [siButton]="'Approva firma selezionate'"
+          [noButton]="'Rifiuta firma selezionate'"
+          [readOnly]="false"
+          (confermaEmitter)="conferma($event)">
+        </app-approvazione-rifiuto>
+      </div>
+      <div *ngIf="!checkMandareAvanti && !mandareAvantiProcesso" class="mt-2">
+        <p class="alert alert-info">
+          {{ "esecuzione_multipla.messaggio" | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="!caricamentoInCorso && !abilitaForm">
+      <div class="col-12">
+        <p class="alert alert-info">
+          Seleziona una o pi&ugrave; pratiche da firmare
+        </p>
+      </div>
+    </div>
+    <div class="row mt-3" *ngIf="caricamentoInCorso">
+      <div class="col-12">
+        <p class="alert alert-warning">
+          Caricamento informazioni relative alle pratiche...
+        </p>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
+
+

@@ -1,0 +1,90 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+          (click)="modal.dismiss('click_on_back_arrow')">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        &nbsp;{{ "preferenze.seleziona_certificato" | translate }}
+      </h5>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <ng-container *ngIf="loadingError">
+        <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+      </ng-container>
+      <ng-container *ngIf="loading">
+        <app-caricamento-in-corso></app-caricamento-in-corso>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadingError">
+        <div id="certificatiFirma">
+            <ng-container *ngIf="!loadingCertificatiError">
+
+              <div class="row">
+                <div class="col-12 col-lg-4">
+                  <button class="btn btn-primary btn-sm" (click)="aggiungiCertificato()">
+                    <span class="fas fa-plus-circle"></span> {{ "preferenze.crea_certificato" | translate }}
+                  </button>
+                </div>
+                <div class="col-12 col-lg-4">
+                </div>
+                <div class="col-12 col-lg-4 text-right">
+                  <cosmo-table-search-filter [table]="table" [enableSearchIn]="false">
+                  </cosmo-table-search-filter>
+                </div>
+              </div>
+              <br>
+              <div class="row mt-3 mb-3">
+                <div class="col-sm-12 text-right pr-3">
+                  <cosmo-table-page-size [table]="table"></cosmo-table-page-size>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+
+                  <cosmo-table #table [tableDisplayClass]="'table table-sm table-hover'" [data]="certificatiFirma"
+                    [columns]="certificatiColumns" [enableSorting]="true" [enablePagination]="true" [enableSelection]="true"
+                    [enableSelectAll]="false" [enableMultiSelect]="false"
+                    [paginationMode]="'CLIENT'" [defaultPageSize]="10" [possiblePageSize]="[10,20,50,100]"
+                    [defaultSortingDirection]="'ASC'" [defaultSortingColumn]="'descrizione'" (selectionChange)="selectionChangeHandler($event)">
+
+                  </cosmo-table>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-sm-12">
+                  <cosmo-table-pagination [table]="table"></cosmo-table-pagination>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="loadingCertificatiError">
+              <app-caricamento-fallito [error]="loadingCertificatiError"></app-caricamento-fallito>
+            </ng-container>
+          </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer text-right">
+      <button ngbAutoFocus class="btn btn-outline-primary btn-sm mr-2" type="button" data-dismiss="modal" (click)="modal.dismiss('cancel click')">
+        {{'common.annulla' | translate }}
+      </button>
+
+      <button class="btn btn-primary btn-sm" type="button"
+        [disabled]="!canProceed"
+        (click)="proceed()" >
+        {{ 'common.seleziona'  | translate }}
+      </button>
+    </div>
+</div>
+
+

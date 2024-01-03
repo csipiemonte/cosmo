@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>
+        Basic table with sorting.
+        Only columns with canSort = true can be sorted.
+      </p>
+      <p>
+        The 'defaultSortingColumn' property of the table is used
+        to specify starting sort column.
+        <br/>
+        The 'defaultSortingDirection' property of the table is used
+        to specify starting sort direction.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+        [defaultSortingColumn]="'email'"
+        [defaultSortingDirection]="'DESC'"
+      ></cosmo-table>
+    </div>
+  </div>
+</div>

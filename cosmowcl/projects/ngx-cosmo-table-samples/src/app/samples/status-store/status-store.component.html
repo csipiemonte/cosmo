@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with in-memory sorting and pagination
+        that remembers its status when you reload the page.
+        Navigate the table and reload.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+        [enablePagination]="true"
+        [paginationMode]="'CLIENT'"
+        [defaultPageSize]="5"
+        [possiblePageSize]="[5,10,20]"
+        [defaultSortingColumn]="'firstName'"
+        [enablePageSizeSelect]="true"
+        [storeAdapter]="storeAdapter"
+        [enableStorePersistence]="true"
+      ></cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="savedStatus">
+    <div class="col-sm-12">
+      <p>Status snapshot saved in local storage:</p>
+      <pre class="alert alert-info">{{ savedStatus | json }}</pre>
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="restoredStatus">
+    <div class="col-sm-12">
+      <p>Restored status snapshot from local storage:</p>
+      <pre class="alert alert-warning">{{ restoredStatus | json }}</pre>
+    </div>
+  </div>
+</div>

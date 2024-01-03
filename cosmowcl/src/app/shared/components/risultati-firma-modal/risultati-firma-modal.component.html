@@ -1,0 +1,131 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header" *ngIf="isDefaultLayout">
+  <h5 class="modal-title">{{ 'Firma documenti' }}</h5>
+</div>
+<div class="modal-body pb-5">
+  <ng-container *ngIf="isDefaultLayout">
+      <div class="row justify-content-center">
+          <div class="col-md-12">
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item"
+                      [class.list-group-item-not-started]="!started"
+                      [class.list-group-item-started]="started"
+                  >
+                      <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                          <i *ngIf="!started" class="fas fa-circle-notch fa-spin"></i>
+                          <i *ngIf="started" class="far fa-check-circle"></i>
+                          &nbsp;
+                      </span>
+
+                      Avvio operazione di firma...
+
+                      <span style="float: right;">
+                        <span class="badge badge-pill badge-success" *ngIf="started">completata</span>
+                        <span class="badge badge-pill badge-primary" *ngIf="!started">in corso</span>
+                    </span>
+
+
+                  </li>
+
+                  <ng-container *ngTemplateOutlet="recursivePracticeList; context:{ $implicit: webSocketPratiche, index: 0 }">
+                  </ng-container>
+
+                  <ng-container *ngTemplateOutlet="recursiveDocumentList; context:{ $implicit: webSocketDocumenti, index: 0 }">
+                  </ng-container>
+
+                  <li *ngIf="finished"
+                      class="list-group-item"
+                      [class.list-group-item-success]="!error"
+                      [class.list-group-item-danger]="error">
+
+                      <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                          <i *ngIf="!error" class="far fa-check-circle"></i>
+                          <i *ngIf="error" class="fas fa-ban"></i>
+                          &nbsp;
+                      </span>
+
+                      <span *ngIf="!error">
+                          Operazione terminata con successo
+                      </span>
+                      <span *ngIf="error">
+                          Operazione fallita
+                      </span>
+
+                      <span style="float: right;">
+                          <span class="badge badge-pill badge-success" *ngIf="!error">completata</span>
+                          <span class="badge badge-pill badge-danger" *ngIf="error">FALLITA</span>
+                      </span>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </ng-container>
+</div>
+
+<ng-template #recursivePracticeList let-webSocketPratiche let-index="index" >
+  <ng-container *ngIf="!(index > 100)">
+      <ng-container *ngFor="let item of webSocketPratiche">
+          <ng-container *ngIf="true">
+              <li class="list-group-item"
+                  [class.list-group-item-started]="item.stato === 'STARTED'"
+                  [class.list-group-item-completed]="item.stato === 'COMPLETED'"
+                  [class.list-group-item-danger]="item.stato === 'FAILED'"
+              >
+                  <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                      <i *ngIf="item.stato === 'STARTED'" class="fas fa-circle-notch fa-spin"></i>
+                      <i *ngIf="item.stato === 'COMPLETED'" class="far fa-check-circle"></i>
+                      <i *ngIf="item.stato === 'FAILED'" class="fas fa-ban"></i>
+                      &nbsp;
+                  </span>
+
+                  <span>
+                      Avvio firma documenti per pratica : {{item.oggettoPratica}}
+                  </span>
+
+                  <span style="float: right;">
+                      <span class="badge badge-pill badge-success" *ngIf="item.stato === 'COMPLETED'">completata</span>
+                      <span class="badge badge-pill badge-danger" *ngIf="item.stato === 'FAILED'">FALLITA</span>
+                      <span class="badge badge-pill badge-primary" *ngIf="item.stato === 'STARTED'">in corso</span>
+                  </span>
+              </li>
+          </ng-container>
+      </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #recursiveDocumentList let-webSocketDocumenti let-index="index" >
+  <ul class="list-group list-group-flush" *ngIf="webSocketDocumenti.length > 0">
+    <ng-container *ngIf="!(index > 100)">
+      <ng-container *ngFor="let item of webSocketDocumenti">
+          <ng-container *ngIf="true">
+              <li class="list-group-item"
+                  [class.list-group-item-started]="item.stato === 'STARTED'"
+                  [class.list-group-item-completed]="item.stato === 'COMPLETED'"
+                  [class.list-group-item-danger]="item.stato === 'FAILED'"
+              >
+                  <span class="mr-3" style="width: 2em;display: inline-block;max-width: 2em;">
+                      <i *ngIf="item.stato === 'STARTED'" class="fas fa-circle-notch fa-spin"></i>
+                      <i *ngIf="item.stato === 'COMPLETED'" class="far fa-check-circle"></i>
+                      <i *ngIf="item.stato === 'FAILED'" class="fas fa-ban"></i>
+                      &nbsp;
+                  </span>
+
+                  <span>
+                      Firma Documento : {{item.descrizioneDocumento}}
+                  </span>
+
+                  <span style="float: right;">
+                      <span class="badge badge-pill badge-success" *ngIf="item.stato === 'COMPLETED'">completata</span>
+                      <span class="badge badge-pill badge-danger" *ngIf="item.stato === 'FAILED'">FALLITA</span>
+                      <span class="badge badge-pill badge-primary" *ngIf="item.stato === 'STARTED'">in corso</span>
+                  </span>
+              </li>
+          </ng-container>
+      </ng-container>
+    </ng-container>
+</ul>
+</ng-template>
+

@@ -1,0 +1,122 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row">
+  <div class="col-6">
+    <h2 class="mt-1">{{titolo}}</h2>
+  </div>
+  <div class="col-6 text-right">
+    <button class="btn btn-sm text-rp_lightblue" (click)="tutte()"><i class="fas fa-angle-right mr-1"></i> Tutte</button>
+  </div>
+</div>
+<div class="card card-bg no-after">
+  <div class="">
+
+    <div class="table-container mobile-first">
+      <div class="card card-bg no-after">
+        <cosmo-table *ngIf="maxSize && maxSize.length > 0"
+          #table
+          [tableDisplayClass]="'table-sm table-hover'"
+          [dataProvider]="dataProvider"
+          [columns]="effectiveColumns"
+          [paginationMode]="'CLIENT'"
+          [enableSorting]="true"
+          [enableRowExpansion]="false"
+          [enableMultipleRowExpansion]="false"
+          [defaultSortingDirection]="'DESC'"
+          [defaultSortingColumn]="'dataCreazionePratica'"
+          >
+          <!-- celle custom -->
+          <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+            <div *ngIf="column.name === 'favorite'">
+              <button (click)="togglePreference(row)" class="btn btn-action-icon" title="Preferito">
+                <em class="{{ row.preferita ? 'fas':'far'}} fa-star"></em>
+              </button>
+            </div>
+
+            <!-- cella STATO (BADGE) -->
+            <div *ngIf="column.name === 'stato'">
+              <span class="badge badge-pill badge-{{ getBadgeClass(row) }}">{{ getStatusText(row) }}</span>
+            </div>
+
+            <div *ngIf="column.name === 'dettaglio'">
+              <button (click)="goToDettaglio(row)" class="btn btn-action-icon">
+                <i class="fas fa-eye" title="Dettaglio"></i>
+              </button>
+            </div>
+
+            <div *ngIf="column.name === 'azioni_dropdown'">
+              <div class="dropdown"  >
+                <div class="btn-action-icon dropdown-toggle" ngbDropdown [container]="'body'" [autoClose]="'outside'" placement="bottom-right">
+                  <a class="" type="button" ngbDropdownToggle [ngClass]="{'dropdown-disabled':!row.attivita || row.attivita.length==0}">
+                    <span class="fas fa-pen"></span>
+                    <span class="span-noexpanded fas fa-angle-down ml-1"></span>
+                    <span class="span-expanded fas fa-angle-up ml-1"></span>
+                  </a>
+                  <div ngbDropdownMenu>
+                    <button ngbDropdownItem *ngFor="let a of row.attivita" (click)="doAttivita(a)">
+                      <li class="list-item"><a><span class="a-bit-smaller">{{a.nome}} {{a.gruppoAssegnatario ? '(' + a.gruppoAssegnatario + ')' : ''}}</span></a></li>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div *ngIf="column.name === 'azioni_menu'" class="text-right">
+              <!-- DA LAVORARE -->
+              <div class="dropdown" *ngIf="isDaLavorare()">
+
+                <div class="btn-action-icon btn-dropdown dropdown-toggle" ngbDropdown [container]="'body'" [autoClose]="'outside'">
+                  <button class="btn btn-link btn-xs btn-action-icon" type="button" ngbDropdownToggle
+                    [disabled]="!canAssign(row.attivita, row.tipo) && !canShare(row) && !isAnnullabile(row)">
+                  <span class="fas fa-ellipsis-v"></span>
+                </button>
+
+                  <div ngbDropdownMenu class="dropdown-menu">
+                    <button ngbDropdownItem (click)="assignPratica(row)" *ngIf="canAssign(row.attivita, row.tipo)">
+                      <a><span class="a-bit-smaller">Assegna attivit&agrave;</span></a>
+                    </button>
+                    <button ngbDropdownItem (click)="condividiPratica(row)" *ngIf="canShare(row)">
+                      <a><span class="a-bit-smaller">Condividi pratica</span></a>
+                    </button>
+                    <ng-container *ngIf="isDaLavorare() && isAnnullabile(row)">
+                      <button *appHasUseCase="'ADMIN_PRAT'" ngbDropdownItem (click)="annullaPratica(row)">
+                        <a><span class="a-bit-smaller">Annulla pratica</span></a>
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CONDIVISE -->
+              <div class="dropdown" *ngIf="isCondivise()">
+
+                <button (click)="eliminaCondivisione(row)" class="btn btn-action-icon text-danger">
+                  <i class="fas fa-trash-alt" title="elimina condivisione"></i>
+                </button>
+              </div>
+
+            </div>
+
+            <div *ngIf="column.name === 'alert'">
+              <button class="btn btn-action-icon" title="Notifiche">
+              </button>
+            </div>
+          </ng-template>
+
+          <!-- dettaglio riga espansa -->
+          <!--
+          <ng-template #rowDetailTemplate let-row="row">
+            <div class="text-center">
+              <img src="https://via.placeholder.com/300x150" alt="Placeholder Image" />
+            </div>
+          </ng-template>
+          -->
+        </cosmo-table>
+
+      </div>
+
+    </div>
+  </div>

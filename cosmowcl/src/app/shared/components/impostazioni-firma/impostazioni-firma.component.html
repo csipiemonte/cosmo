@@ -1,0 +1,89 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-sm-12 form-group bootstrap-select-wrapper">
+    <label for="tipiCredenzialiFirma"
+      [ngClass]="{'required': obbligatorietaCampi}">{{"preferenze.ente_certificatore" | translate}}</label>
+    <select id="entiCertificatori" name="entiCertificatori" class="form-control border col-lg-12"
+      [(ngModel)]="enteCertificatore" (ngModelChange)="onChangeEnteCertificatore($event) " [disabled]="disableAll">
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla" disabled hidden> {{ "preferenze.seleziona" | translate }}
+      </option>
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla">
+      </option>
+      <option [ngValue]="enteCertificatore" *ngFor="let enteCertificatore of entiCertificatori">
+        {{ enteCertificatore.descrizione }}
+      </option>
+    </select>
+    <div *ngIf="isDefault(enteCertificatore?.codice)">
+      <p class="default-message">{{"preferenze.default_message"| translate}}</p>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 form-group bootstrap-select-wrapper">
+    <label for="tipiCredenzialiFirma"
+      [ngClass]="{'required': obbligatorietaCampi}">{{"preferenze.tipo_credenziali_firma" | translate}}</label>
+    <select id="tipiCredenzialiFirma" name="tipiCredenzialiFirma" class="form-control border col-lg-12"
+      [(ngModel)]="tipoCredenzialiFirma" [disabled]="disableAll">
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla" disabled hidden> {{ "preferenze.seleziona" | translate }}
+      </option>
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla">
+      </option>
+      <option [ngValue]="tipoCredenzialiFirma" *ngFor="let tipoCredenzialiFirma of tipiCredenzialiFirma">
+        {{ tipoCredenzialiFirma.descrizione }}
+      </option>
+    </select>
+    <div *ngIf="isDefault(tipoCredenzialiFirma?.codice)">
+      <p class="default-message">{{"preferenze.default_message" | translate}}</p>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 form-group bootstrap-select-wrapper">
+    <label for="tipiOTP" [ngClass]="{'required': obbligatorietaCampi}">{{"preferenze.tipo_otp" | translate}}</label>
+    <select id="tipiOTP" name="tipiOTP" class="form-control border col-lg-12" [(ngModel)]="tipoOTP" [disabled]="disableAll">
+      <option [ngValue]="null"  *ngIf="abilitaSelezioneNulla" disabled hidden> {{ "preferenze.seleziona" | translate }}
+      </option>
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla">
+      </option>
+      <option [ngValue]="tipoOTP" *ngFor="let tipoOTP of tipiOTP">{{ tipoOTP.descrizione }}
+      </option>
+    </select>
+    <div *ngIf="isDefault(tipoOTP?.codice)">
+      <p class="default-message">{{"preferenze.default_message"| translate}}</p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-sm-12 form-group bootstrap-select-wrapper">
+    <label for="profiliFEQ"
+      [ngClass]="{'required': obbligatorietaCampi}">{{"preferenze.profilo_feq" | translate}}</label>
+    <select id="profiliFEQ" name="profiliFEQ" class="form-control border col-lg-12" [(ngModel)]="profiloFEQ" [disabled]="disableAll">
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla" disabled hidden> {{ "preferenze.seleziona" | translate }}
+      </option>
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla">
+      </option>
+      <option [disabled]="disableProfiloFEQ(profiloFEQ.codice)" [ngValue]="profiloFEQ" *ngFor="let profiloFEQ of profiliFEQ">
+        {{ profiloFEQ.descrizione }}
+      </option>
+    </select>
+    <div *ngIf="isDefault(profiloFEQ?.codice)">
+      <p class="default-message">{{"preferenze.default_message"| translate}}</p>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 form-group bootstrap-select-wrapper">
+    <label for="scelteMarcaTemporale"
+      [ngClass]="{'required': obbligatorietaCampi}">{{"preferenze.scelta_marca_temporale" | translate}}</label>
+    <select id="scelteMarcaTemporale" name="scelteMarcaTemporale" class="form-control border col-lg-12"
+      [(ngModel)]="sceltaMarcaTemporale" [disabled]="disableAll">
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla" disabled hidden> {{ "preferenze.seleziona" | translate }}
+      </option>
+      <option [ngValue]="null" *ngIf="abilitaSelezioneNulla">
+      </option>
+      <option [ngValue]="sceltaMarcaTemporale" *ngFor="let sceltaMarcaTemporale of scelteMarcaTemporale">
+        {{ sceltaMarcaTemporale.descrizione }}
+      </option>
+    </select>
+    <div *ngIf="isDefault(sceltaMarcaTemporale?.codice)">
+      <p class="default-message">{{"preferenze.default_message"| translate}}</p>
+    </div>
+  </div>
+</div>

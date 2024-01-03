@@ -1,0 +1,7 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="pratica">
+  <app-consultazione-documenti [pratica] = "pratica" [idPratica]="pratica?.id" [soloLettura]="true" [identificativo]="'consultazione-documenti'" [daFirmare]="false" (totDocumenti) = getTotDocumentiCaricati($event)></app-consultazione-documenti>
+</ng-container>

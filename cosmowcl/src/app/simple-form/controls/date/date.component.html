@@ -1,0 +1,20 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="controls && formField.id" [formGroup]="controls">
+        <label [attr.for]="formField.id" class="active" [ngClass]="{'required': formField.required}">
+            {{formField.name}}
+        </label>
+        <input
+            [ngClass]="{ 'is-invalid': controls?.controls[formField.id].touched && controls?.controls[formField.id].invalid }"
+            [formControlName]="formField.id" class="form-control it-date-datepicker" type="date"
+            [attr.id]="formField.id" [attr.name]="formField.id"
+            [attr.placeholder]="formField.placeholder && formField.placeholder.length > 0 ? formField.placeholder: null"
+            [attr.readonly]="formField.readOnly ? true : null" [attr.required]="formField.required ? true : null">
+        <div class="invalid-feedback"
+            *ngIf="controls?.controls[formField.id].touched && controls?.controls[formField.id].invalid">
+            <p *ngIf="controls?.controls[formField.id].hasError('required')">
+                {{"errori.campo_obbligatorio" | translate}}</p>
+        </div>
+</ng-container>

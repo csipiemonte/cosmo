@@ -1,0 +1,90 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container" *ngIf="pratica && isTaskVisible">
+  <br>
+
+  <app-info-pratica
+    [pratica]="pratica"
+    [isDettaglio]="false"
+    [readOnly]="readOnly"
+    [context]="context"
+    (refresh)="refreshFromInfoPratica()"
+    ></app-info-pratica>
+  <br>
+
+  <div *ngIf="isLocked">
+    <p class="alert alert-warning alert-noicon">
+      <i class="fas fa-user-lock" style="font-size: 1.40em; margin-right: 1.5em;"></i>
+      <ng-container *ngIf="isLockedByOther && otherLock?.utente?.nome">
+        Questo task &egrave; bloccato perch&egrave; {{ otherLock?.utente?.nome }} {{ otherLock?.utente?.cognome }} ci sta lavorando in questo momento.
+      </ng-container>
+      <ng-container *ngIf="isLockedByMe">
+        Questo task &egrave; bloccato perch&egrave; ci stai lavorando in un'altra sessione.
+      </ng-container>
+    </p>
+  </div>
+
+  <div class="text-right" *ngIf="!readOnly">
+    <button class="btn btn-task-action btn-sm btn-secondary mr-2" (click)="salva()">
+      <!-- <span class="btn-icon fas fa-save"></span> -->
+      {{"common.salva" | translate}}
+
+    </button>
+    <button class="btn btn-task-action btn-sm btn-primary"
+      [disabled]="!isValid"
+      (click)="conferma()"
+      *ngIf="!isSubtask"
+    >
+      <!-- <span class="btn-icon fas fa-check"></span> -->
+      {{"common.conferma" | translate}}
+    </button>
+    <button class="btn btn-task-action btn-sm btn-outline-primary"
+      (click)="confermaCollaborazione()"
+      [disabled]="!isValid"
+      *ngIf="isSubtask"
+    >
+      <!-- <span class="btn-icon fas fa-check"></span> -->
+      {{"form_logici.actions.conferma_collaborazione" | translate}}
+    </button>
+  </div>
+
+  <section class="tabs-and-panel mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <ul class="nav nav-tabs" id="tab-navigation" role="tablist">
+            <li class="nav-item" role="presentation" *ngFor="let formLogico of formLogici">
+              <a class="nav-link"
+                [ngClass]="{'disabled-tab':disableTab(formLogico), 'active': !disableTab(formLogico) && tabAttivo === formLogico.ref}"
+                data-toggle="tab" role="tab" id="{{formLogico.id}}"
+                href="{{formLogico.ref}}"
+                (click)="activateTab($event, formLogico.ref)"
+                [attr.aria-controls]="formLogico.description" >
+              {{formLogico.title}}
+
+              <div *ngIf="!disableTab(formLogico)">
+                <ng-container *ngFor="let badge of getBadges(formLogico)">
+                  <app-tab-badge [badge]="badge"></app-tab-badge>
+                </ng-container>
+              </div>
+            </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="tab-content" id="tab-content">
+            <div class="tab-pane px-4 py-5 fade" *ngFor="let formLogico of formLogici" role="tabpanel" id="{{formLogico.description}}"
+            [ngClass]="{'active': !disableTab(formLogico) && tabAttivo === formLogico.ref, 'show': tabAttivo === formLogico.ref}"
+            [attr.aria-labelledby]="formLogico.id">
+             <ng-container appTabs [formConfig]="formLogico"></ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

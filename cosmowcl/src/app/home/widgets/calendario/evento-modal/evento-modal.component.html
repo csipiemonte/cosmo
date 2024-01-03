@@ -1,0 +1,40 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="modal-header cosmo-modal-header" *ngIf="eventi && date">
+    <h6 class="modal-title">{{ "eventi.modal.dettaglio_relativo" | translate }} {{eventi.length | i18nPlural: messageMapping}} {{ "eventi.modal.del" | translate }} {{date?.day}} {{I18N_VALUES[i18n?.language].months[date?.month - 1]}}</h6>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss()">
+      <span aria-hidden="false">&times;</span>
+    </button>&nbsp; &nbsp;
+    <div *ngIf="helper">
+      <app-helper
+        [helper] = "helper"
+        [type] = "'MODAL'">
+      </app-helper>
+    </div>
+</div>
+<div class="modal-body px-5 py-3">
+    <ul class="list-unstyled events-list">
+
+        <li class="media evento" *ngFor="let evento of eventi">
+          <i class="fas align-self-center mr-3" [ngClass]="{'fa-user': 'UTENTE_CORRENTE' === evento.tipoAssegnazione, 'fa-users': 'GRUPPO' === evento.tipoAssegnazione}"></i>
+          <div class="media-body row mb-3">
+            <div class="col-10">
+              <h6 class="event-name">{{evento.nome}}</h6>
+              <p class="event-descr">{{evento.descrizione}}</p>
+              <p class="event-descr">{{ "eventi.modal.creato_il" | translate }} {{evento.dataCreazione.getDate()}} {{I18N_VALUES[i18n?.language].months[evento.dataCreazione.getMonth()]}} {{evento.dataCreazione.getFullYear()}}</p>
+            </div>
+            <div class="col-2 text-right align-self-center">
+              <button ngbAutoFocus class="btn btn-action-icon btn-link" (click)="modificaEvento(evento)">
+                <i class="fas fa-pen"></i>
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button class="btn btn-action-icon btn-link text-danger"
+                (click)="eliminaEvento(evento)"><span class="fas fa-trash-alt"></span></button>
+            </div>
+
+          </div>
+        </li>
+      </ul>
+</div>

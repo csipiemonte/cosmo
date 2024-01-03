@@ -1,0 +1,295 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container pt-3">
+  <h2 class="mt-3 mb-5">Area di amministrazione</h2>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-enti'" routerLinkActive="active">
+    <span class="fas fa-university card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione enti</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Amministrazione degli enti</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-fruitori'" routerLinkActive="active">
+    <span class="fas fa-robot card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione fruitori</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Amministrazione dei fruitori esterni</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-app-esterne'" routerLinkActive="active">
+    <span class="fas fa-sitemap card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Applicazioni esterne</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Amministrazione delle applicazioni esterne</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-tags'" routerLinkActive="active">
+    <span class="fas fa-user-tag card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione tags</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Gestione tags</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-use-case-profili'" routerLinkActive="active">
+    <span class="fas fa-user-cog card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione profili - casi d'uso</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Gestione associazione tra profili e casi d'uso</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+  <hr class="py-3" />
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-form-logici'" routerLinkActive="active">
+    <span class="fas fa-object-ungroup card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Form logici</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazione dei form logici</p>
+      </div>
+    </div>
+  </div>
+
+  <!--
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-istanze-funzionalita-form-logici'" routerLinkActive="active">
+    <span class="fas fa-th-list card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Istanze funzionalita' form logici</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazione delle istanze<br>delle funzionalita' dei form logici</p>
+      </div>
+    </div>
+  </div>
+  -->
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-tipologie-pratiche'" routerLinkActive="active">
+    <span class="fas fa-scroll card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Tipologie di pratiche</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Consente la configurazione delle pratiche</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/deploy-processo'" routerLinkActive="active">
+    <span class="fas fa-file-upload card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Deploy processo</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Consente il deployment di un processo</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/importa-processo'" routerLinkActive="active">
+    <span class="fas fa-file-upload card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Importa processo</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Consente l'importazione di un processo</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/variabili-di-filtro-tipologie-pratiche'" routerLinkActive="active">
+    <span class="fas fas  fa-filter card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Variabili di filtro</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Gestione variabili di filtro per tipologie pratiche</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/task-automatici-in-errore'" routerLinkActive="active">
+    <span class="fas fa-briefcase card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Task automatici in errore</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Gestione task automatici in errore</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-template-fea'" routerLinkActive="active">
+    <span class="fas fa-file-signature card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Template firma elettronica avanzata (FEA)</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Consente il disegno del riquadro di firma</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-sigilli-elettronici'" routerLinkActive="active">
+    <span class="fas fa-solid fa-stamp card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Sigilli elettronici</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Gestione sigilli elettronici</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <hr class="py-3" />
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-template-report'" routerLinkActive="active">
+    <span class="fas fa-file-alt card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione template report</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazione template report</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-custom-form'" routerLinkActive="active">
+    <span class="fas fa-box-open card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione custom form</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazione custom form</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-helper'" routerLinkActive="active">
+    <span class="fas fa-question card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione helper</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazione helper per pagina</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/configurazioni-messaggi-notifiche'" routerLinkActive="active">
+    <span class="fas fa-solid fa-envelope card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Messaggi notifiche</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Configurazioni per i messaggi delle notifiche</p>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <hr class="py-3" />
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/jslt-sandbox'" routerLinkActive="active">
+    <span class="fas fa-spell-check card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>JSLT Sandbox</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Editor interattivo di specifiche di trasformazione JSLT</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/discovery'" routerLinkActive="active">
+    <span class="fas fa-broadcast-tower card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Service discovery</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Visualizza lo stato dei servizi</p>
+      </div>
+    </div>
+  </div>
+  <!--
+  <div class="card card-teaser clickable rounded shadow mr-2" (click)="test()">
+    <span class="fas fa-vial fa-2x"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Service test</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Esegui test dei servizi</p>
+      </div>
+    </div>
+  </div>
+  -->
+
+  <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/amministrazione/gestione-parametri-di-sistema'" routerLinkActive="active">
+    <span class="fas fa-cogs card-icon"></span>
+    <div class="card-body pl-4">
+      <h5 class="card-title">
+        <a>Gestione parametri di sistema</a>
+      </h5>
+      <div class="card-text mt-3">
+        <p>Visualizza i parametri di sistema</p>
+      </div>
+    </div>
+  </div>
+
+  
+
+</div>

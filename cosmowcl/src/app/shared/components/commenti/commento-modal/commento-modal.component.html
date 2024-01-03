@@ -1,0 +1,50 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<form [formGroup]="nuovoCommentoForm" (ngSubmit)="submit()" *ngIf="nuovoCommentoForm">
+
+    <div class="modal-header cosmo-modal-header">
+      <h6 class="modal-title">
+        Inserisci un nuovo Commento
+      </h6>
+      <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+        (click)="modal.dismiss()">
+        <span aria-hidden="false">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body px-5 py-3">
+      <ul class="list-unstyled events-list">
+  
+        <li class="media evento">
+  
+          <div class="media-body">
+            <label>Commento:</label>
+            <input
+              [ngClass]="{ 'is-invalid': nuovoCommentoForm?.controls['commento'].touched && nuovoCommentoForm?.controls['commento'].invalid }"
+              type="text" id="commento" name="commento" formControlName="commento" class="form-control"
+              minlength={{MIN_LEN}}>
+  
+            <!-- non-valid commento messages  -->
+            <div class="invalid-feedback"
+              *ngIf="nuovoCommentoForm?.controls['commento'].touched && nuovoCommentoForm?.controls['commento'].invalid">
+              <p *ngIf="nuovoCommentoForm?.controls['commento']?.hasError('required')">
+                commento  necessario</p>
+              <p *ngIf="nuovoCommentoForm?.controls['commento']?.hasError('minlength')">
+                commento  troppo corto, deve contenere almeno {{MIN_LEN}} caratteri</p>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+              <button type="submit" class="btn btn-primary" aria-label="Submit button"
+                [disabled]="!nuovoCommentoForm?.valid">crea Commento</button>
+            </div>
+          </div>
+        </li>
+  
+      </ul>
+  
+    </div>
+  
+  </form>
+  

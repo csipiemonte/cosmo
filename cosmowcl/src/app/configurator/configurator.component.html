@@ -1,0 +1,74 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="container pt-3">
+    <h2 class="mt-3 mb-5">Area di Configuratore</h2>
+
+    <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/configurazione/tipologie-pratiche'"
+     routerLinkActive="active">
+      <span class="fas fas fa-scroll card-icon"></span>
+      <div class="card-body pl-4">
+        <h5 class="card-title">
+          <a>Tipologie Pratiche</a>
+        </h5>
+        <div class="card-text mt-3">
+          <p>Gestione Tipologie Pratiche</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/configurazione/deploy-processo'" routerLinkActive="active">
+      <span class="fas fas fa-file-upload card-icon"></span>
+      <div class="card-body pl-4">
+        <h5 class="card-title">
+          <a>Deploy processo</a>
+        </h5>
+        <div class="card-text mt-3">
+          <p>Consente il deployment di un processo</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/configurazione/gestione-form-logici'" routerLinkActive="active">
+      <span class="fas fas fa-object-ungroup card-icon"></span>
+      <div class="card-body pl-4">
+        <h5 class="card-title">
+          <a>Form logici</a>
+        </h5>
+        <div class="card-text mt-3">
+          <p>Configurazione dei form logici</p>
+        </div>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/configurazione/variabili-di-filtro-tipologie-pratiche'" routerLinkActive="active">
+      <span class="fas fas fa-solid fa-filter card-icon"></span>
+      <div class="card-body pl-4">
+        <h5 class="card-title">
+          <a>Variabili di filtro</a>
+        </h5>
+        <div class="card-text mt-3">
+          <p>Gestione di variabili di filtro per tipologie di pratiche</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-teaser clickable rounded admin-card" [routerLink]="'/configurazione/gestione-template-fea'" routerLinkActive="active">
+      <span class="fas fa-file-signature card-icon"></span>
+      <div class="card-body pl-4">
+        <h5 class="card-title">
+          <a>Template firma elettronica avanzata (FEA)</a>
+        </h5>
+        <div class="card-text mt-3">
+          <p>Consente il disegno del riquadro di firma</p>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+

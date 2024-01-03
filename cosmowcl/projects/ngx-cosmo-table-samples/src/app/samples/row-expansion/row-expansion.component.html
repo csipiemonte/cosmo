@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with row expansion.</p>
+      <p>You can control which rows are expandable by providing an (optional) expandableStatusProvider.
+        For instance, here you can only expand users in ACTIVE status.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        [data]="users"
+        [columns]="columns"
+        [enableRowExpansion]="true"
+        [enableMultipleRowExpansion]="true"
+        [expandableStatusProvider]="expandableStatusProvider"
+      >
+        <ng-template #rowDetailTemplate let-row="row">
+          <h5>User details</h5>
+          <ul class="list-group">
+            <li class="list-group-item">
+              ID: {{ row._id }}
+            </li>
+            <li class="list-group-item">
+              Name: {{ row.name.first }} {{ row.name.last }}
+            </li>
+            <li class="list-group-item">
+              Email: {{ row.email }}
+            </li>
+            <li class="list-group-item">
+              GUID: {{ row.guid }}
+            </li>
+          </ul>
+        </ng-template>
+      </cosmo-table>
+    </div>
+  </div>
+</div>

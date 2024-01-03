@@ -1,0 +1,165 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<div class="modal-content">
+  <div class="modal-header">
+      <h5 class="modal-title">
+        <button type="button" class="btn btn-link p-0" data-dismiss="modal"
+          (click)="closeModal()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        &nbsp; Ricerca documenti in ACTA
+      </h5>
+      <div *ngIf="helper">
+        <app-helper
+          [helper] = "helper"
+          [type] = "'MODAL'">
+        </app-helper>
+      </div>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="loadingError">
+        <app-caricamento-fallito [error]="loadingError" (retry)="refresh()"></app-caricamento-fallito>
+    </ng-container>
+    <ng-container *ngIf="loading">
+        <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+    </ng-container>
+
+    <ng-container *ngIf="loaded && !loading">
+      <div class="row mt-4 mb-4">
+        <div class="col-12">
+          <app-filtri-ricerca-acta #filtri (ricerca)="updateFiltriRicerca($event)"></app-filtri-ricerca-acta>
+        </div>
+      </div>
+
+      <cosmo-table
+        #table
+        [tableDisplayClass]="'table table-sm table-hover'"
+        [dataProvider]="dataProvider"
+        [columns]="columns"
+        [enableSorting]="false"
+        [enablePagination]="true"
+        [paginationMode]="'SERVER'"
+        [defaultPageSize]="5"
+        [possiblePageSize]="[5]"
+        [defaultSortingDirection]="'ASC'"
+        [defaultSortingColumn]="'oggetto'"
+        [enableRowExpansion]="true"
+        [expandableStatusProvider]="expandableStatusProvider"
+        [selectableStatusProvider]="selectableStatusProvider"
+        [forceRowExpansion]="forceRowExpansion"
+        [enableManualRowExpansion]="false"
+        [enableSelection]="true"
+        [enableSelectAll]="true"
+        [enableMultiSelect]="true"
+        (allChecked)="rootTableCheckAll($event)"
+        [selectionWriteback]="true"
+      >
+        <!-- cella selezione tipo documento -->
+        <ng-template let-row="row" let-column="column" let-value="value" #cellTemplate>
+          <div *ngIf="column.name === 'tipoDocumento' && !isMultiSelect(row) && row.selected">
+            <select
+              [ngClass]="{ 'is-invalid': row.selected && !getTipoDocumentoSelezionato(row, null) }"
+              name="tipoDocumento"
+              class="form-control"
+              [attr.disabled]="null"
+              [ngModel]="getTipoDocumentoSelezionato(row, null)?.codice"
+              (ngModelChange)="setTipoDocumentoSelezionato(row, null, $event)"
+              placeholder="Scegli la tipologia"
+              [disabled]="!row.selected"
+              >
+              <option [ngValue]="null">
+                Scegli la tipologia
+              </option>
+              <option *ngFor="let option of tipiDocumento; let i = index" [ngValue]="option.codice">
+                {{option.valore}}
+              </option>
+            </select>
+          </div>
+        </ng-template>
+
+        <!-- dettaglio riga espansa -->
+        <ng-template #rowDetailTemplate let-row="row">
+          <cosmo-table
+            *ngIf="(row.documentiFisici?.length || 0) > 1"
+            #tableDocFisici
+            [tableContext]="row"
+            [tableDisplayClass]="'table table-sm'"
+            [data]="row.documentiFisici"
+            [columns]="columnsDocFisici"
+            [enableSorting]="false"
+            [enablePagination]="false"
+            [paginationMode]="'CLIENT'"
+            [defaultPageSize]="50"
+            [possiblePageSize]="[50,100]"
+            [defaultSortingDirection]="'ASC'"
+            [defaultSortingColumn]="'progressivo'"
+            [enableSelection]="true"
+            [enableSelectAll]="true"
+            [enableMultiSelect]="true"
+            [selectionWriteback]="true"
+          >
+            <!-- cella selezione tipo documento -->
+            <ng-template let-innerrow="row" let-column="column" let-value="value" #cellTemplate>
+              <div *ngIf="column.name === 'tipoDocumento' && isMultiSelect(row) && innerrow.selected">
+                <select
+                  [ngClass]="{ 'is-invalid': innerrow.selected && !getTipoDocumentoSelezionato(row, innerrow) }"
+                  name="tipoDocumento"
+                  class="form-control"
+                  [attr.disabled]="null"
+                  [ngModel]="getTipoDocumentoSelezionato(row, innerrow)?.codice"
+                  (ngModelChange)="setTipoDocumentoSelezionato(row, innerrow, $event)"
+                  placeholder="Scegli la tipologia"
+                  [disabled]="!innerrow.selected"
+                >
+                  <option [ngValue]="null">
+                    Scegli la tipologia
+                  </option>
+                  <option *ngFor="let option of tipiDocumento; let i = index" [ngValue]="option.codice">
+                    {{option.valore}}
+                  </option>
+                </select>
+              </div>
+            </ng-template>
+          </cosmo-table>
+        </ng-template>
+      </cosmo-table>
+
+      <div class="row mt-3" *ngIf="table">
+        <div class="col-12 col-lg-3">
+          <!-- EMPTY -->
+        </div>
+        <div class="col-12 col-lg-6 text-center">
+          <cosmo-table-pagination *ngIf="table"
+            [table]="table"
+            [nextOnlyMode]="true"
+          ></cosmo-table-pagination>
+        </div>
+        <div class="col-12 col-lg-3 text-right pt-2">
+          <!--
+          <cosmo-table-page-size *ngIf="table"
+            [table]="table"
+          ></cosmo-table-page-size>
+          -->
+        </div>
+      </div>
+
+      <!--
+      <app-debug title="payload" [value]="getDocumentiSelezionati()"></app-debug>
+      -->
+
+    </ng-container>
+  </div>
+  <div class="modal-footer" *ngIf="loaded && !loading">
+    <div class="text-right">
+      <button type="button" class="btn btn-action btn-primary"
+        [disabled]="!abilitaImporta"
+        (click)="importa()"
+      >
+        Aggiungi
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && documento.stato && !isGiusto(documento)" class="d-inline ml-3">
+  <div class="d-inline-block" *ngIf="isErrored(documento)" title="{{ documento.stato.descrizione }}">
+    <span class="fas fa-exclamation-triangle"></span>
+  </div>
+  <div class="d-inline-block" *ngIf="isPending(documento)" title="{{ documento.stato.descrizione }}">
+    <span class="fas fa-spinner fa-spin"></span>
+  </div>
+</div>

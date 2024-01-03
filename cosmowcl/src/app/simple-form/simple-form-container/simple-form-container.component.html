@@ -1,0 +1,58 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<ng-container *ngIf="!formReady">
+  <app-caricamento-in-corso [top]="'6em'"></app-caricamento-in-corso>
+</ng-container>
+<ng-container *ngIf="formReady">
+  <div class="container">
+  <form *ngIf="simpleForm" [formGroup]="simpleFormGroup">
+    <div *ngFor="let field of simpleForm.fields; let i=index" [ngSwitch]="field.type" class="row"
+      formArrayName="dynamicControls">
+      <div class="col form-group" *ngSwitchCase="FieldNames.TEXTAREA">
+        <app-simpleform-textarea [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-textarea>
+      </div>
+      <div class="it-datepicker-wrapper width-40p" *ngSwitchCase="FieldNames.DATE">
+        <div class="col form-group">
+          <app-simpleform-date [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+          </app-simpleform-date>
+        </div>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.RADIO">
+        <app-simpleform-radio [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-radio>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.CHECKBOX">
+        <app-simpleform-checkbox [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-checkbox>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.DROPDOWN">
+        <app-simpleform-dropdown [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-dropdown>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.PEOPLE">
+        <app-simpleform-people [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-people>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.HEADLINE_WITH_LINE">
+        <app-simpleform-headline [formField]="field">
+        </app-simpleform-headline>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.SPACER">
+        <app-simpleform-spacer [formField]="field">
+        </app-simpleform-spacer>
+      </div>
+      <div class="col form-group" *ngSwitchCase="FieldNames.HORIZONTAL_LINE">
+        <app-simpleform-horizontal-line [formField]="field">
+        </app-simpleform-horizontal-line>
+      </div>
+      <div class="col form-group" *ngSwitchDefault>
+        <app-simpleform-text [controlIndex]="i" [formField]="field" [controls]="getFormGroupFromIndex(i)">
+        </app-simpleform-text>
+      </div>
+    </div>
+  </form>
+</div>
+</ng-container>

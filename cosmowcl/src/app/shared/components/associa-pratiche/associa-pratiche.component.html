@@ -1,0 +1,28 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div class="mb-5">
+  <app-messaggi-controlli-obbligatori [messaggiObbligatori]="messaggiErroriConfigurazione"></app-messaggi-controlli-obbligatori>
+</div>
+<div class="row mb-3">
+  <div class="col-5">
+    <ng-template #popContent>
+      <p [innerHTML]="descrizioneInfo" *ngIf="descrizioneInfo"></p>
+    </ng-template>
+    <p>{{"form_logici.associazioni.tipo_associazioni" | translate}}
+      <span  *ngIf="descrizioneInfo" class="text-info pointer ml-2" placement="bottom" [ngbPopover]="popContent" [autoClose]="'outside'"
+      [autoClose]="'outside'" popoverClass="very-large-popover">
+      <i class="fas fa-info-circle"></i>
+    </span>
+    </p>
+
+  </div>
+  <div class="col-7">
+    <select id="relazione" name="relazione" class="form-control border" [(ngModel)]="tipoRelazioneSelezionata"
+      #defaultfocus>
+      <option [ngValue]="tipoRelazione" *ngFor="let tipoRelazione of tipiRelazionePratica">
+        {{tipoRelazione.descrizione}}</option>
+    </select>
+  </div>
+</div>

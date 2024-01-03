@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-sm-12">
+      <p>Basic table with drag and drop between two tables.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table1
+        [data]="users1"
+        [columns]="columns"
+        [tableId]="'table1'"
+        [dropConnectedTo]="'table2'"
+        [enableDrag]="true"
+        [enableDrop]="false"
+      >
+        <ng-template #dragTemplate let-row="row">
+          Moving {{ row.name.first }} {{ row.name.last }}
+        </ng-template>
+      </cosmo-table>
+    </div>
+  </div>
+
+  <div class="row mt-3 mb-3">
+    <div class="col-sm-12">
+      <p>You can only drag from first table onto second table.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <cosmo-table
+        #table2
+        [data]="users2"
+        [columns]="columns"
+        [tableId]="'table2'"
+        [enableDrag]="false"
+        [enableDrop]="true"
+        (itemDropped)="onItemDropped($event)"
+      >
+        <ng-template #dropTemplate let-row="row">
+          At this position
+        </ng-template>
+
+      </cosmo-table>
+    </div>
+  </div>
+
+</div>

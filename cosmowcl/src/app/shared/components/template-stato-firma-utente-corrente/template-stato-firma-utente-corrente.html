@@ -1,0 +1,15 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<div *ngIf="documento && hasFirma(documento)" class="d-inline ml-3">
+  <span class="icon-esito-verifica-firma">
+    <span *ngIf="hasFirma(documento)">
+      <ng-container *ngIf="esitoVerificaFirma(documento)">
+        <span class="text-success pointer">
+          <i class="fas fa-check"></i>
+        </span>
+      </ng-container>
+    </span>
+  </span>
+</div>

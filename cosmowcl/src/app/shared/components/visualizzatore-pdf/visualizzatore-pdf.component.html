@@ -1,0 +1,72 @@
+<!--
+ *  Copyright CSI-Piemonte - 2023
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+<ng-container *ngIf="isContextAvaible">
+ <div *ngIf="riquadroFirma">
+    <div class="example-boundary">
+      <ngx-extended-pdf-viewer
+      [src]="pdfSrc"
+      [height]="height"
+      [showBookmarkButton] = "showBookmarkButton"
+      [showDownloadButton] = "showDownloadButton"
+      [showOpenFileButton] = "showOpenFileButton"
+      [textLayer]="textLayer"
+      [ignoreKeyboard]="true"
+      [ignoreKeys]="ignoreKeys"
+      [customToolbar]="addAdditionalButtons"
+      [zoom]="zoom"
+      [showZoomButtons]="showZoomButtons"
+      [pageViewMode]="pageViewMode"
+      (pageRendered)="pageRendered($event)"
+      #container>
+      </ngx-extended-pdf-viewer>
+    </div>
+ </div>
+ <div *ngIf="!riquadroFirma">
+    <ngx-extended-pdf-viewer
+    [src]="pdfSrc"
+    [height]="height"
+    [showBookmarkButton] = "showBookmarkButton"
+    [showDownloadButton] = "showDownloadButton"
+    [showOpenFileButton] = "showOpenFileButton"
+    #container>
+    </ngx-extended-pdf-viewer>
+</div>
+
+
+
+  <ng-template #addAdditionalButtons>
+    <div id="toolbarViewer" *ngIf="riquadroFirma">
+      <div id="toolbarViewerLeft">
+        <pdf-toggle-sidebar></pdf-toggle-sidebar>
+        <div class="toolbarButtonSpacer"></div>
+        <pdf-find-button [showFindButton]="true" [textLayer]="true"></pdf-find-button>
+        <pdf-paging-area></pdf-paging-area>
+      </div>
+      <div id="toolbarViewerRight">
+        <pdf-open-file></pdf-open-file>
+        <pdf-presentation-mode></pdf-presentation-mode>
+        <pdf-download></pdf-download>
+        <div class="verticalToolbarSeparator hiddenSmallView"></div>
+        <button type="button"
+          class="toolbarButton new-tab hiddenMediumView"
+          title="Riquadro di firma"
+          (click)="showDragAndDropActivation()">
+          <img [src]="signatureIcon" alt="">
+        </button>
+      </div>
+    </div>
+    <div *ngIf="showDragAndDrop"
+      class="example-box"
+      cdkDragBoundary=".example-boundary"
+      cdkDrag
+      [cdkDragFreeDragPosition]="dragPosition"
+      (cdkDragEnded)="onDragEnd($event)">
+      Firma
+    </div>
+  </ng-template>
+
+</ng-container>
+
