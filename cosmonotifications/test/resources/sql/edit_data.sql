@@ -1,0 +1,2 @@
+--- NOP
+SELECT 1;
