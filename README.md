@@ -27,8 +27,9 @@ Ogni componente esporrà dei servizi REST che verranno fruiti dagli orchestrator
 Per la parte di frontend esiste un unico componente [CosmoWcl](/cosmowcl). Questa componente comunica unicamente con [Cosmo](/cosmo). CosmoWcl usa il software development kit pubblicato da AgID attraverso “Designers Italia” (Designers Italia 2020).
 
 # Configurazioni iniziali
-Lanciare il file build.xml per buildare ciascuna componente, utilizzando come target opensource -Dtarget=opensource.
-
+Aggiugere al classpath tutte le librerie che si trovano nel path /lib, /docs/lib_ext e docs/test.
+Aggiungere al classpath delle configurazioni di Ant, le librerie ant-contrib-1.0b3.jar e ivy-2.0.0.jar. Si trovano sotto la cartella [lib-build](/cosmocommon/docs/lib_build).
+Lanciare il file build.xml per buildare ciascuna componente.
 Una volta che la build è terminata, nella cartella build del componente è presente un file .ear con il nome della componente, deployabile su un application server.
 
 Per quanto riguarda invece il frontend, dopo aver installato npm e l'angular cli, da command line bisogna portarsi nella cartella di CosmoWcl e da li installare le dipendenze e le devDependencies e avviare il server che punta a localhost:4200.

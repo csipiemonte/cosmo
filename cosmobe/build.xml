@@ -47,7 +47,7 @@
 	<!-- -->
 	<target name="init" description="Inizializza lo script Ant.">
 		<tstamp />
-		<condition property="target" value="dev-int-01">
+		<condition property="target" value="local">
 			<equals arg1="${target}" arg2="$${target}" />
 		</condition>
 		<mkdir dir="${build}/sources" />

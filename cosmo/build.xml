@@ -8,7 +8,6 @@
 <!-- # l'argomento di ant -projecthelp quando si         # -->
 <!-- # richiama questo build.xml.                        # -->
 <!-- ##################################################### -->
-
 <project basedir="." default="default" name="cosmo" xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
 
 	<description>Build file per il progetto: [cosmo]</description>
@@ -43,7 +42,7 @@
 	<!-- -->
 	<target name="init" description="Inizializza lo script Ant.">
 		<tstamp />
-		<condition property="target" value="dev-int-01">
+		<condition property="target" value="local">
 			<equals arg1="${target}" arg2="$${target}" />
 		</condition>
 		<mkdir dir="${build}/sources" />

@@ -47,7 +47,7 @@
 	<!-- -->
 	<target name="init" description="Inizializza lo script Ant.">
 		<tstamp />
-		<condition property="target" value="dev-int-01">
+		<condition property="target" value="local">
 			<equals arg1="${target}" arg2="$${target}" />
 		</condition>
 		<mkdir dir="${build}/sources" />
@@ -100,7 +100,6 @@
 	<!-- -->
 	<target name="all-targets" description="Esegue il build per le varie distribuzioni in sequenza.">
 		<!--PROTECTED REGION ID(R-1748880042) ENABLED START-->
-		<!-- Inserire le varie distribuzioni di cui si intende eseguire il build. -->
 		<antcall target="distribution" />
 		<!--PROTECTED REGION END-->
 	</target>

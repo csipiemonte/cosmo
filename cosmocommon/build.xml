@@ -45,7 +45,7 @@
 	<!-- -->
 	<target name="init" description="Inizializza lo script Ant.">
 		<tstamp />
-		<condition property="target" value="dev-int-01">
+		<condition property="target" value="local">
 			<equals arg1="${target}" arg2="$${target}" />
 		</condition>
 		<mkdir dir="${build}/sources" />
@@ -73,16 +73,6 @@
 	<target name="default"
 	        description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
 
-		<!--
-		<fail message="Unsupported Java version: ${ant.java.version}">
-		  <condition>
-		    <not>
-		        <equals arg1="${ant.java.version}" arg2="11"/>
-		    </not>
-		  </condition>
-		</fail>
-		-->
-		
 		<condition property="first-call" value="distribution">
 			<not>
 				<equals arg1="${target}" arg2="$${target}" />
@@ -427,12 +417,12 @@
 	<!-- # [IVY]: internal target: load-dependencies                 # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="load-dependencies-true" depends="clean-lib,resolve-dependencies" description="Risolve le dipendenze esterne.">
+	<target name="load-dependencies-true" depends="resolve-dependencies" description="Risolve le dipendenze esterne.">
         <echo message="load-dependencies-true" />
 		<ivy:retrieve pattern="${lib}/[conf]/[artifact].[ext]" conf="*"/>
 	</target>
 
-    <target name="load-dependencies-false" depends="clean-lib" description="Risolve le dipendenze esterne.">
+    <target name="load-dependencies-false" description="Risolve le dipendenze esterne.">
     	<echo message="Skipping ivy dependencies resolution." />
 	</target>
 
