@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final utlizzo versione della libreria JasperReports6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Checklist Vuota" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb249bb2-dbab-4ee2-be88-548fb1b3db99">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Style1" isDefault="true" isBlankWhenNull="true" fontSize="10"/>
+	<subDataset name="MainDataset" uuid="fa73b4dc-1a7a-47df-9c73-3ec386f50310">
+		<field name="item" class="java.lang.String">
+			<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="image001" class="java.lang.Object"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="parameter2" class="java.lang.String"/>
+	<parameter name="attivita" class="java.util.List" nestedType="java.lang.Object"/>
+	<parameter name="subreportAttivita" class="net.sf.jasperreports.engine.JasperReport"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="170" splitType="Stretch">
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement style="Style1" x="0" y="11" width="554" height="50" uuid="340c12c3-8421-4189-82a2-869919c68f2a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{image001}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Style1" x="10" y="100" width="110" height="20" uuid="b03ca357-fd61-4d66-a445-678a6f14206d"/>
+				<textElement textAlignment="Left">
+					<font isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Parameter 1:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="10" y="120" width="110" height="20" uuid="06d8d54a-5fb3-44fa-8e8b-c7e958d225eb"/>
+				<textElement textAlignment="Left">
+					<font isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Parameter 2:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="120" y="100" width="434" height="20" uuid="f7f9eb52-a841-489b-9244-06453f388d0f"/>
+				<textFieldExpression><![CDATA[$P{parameter1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Style1" x="120" y="120" width="434" height="20" uuid="1260c5b5-1bf9-4a3a-8727-7e743869ab4f"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{parameter2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="10" y="150" width="544" height="20" uuid="bdeb747f-aebf-43ce-9687-3dd0c85cad22"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="90">
+			<subreport>
+				<reportElement x="10" y="10" width="544" height="80" uuid="ad169cdb-8995-400a-bf80-4c3defc44930"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{attivita})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subreportAttivita}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

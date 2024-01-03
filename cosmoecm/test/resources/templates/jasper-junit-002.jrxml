@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Checklist Vuota" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb249bb2-dbab-4ee2-be88-548fb1b3db99">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Style1" isDefault="true" isBlankWhenNull="true" fontSize="10"/>
+	<subDataset name="MainDataset" uuid="fa73b4dc-1a7a-47df-9c73-3ec386f50310">
+		<field name="item" class="java.lang.String">
+			<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="DatasourceTable">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[name]]></fieldDescription>
+		</field>
+		<field name="value" class="java.lang.String">
+			<fieldDescription><![CDATA[value]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="image001" class="java.lang.Object"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="parameter2" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="value" class="java.lang.String">
+		<fieldDescription><![CDATA[value]]></fieldDescription>
+	</field>
+	<field name="data" class="java.util.Collection">
+		<fieldDescription><![CDATA[data]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="170" splitType="Stretch">
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement style="Style1" x="0" y="11" width="554" height="50" uuid="340c12c3-8421-4189-82a2-869919c68f2a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{image001}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Style1" x="10" y="100" width="110" height="20" uuid="b03ca357-fd61-4d66-a445-678a6f14206d"/>
+				<textElement textAlignment="Left">
+					<font isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Parameter 1:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="10" y="120" width="110" height="20" uuid="06d8d54a-5fb3-44fa-8e8b-c7e958d225eb"/>
+				<textElement textAlignment="Left">
+					<font isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Parameter 2:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="120" y="100" width="434" height="20" uuid="f7f9eb52-a841-489b-9244-06453f388d0f"/>
+				<textFieldExpression><![CDATA[$P{parameter1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Style1" x="120" y="120" width="434" height="20" uuid="1260c5b5-1bf9-4a3a-8727-7e743869ab4f"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{parameter2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="10" y="150" width="544" height="20" uuid="bdeb747f-aebf-43ce-9687-3dd0c85cad22"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="74">
+			<componentElement>
+				<reportElement stretchType="RelativeToTallestObject" x="12" y="18" width="531" height="40">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DatasourceTable">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{data})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="50">
+						<jr:columnHeader height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="20">
+							<textField>
+								<reportElement x="0" y="0" width="50" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="260">
+						<jr:columnHeader height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="260" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[value]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="20">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="50" height="20"/>
+								<textElement verticalAlignment="Middle">
+									<paragraph leftIndent="1" spacingBefore="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<break>
+				<reportElement x="0" y="0" width="99" height="1"/>
+			</break>
+		</band>
+	</detail>
+</jasperReport>

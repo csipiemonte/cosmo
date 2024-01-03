@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final utlizzo versione della libreria JasperReports6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Checklist Vuota" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb249bb2-dbab-4ee2-be88-548fb1b3db99">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Style1" isDefault="true" isBlankWhenNull="true" fontSize="10"/>
+	<subDataset name="MainDataset" uuid="fa73b4dc-1a7a-47df-9c73-3ec386f50310">
+		<field name="item" class="java.lang.String">
+			<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="descrizione" class="java.lang.String">
+		<fieldDescription><![CDATA[descrizione]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="60">
+			<staticText>
+				<reportElement x="10" y="10" width="90" height="20" uuid="252adf9a-34c5-4abd-9f75-756e8ea233fb"/>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="30" width="90" height="20" uuid="2f2d6a22-0ef1-4e0d-9984-6a27b73126bb"/>
+				<text><![CDATA[Descrizione:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="10" width="454" height="20" uuid="1de59745-b5f3-4e21-852c-7e32a5b06e17"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="30" width="454" height="20" uuid="faad7998-77c7-48ed-9363-7b5e68506e57"/>
+				<textFieldExpression><![CDATA[$F{descrizione}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

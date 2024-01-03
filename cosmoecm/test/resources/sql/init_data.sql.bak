@@ -1,0 +1,109 @@
+INSERT INTO cosmo_c_configurazione (chiave, valore, descrizione, dt_inizio_val, dt_fine_val)
+	VALUES('max.page.size', '70', 'hard limit per numero massimo elementi per pagina', CURRENT_TIMESTAMP(), null);
+
+INSERT INTO cosmo_t_utente (id, codice_fiscale,nome,cognome,dt_inserimento,utente_inserimento)
+	VALUES (1, 'AAAAAA00A00A000F','Utente','Di Prova',CURRENT_TIMESTAMP(),'SYSTEM');
+	
+INSERT INTO cosmo_t_ente (id, codice_fiscale, codice_ipa, nome, dt_inserimento,utente_inserimento)
+	VALUES (1, 'codice_1', 'codice_1', 'Ente Di Prova', CURRENT_TIMESTAMP(),'SYSTEM');
+
+INSERT INTO cosmo_r_utente_ente (id_utente,id_ente,telefono,email,dt_inizio_val)
+	VALUES (1,1,'011000000','test@test.it',CURRENT_TIMESTAMP());
+
+INSERT INTO cosmo_d_tipo_pratica(codice, descrizione, process_definition_key, dt_inizio_val, id_ente) 
+	VALUES ('1', 'nome tipo pratica','proc_1', CURRENT_TIMESTAMP(), 1);
+
+INSERT INTO cosmo_d_tipo_documento(codice, descrizione, dt_inizio_val) 
+	VALUES ('codice 1', 'esempio tipo documento 1', CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_d_tipo_documento(codice, descrizione, dt_inizio_val) 
+	VALUES ('codice 2', 'esempio tipo documento 2', CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_r_tipodoc_tipopratica (codice_tipo_documento,	codice_tipo_pratica, dt_inizio_val)
+	VALUES ('codice 1', '1', CURRENT_TIMESTAMP() );
+
+INSERT INTO cosmo_r_tipodoc_tipopratica (codice_tipo_documento,	codice_tipo_pratica, dt_inizio_val)
+	VALUES ('codice 2', '1', CURRENT_TIMESTAMP() );
+	
+INSERT INTO cosmo_d_tipo_firma(codice, descrizione, estraibile, dt_inizio_val) 
+	VALUES ('firma estraibile', 'esempio tipo firma estraibile', true, CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_d_tipo_firma(codice, descrizione, estraibile, dt_inizio_val) 
+	VALUES ('firma non estraibile', 'esempio tipo firma non estraibile', false, CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_t_pratica(id, dt_inserimento, utente_inserimento, oggetto, uuid_nodo, codice_tipo_pratica, id_ente) 
+	VALUES (1, CURRENT_TIMESTAMP(),'SYSTEM', 'Oggetto pratica', '121345b7-d7d5-11ea-a4e6-07060647e0b9', '1', 1);
+	
+INSERT INTO cosmo_t_pratica(id, dt_inserimento, oggetto,utente_inserimento, id_ente) 
+	VALUES (2, CURRENT_TIMESTAMP(), 'oggetto 2','SYSTEM', 1);
+	
+INSERT INTO cosmo_t_fruitore (id, api_manager_id, utente_inserimento, dt_inserimento)
+	VALUES (1, 'cosmo_cmmn', 'AAAAAA00B77B000F', CURRENT_TIMESTAMP());
+
+INSERT INTO cosmo_d_stato_documento (codice, descrizione, dt_inizio_val, dt_fine_val) VALUES
+	('ACQUISITO', 'Il file e'' stato caricato ma non ancora elaborato', CURRENT_TIMESTAMP(), NULL),
+	('IN_ELABORAZIONE', 'Il file e'' stato caricato ed e'' attualmente in fase di elaborazione', CURRENT_TIMESTAMP(), NULL),
+	('ELABORATO', 'Il file e'' stato acquisito e correttamente elaborato', CURRENT_TIMESTAMP(), NULL),
+	('ERR_ACQUISIZIONE', 'Si e'' verificato un errore in fase di acquisizione del file', CURRENT_TIMESTAMP(), NULL),
+	('ERR_ANALISI', 'Si e'' verificato un errore in fase di analisi del contenuto del file', CURRENT_TIMESTAMP(), NULL),
+	('ERR_SBUSTAMENTO', 'Si e'' verificato un errore in fase di estrazione del contenuto firmato', CURRENT_TIMESTAMP(), NULL);
+
+INSERT INTO cosmo_t_documento (id, codice_stato_documento, titolo, uuid_doc, id_pratica, utente_inserimento, dt_inserimento, parent_id, id_path,codice_tipo_documento, codice_tipo_firma) 
+	VALUES( 1, 'ELABORATO', 'Documento 1', 'a4010513-db0d-4f59-bda5-c7b80f2284f2', 1, 'SYSTEM',CURRENT_TIMESTAMP(),null, 'fs', 'codice 1', 'firma estraibile');
+	
+INSERT INTO cosmo_t_documento (id, codice_stato_documento, titolo, uuid_doc, id_pratica, utente_inserimento, dt_inserimento, parent_id,codice_tipo_documento) 
+	VALUES( 2, 'ELABORATO', 'Documento 2', 'uuid_doc', 1, 'SYSTEM',CURRENT_TIMESTAMP(),null, 'codice 1');	
+	
+INSERT INTO cosmo_t_documento (id, codice_stato_documento, titolo, uuid_doc, id_pratica, utente_inserimento, dt_inserimento, parent_id,codice_tipo_documento) 
+	VALUES( 3, 'ELABORATO', 'Documento 3', 'uuid_doc', 1,  'SYSTEM',CURRENT_TIMESTAMP(),1, 'codice 1');
+	
+INSERT INTO cosmo_t_documento (id, codice_stato_documento, titolo, uuid_doc, id_pratica, utente_inserimento, dt_inserimento, parent_id, codice_tipo_documento) 
+	VALUES( 4, 'ELABORATO', 'Documento 4','uuid_doc', 2, 'SYSTEM',CURRENT_TIMESTAMP(),null, 'codice 2');
+	
+INSERT INTO cosmo_d_tipo_contenuto_documento (codice, descrizione, dt_inizio_val) VALUES
+	('TEMPORANEO', 'Contenuto temporaneo salvato su fileshare in attesa di caricamento', CURRENT_TIMESTAMP()),
+	('ORIGINALE', 'Contenuto del file originale', CURRENT_TIMESTAMP()),
+	('SBUSTATO', 'Contenuto sbustato dal file originale', CURRENT_TIMESTAMP()),
+	('FIRMATO', 'Contenuto ottenuto firmando il file originale', CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_d_formato_file (codice, mime_type, descrizione, dt_inizio_val, dt_fine_val)
+   VALUES('application/xml', 'application/xml', 'File XML', CURRENT_TIMESTAMP(), NULL);
+   
+INSERT INTO cosmo_d_tipo_firma (codice, descrizione, dt_inizio_val, dt_fine_val)
+   VALUES('XML','XML Firmato', CURRENT_TIMESTAMP(), NULL);
+
+INSERT INTO cosmo_t_contenuto_documento (id, id_documento, id_contenuto_sorgente, codice_tipo_contenuto, codice_formato_file, codice_tipo_firma, nome_file, utente_inserimento, dt_inserimento) 
+	VALUES( 1, 1, null, 'ORIGINALE', 'application/xml', 'XML', 'testfile-content.xml', 'SYSTEM',CURRENT_TIMESTAMP());
+	
+INSERT INTO cosmo_d_ente_certificatore(codice, descrizione, dt_inizio_val)
+VALUES ('CERT1', 'Ente certificatore di prova 1', CURRENT_TIMESTAMP()),
+	   ('CERT2', 'Ente certificatore di prova 2', CURRENT_TIMESTAMP());
+	   
+INSERT INTO cosmo_d_tipo_credenziali_firma (codice, descrizione, non_valido_in_apposizione, dt_inizio_val)
+VALUES ('TIPOCREDFIRMA1', 'Tipo credenziale firma di prova 1', false, CURRENT_TIMESTAMP()),
+	   ('TIPOCREDFIRMA2', 'Tipo credenziale firma di prova 2', false, CURRENT_TIMESTAMP()),
+	   ('TIPOCREDFIRMA3', 'Tipo credenziale firma di prova 3', true, CURRENT_TIMESTAMP());
+	   
+INSERT INTO cosmo_d_tipo_otp (codice, descrizione, non_valido_in_apposizione, dt_inizio_val)
+VALUES ('TIPOOTP1', 'Tipo OTP di prova 1', false, CURRENT_TIMESTAMP()),
+	   ('TIPOOTP2', 'Tipo OTP di prova 2', false, CURRENT_TIMESTAMP()),
+       ('TIPOOTP3', 'Tipo OTP di prova 3', true, CURRENT_TIMESTAMP());
+       
+INSERT INTO cosmo_d_profilo_feq (codice, descrizione, non_valido_in_apposizione, dt_inizio_val)
+VALUES ('PROFILOFEQ1', 'Profilo FEQ 1', false, CURRENT_TIMESTAMP()),
+	   ('PROFILOFEQ2', 'Profilo FEQ 2', false, CURRENT_TIMESTAMP()),
+	   ('PROFILOFEQ3', 'Profilo FEQ 3', true, CURRENT_TIMESTAMP());
+	   
+INSERT INTO cosmo_d_scelta_marca_temporale (codice, descrizione, non_valido_in_apposizione, dt_inizio_val)
+VALUES ('SI', 'S�', false, CURRENT_TIMESTAMP()),
+	   ('NO', 'No', false, CURRENT_TIMESTAMP()),
+	   ('SCEGLI', 'Scegli sempre', true, CURRENT_TIMESTAMP());
+
+INSERT INTO cosmo_t_credenziali_firma (descrizione,username,password,id_utente,dt_scadenza,ente_certificatore,profilo_feq,scelta_temporale,tipo_credenziali_firma,tipo_otp,dt_inserimento,utente_inserimento)
+	VALUES ('Certificato 1','fHXkxpDkP+pBliuzfG7vNzJHuT6Hczw3YvxfjvlepyE=','sAhMtIW0zdUM8WmEQ+8Hqg==',1,'5BIJTsFkOxoB+a69GQJreiWVr9PfSyXMyI2D21ZiqpE=','CERT1','PROFILOFEQ1','SI','TIPOCREDFIRMA1','TIPOOTP1',CURRENT_TIMESTAMP(),'SYSTEM');
+	
+INSERT INTO cosmo_d_ente_certificatore (codice, descrizione, dt_inizio_val)
+VALUES ('InfoCert', 'InfoCert', CURRENT_TIMESTAMP()), 
+       ('Aruba', 'Aruba', CURRENT_TIMESTAMP());
+
+
