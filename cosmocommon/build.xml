@@ -9,10 +9,7 @@
 <!-- # richiama questo build.xml.                        # -->
 <!-- ##################################################### -->
 
-<project basedir="."
-         default="default"
-         name="cosmocommon"
-         xmlns:ivy="antlib:fr.jayasoft.ivy.ant" >
+<project basedir="." default="default" name="cosmocommon" xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
 
 	<description>Build file per il progetto: [cosmocommon]</description>
 
@@ -31,13 +28,13 @@
 		<fileset dir="${lib_ext}">
 			<include name="**/*.jar" />
 			<include name="**/*.zip" />
-		</fileset> 
+		</fileset>
 		<fileset dir="${docs}/test">
 			<include name="**/*.jar" />
 			<include name="**/*.zip" />
 		</fileset>
 	</path>
-	
+
 	<!-- -->
 	<!-- ############################################################# -->
 	<!-- # Target: init                                              # -->
@@ -50,7 +47,7 @@
 		</condition>
 		<mkdir dir="${build}/sources" />
 		<mkdir dir="${build}/classes" />
-		<mkdir dir="${build}/classes/properties-cache" /> 
+		<mkdir dir="${build}/classes/properties-cache" />
 		<mkdir dir="${build}/test-classes" />
 		<mkdir dir="${build}/generated-sources" />
 		<mkdir dir="${build}/jar-resources" />
@@ -60,9 +57,9 @@
 		<mkdir dir="${build}/javadoc" />
 		<mkdir dir="${build}/jsp" />
 		<mkdir dir="${build}/cache" />
-		
-        <var name="classpathRefid" value="library.ref" />
-        
+
+		<var name="classpathRefid" value="library.ref" />
+
 	</target>
 
 	<!-- -->
@@ -70,8 +67,7 @@
 	<!-- # Target: default                                           # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="default"
-	        description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
+	<target name="default" description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
 
 		<condition property="first-call" value="distribution">
 			<not>
@@ -108,15 +104,15 @@
 	<!-- # [DISTRIB]: distribution                                   # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="distribution" depends="package-all" description="Costruisce il tar per la distribuzione." >
-		<echo message="====== Creating distribution ..."/>
-		<echo message="====== Basedir: ${build}/archives/${target} ..."/>
+	<target name="distribution" depends="package-all" description="Costruisce il tar per la distribuzione.">
+		<echo message="====== Creating distribution ..." />
+		<echo message="====== Basedir: ${build}/archives/${target} ..." />
 		<!--PROTECTED REGION ID(R-64293809) ENABLED START-->
 		<!-- inserire qui eventuali statement antcall aggiuntivi da invocare nel processo di distribuzione del tar -->
 		<!--PROTECTED REGION END-->
 		<tar tarfile="${dist}/${target}/${dist-file-name}.tar" basedir="${build}/archives/${target}" includes="*.ear,*.xml">
 			<tarfileset dir="buildfiles">
-				<include name="readme.txt"/>
+				<include name="readme.txt" />
 				<!--PROTECTED REGION ID(R-1413323135) ENABLED START-->
 				<!-- inserire qui eventuali statement per includere oggetti extra nel tar -->
 				<!--PROTECTED REGION END-->
@@ -151,15 +147,11 @@
 	<target name="compile-all" depends="init,load-ivy,preprocess-sources" description="Compila tutti i sorgenti.">
 
 		<!-- compilazione dei sorgenti -->
-		<javac srcdir="${build}/sources" destdir="${build}/classes"
-				source="11" target="11"
-		       optimize="on" deprecation="on" compiler="modern"
-		       debug="on" debuglevel="lines,vars,source"
-		       	classpath="${gen}/java">
-            <classpath refid="${classpathRefid}" />
-			
-			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.3.1.Final.jar"'/>
-			<compilerarg line='-s "${build}/generated-sources"'/>
+		<javac srcdir="${build}/sources" destdir="${build}/classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source" classpath="${gen}/java">
+			<classpath refid="${classpathRefid}" />
+
+			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.3.1.Final.jar"' />
+			<compilerarg line='-s "${build}/generated-sources"' />
 		</javac>
 
 		<!-- copia dei sorgenti -->
@@ -167,19 +159,17 @@
 			<fileset dir="${src}/java" excludes="**/*.java*,**/*.jbx*" />
 		</copy>
 	</target>
- 
+
 	<target name="compile-test" depends="init,load-ivy,preprocess-sources" description="Compila tutti i sorgenti di test.">
 		<delete dir="${build}/test-classes" />
 		<mkdir dir="${build}/test-classes" />
-			
+
 		<echo message="===> TEST Target: ${target}" />
 
 		<!-- compilazione dei sorgenti -->
-		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes"
-			source="11" target="11"
-			optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
-            <classpath refid="${classpathRefid}" />
-            <classpath>
+		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="${classpathRefid}" />
+			<classpath>
 				<pathelement location="${build}/classes" />
 			</classpath>
 		</javac>
@@ -199,8 +189,7 @@
 	<!-- # Target: environment-recreate                              # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="environment-recreate"
-	        description="Ricrea l&apos;environment di configurazione per il target corrente (per applicare le sostituzionidelle variabili).">
+	<target name="environment-recreate" description="Ricrea l&apos;environment di configurazione per il target corrente (per applicare le sostituzionidelle variabili).">
 		<mkdir dir="build/temp/conf" />
 		<!--
 		<copy todir="build/temp/conf" overwrite="true">
@@ -215,7 +204,7 @@
 	<!-- #         Gestire qui i  replace delle variabile d'ambiente # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="environment-config" description="Predispone le configurazioni dipendenti dall&apos;ambiente." >
+	<target name="environment-config" description="Predispone le configurazioni dipendenti dall&apos;ambiente.">
 
 		<!-- Gestione replace delle variabile d'ambiente create dal generatore -->
 
@@ -241,7 +230,7 @@
 	<target name="package-jar" depends="compile-all" description="Genera il jar per le classi comuni.">
 		<jar destfile="${build}/archives/${target}/cosmo-common.jar">
 			<fileset dir="${build}/classes" includes="it/csi/cosmo/common/**" />
-		    <fileset dir="${build}/jar-resources"/>
+			<fileset dir="${build}/jar-resources" />
 		</jar>
 	</target>
 
@@ -252,16 +241,14 @@
 	<!-- nota: non cancella la directory "dist" appositamente: v. STDMDD-495.
 	per ripulire anche la "dist" richiamare esplicitamente il target "clean-dist" -->
 	<!-- -->
-	<target name="clean-all" description="Rimuove tutte le cartelle temporanee."
-	        depends="clean-archives, clean-cache, clean-classes, clean-javadoc, clean-jsp, clean-temp" />
+	<target name="clean-all" description="Rimuove tutte le cartelle temporanee." depends="clean-archives, clean-cache, clean-classes, clean-javadoc, clean-jsp, clean-temp" />
 
 	<!-- -->
 	<!-- ############################################################# -->
 	<!-- # [CLEAN]: clean-cache                                      # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-cache"
-	        description="Rimuove la cartella di cache di Ivy e la lib.">
+	<target name="clean-cache" description="Rimuove la cartella di cache di Ivy e la lib.">
 		<!--	<delete dir="${build}/cache" failonerror="no" />
 		<delete dir="${lib}" failonerror="no" /> -->
 	</target>
@@ -271,8 +258,7 @@
 	<!-- # [CLEAN]: clean-temp                                       # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-temp"
-	        description="Rimuove la cartella dei files temporanei di build.">
+	<target name="clean-temp" description="Rimuove la cartella dei files temporanei di build.">
 		<delete dir="${temp}" />
 	</target>
 
@@ -281,8 +267,7 @@
 	<!-- # [CLEAN]: clean-archives                                  # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-archives"
-	        description="Rimuove la cartella degli archivi (war, ear, ...).">
+	<target name="clean-archives" description="Rimuove la cartella degli archivi (war, ear, ...).">
 		<delete dir="${build}/archives" />
 	</target>
 
@@ -291,8 +276,7 @@
 	<!-- # [CLEAN]: clean-dist                                       # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-dist"
-	        description="Rimuove la cartella delle distribuzioni.">
+	<target name="clean-dist" description="Rimuove la cartella delle distribuzioni.">
 		<delete dir="${dist}" />
 	</target>
 
@@ -301,8 +285,7 @@
 	<!-- # [CLEAN]: clean-classes                                    # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-classes"
-	        description="Rimuove la cartella dei sorgenti compilati.">
+	<target name="clean-classes" description="Rimuove la cartella dei sorgenti compilati.">
 		<delete dir="${build}/classes" />
 		<delete dir="${build}/generated-sources" />
 		<delete dir="${build}/sources" />
@@ -314,8 +297,7 @@
 	<!-- # [CLEAN]: clean-javadoc                                    # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-javadoc"
-	        description="Rimuove la cartella temporanea dei javadoc.">
+	<target name="clean-javadoc" description="Rimuove la cartella temporanea dei javadoc.">
 		<delete dir="${build}/javadoc" />
 	</target>
 
@@ -324,8 +306,7 @@
 	<!-- # [CLEAN]: clean-jsp                                        # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-jsp"
-	        description="Rimuove la cartella temporanea delle jsp compilate.">
+	<target name="clean-jsp" description="Rimuove la cartella temporanea delle jsp compilate.">
 		<delete dir="${build}/jsp" />
 	</target>
 
@@ -334,8 +315,7 @@
 	<!-- # [CLEAN]: _clean-web-inf                                   # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="_clean-web-inf"
-	        description="Rimuove il contenuto di lib e classes della
+	<target name="_clean-web-inf" description="Rimuove il contenuto di lib e classes della
 	                     web application (per run locali).">
 		<delete dir="${srcweb}/WEB-INF/classes" />
 		<delete dir="${srcweb}/WEB-INF/lib" />
@@ -357,10 +337,9 @@
 	<!-- # Target: about-custom                                      # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="about-custom"
-	        description="Visualizza l'elenco di tutti i target,
+	<target name="about-custom" description="Visualizza l'elenco di tutti i target,
 	                     pubblici e privati
-	                     (equivalente a 'ant -projecthelp')" >
+	                     (equivalente a 'ant -projecthelp')">
 
 		<loadproperties srcfile="buildfiles/build.properties" />
 		<loadfile property="about-custom" srcfile="buildfiles/about-custom.txt" />
@@ -375,8 +354,7 @@
 	<!-- # Target: show-vars                                         # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="show-vars" depends="init"
-	        description="Visualizza tutte le variabili impostate nei file di properties e/o da linea di comando">
+	<target name="show-vars" depends="init" description="Visualizza tutte le variabili impostate nei file di properties e/o da linea di comando">
 		<echo message="*****************************************" />
 		<echo message="********  ${componente} environment  *******" />
 		<echo message="*****************************************" />
@@ -386,11 +364,11 @@
 		<echo message="*****************************************" />
 		<echo message="********    java properties      ********" />
 		<echo message="*****************************************" />
-		<echoproperties prefix="java."/>
+		<echoproperties prefix="java." />
 	</target>
 
 
-	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
 	<!--PROTECTED REGION ID(R1519293945) ENABLED START-->
 	<path id="axis1.classpath">
@@ -405,11 +383,11 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="clean-lib">
-        <echo message="clean-lib" />
-        <delete failonerror="false">
-            <dirset dir="lib" includes="*" />
-            <fileset dir="lib" includes="*" />
-        </delete>
+		<echo message="clean-lib" />
+		<delete failonerror="false">
+			<dirset dir="lib" includes="*" />
+			<fileset dir="lib" includes="*" />
+		</delete>
 	</target>
 
 	<!-- -->
@@ -418,22 +396,22 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="load-dependencies-true" depends="resolve-dependencies" description="Risolve le dipendenze esterne.">
-        <echo message="load-dependencies-true" />
-		<ivy:retrieve pattern="${lib}/[conf]/[artifact].[ext]" conf="*"/>
+		<echo message="load-dependencies-true" />
+		<ivy:retrieve pattern="${lib}/[conf]/[artifact].[ext]" conf="*" />
 	</target>
 
-    <target name="load-dependencies-false" description="Risolve le dipendenze esterne.">
-    	<echo message="Skipping ivy dependencies resolution." />
+	<target name="load-dependencies-false" description="Risolve le dipendenze esterne.">
+		<echo message="Skipping ivy dependencies resolution." />
 	</target>
 
 	<target name="load-ivy">
-        <condition property="target.ivy.task" value="load-dependencies-false" else="load-dependencies">
-		  <equals arg1="${target.enable.ivy}" arg2="false" />
+		<condition property="target.ivy.task" value="load-dependencies-false" else="load-dependencies">
+			<equals arg1="${target.enable.ivy}" arg2="false" />
 		</condition>
 		<echo message="target.enable.ivy: ${target.enable.ivy}" />
 		<antcall target="${target.ivy.task}" />
 	</target>
- 
+
 	<target name="test" depends="environment-recreate, environment-config, compile-all, compile-test">
 		<echo>ESECUZIONE TEST JUNIT</echo>
 		<junit printsummary="yes" haltonfailure="yes" showoutput="true" fork="yes">
@@ -443,8 +421,8 @@
 				<pathelement location="build/classes" />
 				<pathelement location="lib" />
 			</classpath>
-            <classpath refid="${classpathRefid}" />
-			
+			<classpath refid="${classpathRefid}" />
+
 			<formatter type="plain" usefile="false" />
 
 			<batchtest>
@@ -456,5 +434,5 @@
 			</batchtest>
 		</junit>
 	</target>
-	
+
 </project>

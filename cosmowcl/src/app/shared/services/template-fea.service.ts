@@ -11,10 +11,6 @@ import { TemplateFea } from '../models/api/cosmoecm/templateFea';
 import { Utils } from '../utilities/utilities';
 import { CreaTemplateFeaRequest } from '../models/api/cosmoecm/creaTemplateFeaRequest';
 
-/*
- * Copyright CSI-Piemonte - 2023
- * SPDX-License-Identifier: EUPL-1.2-or-later
- */
 @Injectable({
   providedIn: 'root',
 })

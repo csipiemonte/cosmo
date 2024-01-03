@@ -201,8 +201,7 @@ export class GestioneCustomFormComponent implements OnInit {
       [{
         testo: 'Sei sicuro di voler sovrascrivere la definizione di questo custom form con la versione presente sul modeler esterno?',
       }], [
-      { testo: 'Importa da dev', valore: 'http://dev-cosmobe.csi.it/formio', classe: 'btn-outline-warning' },
-      { testo: 'Importa da xp', valore: 'http://xp-cosmobe.csi.it/formio', classe: 'btn-outline-warning' },
+      { testo: 'Importa', valore: 'http://endpoint/formio', classe: 'btn-outline-warning' },
       { testo: 'Annulla', dismiss: true, defaultFocus: true }
     ]
     ).then(proceed => {

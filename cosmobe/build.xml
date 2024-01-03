@@ -9,10 +9,7 @@
 <!-- # richiama questo build.xml.                        # -->
 <!-- ##################################################### -->
 
-<project basedir="."
-         default="default"
-         name="cosmobe"
-         xmlns:ivy="antlib:fr.jayasoft.ivy.ant" >
+<project basedir="." default="default" name="cosmobe" xmlns:ivy="antlib:fr.jayasoft.ivy.ant">
 
 	<description>Build file per il progetto: [cosmobe]</description>
 
@@ -72,8 +69,7 @@
 	<!-- # Target: default                                           # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="default"
-	        description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
+	<target name="default" description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
 
 		<condition property="first-call" value="distribution">
 			<not>
@@ -110,9 +106,9 @@
 	<!-- # [DISTRIB]: distribution                                   # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="distribution" depends="package-all" description="Costruisce il tar per la distribuzione." >
-		<echo message="====== Creating distribution for ${target} ..."/>
-		<echo message="====== Basedir: ${build}/archives/${target} ..."/>
+	<target name="distribution" depends="package-all" description="Costruisce il tar per la distribuzione.">
+		<echo message="====== Creating distribution for ${target} ..." />
+		<echo message="====== Basedir: ${build}/archives/${target} ..." />
 		<!--PROTECTED REGION ID(R-64293809) ENABLED START-->
 		<!-- inserire qui eventuali statement antcall aggiuntivi da invocare nel processo di distribuzione del tar -->
 		<copy todir="${build}/archives/${target}">
@@ -121,7 +117,7 @@
 		<!--PROTECTED REGION END-->
 		<tar tarfile="${dist}/${target}/${dist-file-name}.tar" basedir="${build}/archives/${target}" includes="*.ear,*.xml">
 			<tarfileset dir="buildfiles">
-				<include name="readme.txt"/>
+				<include name="readme.txt" />
 				<!--PROTECTED REGION ID(R-1413323135) ENABLED START-->
 				<!-- inserire qui eventuali statement per includere oggetti extra nel tar -->
 				<!--PROTECTED REGION END-->
@@ -157,23 +153,17 @@
 		<echo message="===> Target: ${target}" />
 
 		<!-- compilazione dei sorgenti -->
-		<javac srcdir="${gen}/java" destdir="${build}/classes" source="11" target="11"
-						       optimize="on" deprecation="on" compiler="modern"
-						       debug="on" debuglevel="lines,vars,source"
-						       >
+		<javac srcdir="${gen}/java" destdir="${build}/classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="${classpathRefid}" />
 
-			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.1.0.Final.jar"'/>
-			<compilerarg line='-s "${build}/generated-sources"'/>
+			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.1.0.Final.jar"' />
+			<compilerarg line='-s "${build}/generated-sources"' />
 		</javac>
 
-		<javac srcdir="${build}/sources" destdir="${build}/classes" source="11" target="11"
-		       optimize="on" deprecation="on" compiler="modern"
-		       debug="on" debuglevel="lines,vars,source"
-		       	classpath="${gen}/java">
+		<javac srcdir="${build}/sources" destdir="${build}/classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source" classpath="${gen}/java">
 			<classpath refid="${classpathRefid}" />
-			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.1.0.Final.jar"'/>
-			<compilerarg line='-s "${build}/generated-sources"'/>
+			<compilerarg line='-processorpath "${lib_ext}/mapstruct-processor-1.1.0.Final.jar"' />
+			<compilerarg line='-s "${build}/generated-sources"' />
 		</javac>
 
 		<!-- copia dei sorgenti -->
@@ -189,9 +179,7 @@
 		<echo message="===> TEST Target: ${target}" />
 
 		<!-- compilazione dei sorgenti -->
-		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes"
-			source="11" target="11"
-			optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
+		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="${classpathRefid}" />
 			<classpath>
 				<pathelement location="${build}/classes" />
@@ -210,8 +198,7 @@
 	<!-- # Target: environment-recreate                              # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="environment-recreate"
-	        description="Ricrea l&apos;environment di configurazione per il target corrente (per applicare le sostituzionidelle variabili).">
+	<target name="environment-recreate" description="Ricrea l&apos;environment di configurazione per il target corrente (per applicare le sostituzionidelle variabili).">
 		<mkdir dir="build/temp/conf" />
 		<copy todir="build/temp/conf" overwrite="true">
 			<fileset dir="${conf}" />
@@ -224,7 +211,7 @@
 	<!-- #         Gestire qui i  replace delle variabile d'ambiente # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="environment-config" description="Predispone le configurazioni dipendenti dall&apos;ambiente." >
+	<target name="environment-config" description="Predispone le configurazioni dipendenti dall&apos;ambiente.">
 
 		<!-- Gestione replace delle variabile d'ambiente create dal generatore -->
 
@@ -254,13 +241,11 @@
 	<!-- # [PKG]: package-ear                                        # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="package-ear"
-            depends="environment-recreate, environment-config, compile-all, package-commons-jar, package-client-jar,
-                     package-all-ws-wars"
-            description="costruisce l&apos;ear">
+	<target name="package-ear" depends="environment-recreate, environment-config, compile-all, package-commons-jar, package-client-jar,
+                     package-all-ws-wars" description="costruisce l&apos;ear">
 
 		<!-- librerie infrastrutturali o client di servizi fruiti -->
-	
+
 		<copy todir="${temp}/${target}/${earLib}">
 			<fileset dir="${lib}" includes="${ear-libs-filter} ${ear-custom-libs-filter}" />
 		</copy>
@@ -269,8 +254,7 @@
 			<fileset dir="${build}/archives/${target}" includes="*common.jar" />
 		</copy>
 
-		<ear appxml="${temp}/conf/ear/application.xml"
-		     destfile="${build}/archives/${target}/${ear-file-name}.ear">
+		<ear appxml="${temp}/conf/ear/application.xml" destfile="${build}/archives/${target}/${ear-file-name}.ear">
 			<fileset dir="${build}/archives/${target}" includes="*.jar,*.war" excludes="*client*.jar,*common.jar" />
 			<fileset dir="${temp}/${target}">
 				<include name="**/*" />
@@ -290,14 +274,13 @@
 	<!-- # [PKG]: package-all-ws-wars                                # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="package-all-ws-wars"
-	        description="Costruisce i war di tutti i web services">
+	<target name="package-all-ws-wars" description="Costruisce i war di tutti i web services">
 		<!-- richiamo costruzione war backend REST  -->
 		<antcall target="_package-ws-war">
-			<param name="component.name" value="cosmobe"/>
-			<param name="service.name" value="be"/>
-			<param name="binding.code" value="rest"/>
-			<param name="service.type" value="appl"/>
+			<param name="component.name" value="cosmobe" />
+			<param name="service.name" value="be" />
+			<param name="binding.code" value="rest" />
+			<param name="service.type" value="appl" />
 		</antcall>
 	</target>
 
@@ -306,32 +289,25 @@
 	<!-- # [PKG]: _package-ws-war                                    # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="_package-ws-war"
-	        description="Costruisce il war per un singolo web service">
+	<target name="_package-ws-war" description="Costruisce il war per un singolo web service">
 		<!-- prende in input i parametri: component.name, service.name, binding.code, service.type, service.ver (deve essere a 2 cifre!!!) -->
-		<copy 
-			file="buildfiles/${target}.properties" 
-			tofile="${build}/classes/config.properties" 
-			overwrite="true"
-		/>
+		<copy file="buildfiles/${target}.properties" tofile="${build}/classes/config.properties" overwrite="true" />
 
 		<copy todir="${build}/classes/properties-cache">
 			<fileset dir="buildfiles" includes="*.properties" />
 		</copy>
 
-	
+
 		<copy todir="${temp}/${target}/warLib">
 			<fileset dir="${lib}">
 				<include name="**/*.jar" />
 				<include name="**/*.zip" />
 			</fileset>
 		</copy>
-		
-		<replace dir="${build}/classes/properties-cache" token="@@@TARGET@@@" value="${target}"/>
 
-		<war destfile="${build}/archives/${target}/${service.type}-${service.name}-${binding.code}.war"
-				     webxml="${temp}/conf/web/${service.name}/${binding.code}/WEB-INF/web.xml"
-				     roundup="false">
+		<replace dir="${build}/classes/properties-cache" token="@@@TARGET@@@" value="${target}" />
+
+		<war destfile="${build}/archives/${target}/${service.type}-${service.name}-${binding.code}.war" webxml="${temp}/conf/web/${service.name}/${binding.code}/WEB-INF/web.xml" roundup="false">
 			<webinf dir="${temp}/conf/web/${service.name}/${binding.code}/WEB-INF/">
 				<include name="*.xml" />
 				<include name="*.properties" />
@@ -339,20 +315,20 @@
 			</webinf>
 			<classes dir="${build}/classes">
 				<!-- <include name="it/csi/*/cosmobe/business/${service.name}/**"/> -->
-				<include name="it/csi/*/cosmobe/**"/>
+				<include name="it/csi/*/cosmobe/**" />
 			</classes>
 
 
 			<classes dir="${temp}/conf/web/${service.name}/${binding.code}/WEB-INF/classes">
-				<include name="*.xml"/>
+				<include name="*.xml" />
 			</classes>
 
 			<classes dir="${src}/resources">
 			</classes>
 
 			<classes dir="${build}/classes">
-				<include name="config.properties"/>
-				<include name="properties-cache/*.properties"/>
+				<include name="config.properties" />
+				<include name="properties-cache/*.properties" />
 			</classes>
 
 
@@ -368,9 +344,7 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="package-commons-jar" description="Genera il jar per le classi comuni.">
-		<jar destfile="${build}/archives/${target}/cosmobe-common.jar"
-		     basedir="${build}/classes"
-		     includes="it/csi/cosmo/cosmobe/business/**,
+		<jar destfile="${build}/archives/${target}/cosmobe-common.jar" basedir="${build}/classes" includes="it/csi/cosmo/cosmobe/business/**,
 		               it/csi/cosmo/cosmobe/integration/**,
 		               it/csi/cosmo/cosmobe/util/**">
 
@@ -385,11 +359,8 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="package-client-jar" description="Genera il jar per i client">
-		<jar destfile="${build}/archives/${target}/${client.name}.jar"
-		     basedir="${build}/classes"
-		     includes="it/csi/cosmo/cosmobe/client/**,
-				it/csi/cosmo/cosmobe/dto/rest/**"
-			excludes="it/csi/cosmo/cosmobe/business/rest/impl/**">
+		<jar destfile="${build}/archives/${target}/${client.name}.jar" basedir="${build}/classes" includes="it/csi/cosmo/cosmobe/client/**,
+				it/csi/cosmo/cosmobe/dto/rest/**" excludes="it/csi/cosmo/cosmobe/business/rest/impl/**">
 		</jar>
 	</target>
 
@@ -400,16 +371,14 @@
 	<!-- nota: non cancella la directory "dist" appositamente: v. STDMDD-495.
 	per ripulire anche la "dist" richiamare esplicitamente il target "clean-dist" -->
 	<!-- -->
-	<target name="clean-all" description="Rimuove tutte le cartelle temporanee."
-	        depends="clean-archives, clean-cache, clean-classes, clean-javadoc, clean-jsp, clean-temp" />
+	<target name="clean-all" description="Rimuove tutte le cartelle temporanee." depends="clean-archives, clean-cache, clean-classes, clean-javadoc, clean-jsp, clean-temp" />
 
 	<!-- -->
 	<!-- ############################################################# -->
 	<!-- # [CLEAN]: clean-cache                                      # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-cache"
-	        description="Rimuove la cartella di cache di Ivy e la lib.">
+	<target name="clean-cache" description="Rimuove la cartella di cache di Ivy e la lib.">
 		<!--	<delete dir="${build}/cache" failonerror="no" />
 		<delete dir="${lib}" failonerror="no" /> -->
 	</target>
@@ -419,8 +388,7 @@
 	<!-- # [CLEAN]: clean-temp                                       # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-temp"
-	        description="Rimuove la cartella dei files temporanei di build.">
+	<target name="clean-temp" description="Rimuove la cartella dei files temporanei di build.">
 		<delete dir="${temp}" />
 	</target>
 
@@ -429,8 +397,7 @@
 	<!-- # [CLEAN]: clean-archives                                  # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-archives"
-	        description="Rimuove la cartella degli archivi (war, ear, ...).">
+	<target name="clean-archives" description="Rimuove la cartella degli archivi (war, ear, ...).">
 		<delete dir="${build}/archives" />
 	</target>
 
@@ -439,8 +406,7 @@
 	<!-- # [CLEAN]: clean-dist                                       # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-dist"
-	        description="Rimuove la cartella delle distribuzioni.">
+	<target name="clean-dist" description="Rimuove la cartella delle distribuzioni.">
 		<delete dir="${dist}" />
 	</target>
 
@@ -449,8 +415,7 @@
 	<!-- # [CLEAN]: clean-classes                                    # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-classes"
-	        description="Rimuove la cartella dei sorgenti compilati.">
+	<target name="clean-classes" description="Rimuove la cartella dei sorgenti compilati.">
 		<delete dir="${build}/classes" />
 		<delete dir="${build}/generated-sources" />
 		<delete dir="${build}/sources" />
@@ -461,8 +426,7 @@
 	<!-- # [CLEAN]: clean-javadoc                                    # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-javadoc"
-	        description="Rimuove la cartella temporanea dei javadoc.">
+	<target name="clean-javadoc" description="Rimuove la cartella temporanea dei javadoc.">
 		<delete dir="${build}/javadoc" />
 	</target>
 
@@ -471,8 +435,7 @@
 	<!-- # [CLEAN]: clean-jsp                                        # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-jsp"
-	        description="Rimuove la cartella temporanea delle jsp compilate.">
+	<target name="clean-jsp" description="Rimuove la cartella temporanea delle jsp compilate.">
 		<delete dir="${build}/jsp" />
 	</target>
 
@@ -481,8 +444,7 @@
 	<!-- # [CLEAN]: _clean-web-inf                                   # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="_clean-web-inf"
-	        description="Rimuove il contenuto di lib e classes della
+	<target name="_clean-web-inf" description="Rimuove il contenuto di lib e classes della
 	                     web application (per run locali).">
 		<delete dir="${srcweb}/WEB-INF/classes" />
 		<delete dir="${srcweb}/WEB-INF/lib" />
@@ -504,10 +466,9 @@
 	<!-- # Target: about-custom                                      # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="about-custom"
-	        description="Visualizza l'elenco di tutti i target,
+	<target name="about-custom" description="Visualizza l'elenco di tutti i target,
 	                     pubblici e privati
-	                     (equivalente a 'ant -projecthelp')" >
+	                     (equivalente a 'ant -projecthelp')">
 
 		<loadproperties srcfile="buildfiles/build.properties" />
 		<loadfile property="about-custom" srcfile="buildfiles/about-custom.txt" />
@@ -522,8 +483,7 @@
 	<!-- # Target: show-vars                                         # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="show-vars" depends="init"
-	        description="Visualizza tutte le variabili impostate nei file di properties e/o da linea di comando">
+	<target name="show-vars" depends="init" description="Visualizza tutte le variabili impostate nei file di properties e/o da linea di comando">
 		<echo message="*****************************************" />
 		<echo message="********  ${componente} environment  *******" />
 		<echo message="*****************************************" />
@@ -533,11 +493,11 @@
 		<echo message="*****************************************" />
 		<echo message="********    java properties      ********" />
 		<echo message="*****************************************" />
-		<echoproperties prefix="java."/>
+		<echoproperties prefix="java." />
 	</target>
 
 
-	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
 	<!--PROTECTED REGION ID(R1519293945) ENABLED START-->
 	<path id="axis1.classpath">
@@ -566,10 +526,10 @@
 	<!-- -->
 	<target name="load-dependencies-true" depends="resolve-dependencies" description="Risolve le dipendenze esterne.">
 		<echo message="load-dependencies-true" />
-		<ivy:retrieve pattern="${lib}/[conf]/[artifact].[ext]" conf="*"/>
+		<ivy:retrieve pattern="${lib}/[conf]/[artifact].[ext]" conf="*" />
 	</target>
 
-	<target name="load-dependencies-false"  description="Risolve le dipendenze esterne.">
+	<target name="load-dependencies-false" description="Risolve le dipendenze esterne.">
 		<echo message="Skipping ivy dependencies resolution." />
 	</target>
 
@@ -609,5 +569,5 @@
 			</batchtest>
 		</junit>
 	</target>
-	
+
 </project>

@@ -59,7 +59,7 @@
 		<mkdir dir="${build}/cache" />
 
 		<var name="classpathRefid" value="library.ref" />
-			
+
 	</target>
 
 	<!-- -->
@@ -67,8 +67,7 @@
 	<!-- # Target: default                                           # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="default"
-		description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
+	<target name="default" description="Eseguire il build per l'environment specificato a linea di comando con -Dtarget=${target} o per tutti gli environment (se non specificato).">
 
 		<condition property="first-call" value="distribution">
 			<not>
@@ -177,9 +176,7 @@
 		<echo message="===> TEST Target: ${target}" />
 
 		<!-- compilazione dei sorgenti -->
-		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes"
-			source="11" target="11"
-			optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
+		<javac srcdir="${testsrc}/java" destdir="${build}/test-classes" source="11" target="11" optimize="on" deprecation="on" compiler="modern" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="${classpathRefid}" />
 			<classpath>
 				<pathelement location="${build}/classes" />
@@ -196,15 +193,13 @@
 			<equals arg1="${infinispan.jndi.enable}" arg2="true" />
 		</condition>
 
-		<replace file="${build}/sources/${package.prefix.slash}/integration/infinispan/connector/InfinispanResourceProvider.java" 
-					token="@Resource" value="${target.preprocess.sources.injectiontoken}" />
+		<replace file="${build}/sources/${package.prefix.slash}/integration/infinispan/connector/InfinispanResourceProvider.java" token="@Resource" value="${target.preprocess.sources.injectiontoken}" />
 
 		<condition property="target.preprocess.sources.injectionname" value="${infinispan.jndi.name}" else="--- disabled ---">
 			<equals arg1="${infinispan.jndi.enable}" arg2="true" />
 		</condition>
 
-		<replace file="${build}/sources/${package.prefix.slash}/integration/infinispan/connector/InfinispanResourceProvider.java" 
-					token="@@@infinispan.jndi.name@@@" value="${target.preprocess.sources.injectionname}" />
+		<replace file="${build}/sources/${package.prefix.slash}/integration/infinispan/connector/InfinispanResourceProvider.java" token="@@@infinispan.jndi.name@@@" value="${target.preprocess.sources.injectionname}" />
 
 	</target>
 
@@ -229,7 +224,7 @@
 	<target name="environment-config" description="Predispone le configurazioni dipendenti dall&apos;ambiente.">
 		<replace dir="${temp}/conf/web/be/rest/WEB-INF" token="@@hibernate.default.schema@@" value="${hibernate.default.schema}" />
 		<replace dir="${temp}/conf/web/be/rest/WEB-INF" token="@@hibernate.show.sql@@" value="${hibernate.show.sql}" />
-		<replace dir="${temp}/conf/web/be/rest/WEB-INF" token="@@hibernate.generate.statistics@@" value="${hibernate.generate.statistics}"/>
+		<replace dir="${temp}/conf/web/be/rest/WEB-INF" token="@@hibernate.generate.statistics@@" value="${hibernate.generate.statistics}" />
 	</target>
 
 	<!-- -->
@@ -254,7 +249,7 @@
 		<copy todir="${temp}/${target}/${earLib}">
 			<fileset dir="${lib}" includes="${ear-libs-filter} ${ear-custom-libs-filter}" />
 		</copy>
-			
+
 		<copy todir="${temp}/${target}/${earLib}">
 			<fileset dir="${lib_ext}" includes="${ear-libs-filter} ${ear-custom-libs-filter}" />
 		</copy>
@@ -363,8 +358,7 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="package-commons-jar" description="Genera il jar per le classi comuni.">
-		<jar destfile="${build}/archives/${target}/cosmobusiness-common.jar" basedir="${build}/classes" 
-			includes="
+		<jar destfile="${build}/archives/${target}/cosmobusiness-common.jar" basedir="${build}/classes" includes="
 		     	it/csi/cosmo/cosmobusiness/integration/**,
 		        it/csi/cosmo/cosmobusiness/util/**">
 
@@ -378,11 +372,9 @@
 	<!-- ############################################################# -->
 	<!-- -->
 	<target name="package-client-jar" description="Genera il jar per i client">
-		<jar destfile="${build}/archives/${target}/${client.name}.jar" basedir="${build}/classes" 
-			includes="
+		<jar destfile="${build}/archives/${target}/${client.name}.jar" basedir="${build}/classes" includes="
 				it/csi/cosmo/cosmobusiness/client/**,
-				it/csi/cosmo/cosmobusiness/dto/rest/**" 
-			excludes="it/csi/cosmo/cosmobusiness/business/rest/impl/**">
+				it/csi/cosmo/cosmobusiness/dto/rest/**" excludes="it/csi/cosmo/cosmobusiness/business/rest/impl/**">
 		</jar>
 	</target>
 

@@ -261,7 +261,7 @@
 		<copy todir="${temp}/${target}/${earLib}">
 			<fileset dir="${lib}" includes="${ear-libs-filter} ${ear-custom-libs-filter}" />
 		</copy>
-			
+
 		<copy todir="${temp}/${target}/${earLib}">
 			<fileset dir="${lib_ext}" includes="${ear-libs-filter} ${ear-custom-libs-filter}" />
 		</copy>
@@ -521,7 +521,7 @@
 	<!-- # [CLEAN]: clean-lib                                    		 # -->
 	<!-- ############################################################# -->
 	<!-- -->
-	<target name="clean-lib" >
+	<target name="clean-lib">
 		<echo message="clean-lib" />
 		<delete failonerror="false">
 			<dirset dir="lib" includes="*" />
@@ -579,5 +579,5 @@
 			</batchtest>
 		</junit>
 	</target>
-	
+
 </project>
