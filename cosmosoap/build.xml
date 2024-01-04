@@ -42,13 +42,6 @@
 		<fileset dir="${lib}" includes="activation-1.0.2.jar, jaxb-api-2.1.jar, jaxb-impl-2.1.12.jar, jaxb-xjc-2.2.5.1.jar" />
 	</path>
 
-	<path id="wsimport.classpath.opensource">
-		<fileset dir="${lib_ext}" includes="jaxws-tools.jar,jakarta.xml.ws-api-2.3.3.jar,jaxws-rt.jar,streambuffer-1.5.6.jar,stax-ex-1.7.8.jar,javax.jws-api-1.1.jar" />
-		<fileset dir="${opensource.basedir}" includes="activation-1.0.2.jar, jaxb-api-2.1.jar, jaxb-impl-2.1.12.jar, jaxb-xjc-2.2.5.1.jar" />
-		<fileset dir="${opensource.basedir}/${componente}" includes="activation-1.0.2.jar, jaxb-api-2.1.jar, jaxb-impl-2.1.12.jar, jaxb-xjc-2.2.5.1.jar" />
-
-	</path>
-
 	<!-- -->
 	<!-- ############################################################# -->
 	<!-- # Target: init                                              # -->

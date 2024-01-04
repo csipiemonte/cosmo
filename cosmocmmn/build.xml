@@ -36,23 +36,6 @@
 		</fileset>
 	</path>
 
-	<path id="library.opensource.ref">
-
-		<fileset dir="${lib}">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
-		</fileset>
-		<fileset dir="${lib_ext}">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
-		</fileset>
-		<fileset dir="${docs}/test">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
-		</fileset>
-
-	</path>
-
 	<!-- -->
 	<!-- ############################################################# -->
 	<!-- # Target: init                                              # -->
