@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:cmn="http://www.csi.it/stardas/services/StardasCommonTypes"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:tns="http://www.csi.it/stardas/wso2/StardasService"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	targetNamespace="http://www.csi.it/stardas/wso2/StardasService">
+	<wsdl:types>
+		<xsd:schema attributeFormDefault="unqualified"
+			elementFormDefault="unqualified">
+			<xsd:import
+				namespace="http://www.csi.it/stardas/wso2/StardasService"
+				schemaLocation="StardasWso2ServiceTypes.xsd" />
+			<xsd:import
+				namespace="http://www.csi.it/stardas/services/StardasCommonTypes"
+				schemaLocation="StardasCommonTypes.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="GetDettaglioRichiestaRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetDettaglioRichiestaRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetDettaglioRichiestaResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetDettaglioRichiestaResponse" />
+	</wsdl:message>
+	<wsdl:message name="DownloadDettagliInvioSegnaturaRequest">
+		<wsdl:part name="parameters"
+			element="tns:DownloadDettagliInvioSegnaturaRequest" />
+	</wsdl:message>
+	<wsdl:message
+		name="DownloadDettagliInvioSegnaturaResponse">
+		<wsdl:part name="parameters"
+			element="tns:DownloadDettagliInvioSegnaturaResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetStatoRichiestaRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetStatoRichiestaRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetStatoRichiestaResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetStatoRichiestaResponse" />
+	</wsdl:message>
+	<wsdl:message name="SmistaDocumentoRequest">
+		<wsdl:part name="parameters"
+			element="tns:SmistaDocumentoRequest" />
+	</wsdl:message>
+	<wsdl:message name="SmistaDocumentoResponse">
+		<wsdl:part name="parameters"
+			element="tns:SmistaDocumentoResponse" />
+	</wsdl:message>
+	<wsdl:portType name="StardasServiceProxyPortType">
+		<wsdl:operation name="GetDettaglioRichiesta">
+			<wsdl:input message="tns:GetDettaglioRichiestaRequest"
+				wsaw:Action="http://www.csi.it/stardas/services/StardasService/GetDettaglioRichiesta" />
+			<wsdl:output message="tns:GetDettaglioRichiestaResponse"
+				wsaw:Action="http://www.csi.it/stardas/wso2/StardasService/StardasService/GetDettaglioRichiestaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="DownloadDettagliInvioSegnatura">
+			<wsdl:input
+				message="tns:DownloadDettagliInvioSegnaturaRequest"
+				wsaw:Action="http://www.csi.it/stardas/services/StardasService/DownloadDettagliInvioSegnatura" />
+			<wsdl:output
+				message="tns:DownloadDettagliInvioSegnaturaResponse"
+				wsaw:Action="http://www.csi.it/stardas/wso2/StardasService/StardasService/DownloadDettagliInvioSegnaturaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="GetStatoRichiesta">
+			<wsdl:input message="tns:GetStatoRichiestaRequest"
+				wsaw:Action="http://www.csi.it/stardas/services/StardasService/GetStatoRichiesta" />
+			<wsdl:output message="tns:GetStatoRichiestaResponse"
+				wsaw:Action="http://www.csi.it/stardas/wso2/StardasService/StardasService/GetStatoRichiestaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="SmistaDocumento">
+			<wsdl:input message="tns:SmistaDocumentoRequest"
+				wsaw:Action="http://www.csi.it/stardas/services/StardasService/SmistaDocumento" />
+			<wsdl:output message="tns:SmistaDocumentoResponse"
+				wsaw:Action="http://www.csi.it/stardas/wso2/StardasService/StardasService/SmistaDocumentoResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="StardasServiceProxySoap11Binding"
+		type="tns:StardasServiceProxyPortType">
+		<soap:binding
+			transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<wsdl:operation name="GetDettaglioRichiesta">
+			<soap:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/GetDettaglioRichiesta"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DownloadDettagliInvioSegnatura">
+			<soap:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/DownloadDettagliInvioSegnatura"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetStatoRichiesta">
+			<soap:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/GetStatoRichiesta"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SmistaDocumento">
+			<soap:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/SmistaDocumento"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="StardasServiceProxySoap12Binding"
+		type="tns:StardasServiceProxyPortType">
+		<soap12:binding
+			transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+		<wsdl:operation name="GetDettaglioRichiesta">
+			<soap12:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/GetDettaglioRichiesta"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DownloadDettagliInvioSegnatura">
+			<soap12:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/DownloadDettagliInvioSegnatura"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetStatoRichiesta">
+			<soap12:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/GetStatoRichiesta"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SmistaDocumento">
+			<soap12:operation
+				soapAction="http://www.csi.it/stardas/services/StardasService/SmistaDocumento"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="StardasServiceProxyHttpBinding"
+		type="tns:StardasServiceProxyPortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="GetDettaglioRichiesta">
+			<http:operation location="GetDettaglioRichiesta" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DownloadDettagliInvioSegnatura">
+			<http:operation
+				location="DownloadDettagliInvioSegnatura" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetStatoRichiesta">
+			<http:operation location="GetStatoRichiesta" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SmistaDocumento">
+			<http:operation location="SmistaDocumento" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="parameters" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="StardasServiceProxy">
+		<wsdl:port name="StardasServiceProxyHttpSoap11Endpoint"
+			binding="tns:StardasServiceProxySoap11Binding">
+			<soap:address
+				location="http://tst-srv-stardas.doc.csi.it:80/wso001/services/StardasServiceProxy.StardasServiceProxyHttpSoap11Endpoint" />
+		</wsdl:port>
+		<wsdl:port name="StardasServiceProxyHttpsSoap11Endpoint"
+			binding="tns:StardasServiceProxySoap11Binding">
+			<soap:address
+				location="https://tst-srv-stardas.doc.csi.it:443/wso001/services/StardasServiceProxy.StardasServiceProxyHttpsSoap11Endpoint" />
+		</wsdl:port>
+		<wsdl:port name="StardasServiceProxyHttpSoap12Endpoint"
+			binding="tns:StardasServiceProxySoap12Binding">
+			<soap12:address
+				location="http://tst-srv-stardas.doc.csi.it:80/wso001/services/StardasServiceProxy.StardasServiceProxyHttpSoap12Endpoint" />
+		</wsdl:port>
+		<wsdl:port name="StardasServiceProxyHttpsSoap12Endpoint"
+			binding="tns:StardasServiceProxySoap12Binding">
+			<soap12:address
+				location="https://tst-srv-stardas.doc.csi.it:443/wso001/services/StardasServiceProxy.StardasServiceProxyHttpsSoap12Endpoint" />
+		</wsdl:port>
+		<wsdl:port name="StardasServiceProxyHttpEndpoint"
+			binding="tns:StardasServiceProxyHttpBinding">
+			<http:address
+				location="http://tst-srv-stardas.doc.csi.it:80/wso001/services/StardasServiceProxy.StardasServiceProxyHttpEndpoint" />
+		</wsdl:port>
+		<wsdl:port name="StardasServiceProxyHttpsEndpoint"
+			binding="tns:StardasServiceProxyHttpBinding">
+			<http:address
+				location="https://tst-srv-stardas.doc.csi.it:443/wso001/services/StardasServiceProxy.StardasServiceProxyHttpsEndpoint" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

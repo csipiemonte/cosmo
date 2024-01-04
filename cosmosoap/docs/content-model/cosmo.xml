@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="cosmo:model">
+	<description>cosmo Model</description>
+	<author>DOQUI Group</author>
+	<version>1.4</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.doqui.it/model/cosmo/1.0" prefix="cosmo"/>
+	</namespaces>
+	<types>
+		<type name="cosmo:documento">
+			<title>Cosmo - documento</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="cosmo:tipoDocumento">
+					<title>Tipo documento</title>
+					<type>d:text</type>
+					<mandatory enforced="true">true</mandatory>
+				</property>
+				<property name="cosmo:struttura">
+					<title>Struttura</title>
+					<type>d:text</type>
+					<mandatory enforced="true">false</mandatory>
+				</property>
+				<property name="cosmo:descrizione">
+					<title>Descrizione documento</title>
+					<type>d:text</type>
+					<mandatory enforced="true">false</mandatory>
+				</property>
+				<property name="cosmo:oggetto">
+					<title>Oggetto documento</title>
+					<type>d:text</type>
+					<mandatory enforced="true">true</mandatory>
+				</property>
+				<property name="cosmo:numero">
+					<title>Numero documento</title>
+					<type>d:int</type>
+					<mandatory enforced="true">false</mandatory>
+				</property>
+			</properties>
+		</type>
+		<type name="cosmo:pratica">
+			<title>Cosmo - pratica</title>
+			<parent>cm:folder</parent>
+			<properties>
+			</properties>
+		</type>
+	</types>
+</model>

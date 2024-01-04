@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime" 
+	xmlns:tns="http://signaturevalidation.dosign.session.business.dosign.dosign.doqui.it/"
+	targetNamespace="http://signaturevalidation.dosign.session.business.dosign.dosign.doqui.it/"
+	elementFormDefault="unqualified">
+</schema>

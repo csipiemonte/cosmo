@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="RelationshipsService" targetNamespace="relationshipsservice.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="relationshipsservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xsd:schema targetNamespace="common.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="relationshipsservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Common.xsd" />
+		</xsd:schema>
+<xsd:schema targetNamespace="archive.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="relationshipsservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Archive.xsd" />
+			<xsd:include schemaLocation="ACARIS-ArchiveMessaging.xsd" />
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="acarisException">
+    <wsdl:part element="common:acarisFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getObjectRelationshipsRequest">
+    <wsdl:part element="archive:getObjectRelationships" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getObjectRelationshipsResponse">
+    <wsdl:part element="archive:getObjectRelationshipsResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RelationshipsServicePort">
+    <wsdl:operation name="getObjectRelationships">
+      <wsdl:input message="tns:getObjectRelationshipsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getObjectRelationshipsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="getObjectRelationshipsFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RelationshipsServiceBinding" type="tns:RelationshipsServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getObjectRelationships">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="getObjectRelationshipsFault">
+        <soap:fault name="getObjectRelationshipsFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RelationshipsService">
+    <wsdl:port binding="tns:RelationshipsServiceBinding" name="RelationshipsServicePort">
+      <soap:address location="http://tst-applogic.reteunitaria.piemonte.it/actasrv/relationshipsWS" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

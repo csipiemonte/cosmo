@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<bindings
+	xmlns="http://java.sun.com/xml/ns/jaxb"
+	version="2.1">
+	<bindings schemaLocation="StardasWso2ServiceTypes.xsd">
+		<schemaBindings>
+			<package name="it.csi.cosmo.cosmosoap.integration.stardasWso2Service.dto" />
+		</schemaBindings>
+	</bindings>
+</bindings>

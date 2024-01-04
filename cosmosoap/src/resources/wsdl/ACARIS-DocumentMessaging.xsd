@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8'?><xs:schema jaxb:version="2.0" targetNamespace="document.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:service="documentservice.acaris.acta.doqui.it" xmlns:tns="document.acaris.acta.doqui.it" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:import namespace="documentservice.acaris.acta.doqui.it" schemaLocation="ACARIS-Document.xsd" />
+	<xs:import namespace="archive.acaris.acta.doqui.it" schemaLocation="ACARIS-Archive.xsd" />
+    <xs:import namespace="common.acaris.acta.doqui.it" schemaLocation="ACARIS-Common.xsd" />
+
+	
+
+	<!--============================-->
+	<!-- Classi locali allo schema  -->
+	<!--============================-->
+
+	
+
+	<!--=====================-->
+	<!-- Service operations  -->
+	<!--=====================-->
+
+	<!-- creaDocumento operation -->
+	<xs:element name="creaDocumento">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="tipoOperazione" type="service:enumTipoOperazione" />
+				<xs:element maxOccurs="1" minOccurs="1" name="datiCreazione" type="service:InfoRichiestaCreazione" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="creaDocumentoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="info" type="service:IdentificatoreDocumento" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- getRappresentazioneDocumento operation -->
+	<xs:element name="getRappresentazioneDocumento">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="puntoDiPartenza" type="service:IdentificatoreDocumento" />
+				<xs:element maxOccurs="1" minOccurs="1" name="recuperaAscendenza" type="common:boolean" />
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getRappresentazioneDocumentoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="info" type="service:MappaIdentificazioneDocumento" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	
+	<!-- trasformaDocumentoPlaceHolderInDocumentoElettronicoOld Operation -->
+	<xs:element name="trasformaDocumentoPlaceHolderInDocumentoElettronicoOld">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="placeHolderId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="placeHolderId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="tipoDocFisicoId" type="common:integer" />
+				<xs:element maxOccurs="1" minOccurs="1" name="composizioneId" type="common:integer" />
+				<xs:element maxOccurs="1" minOccurs="1" name="multiplo" type="common:boolean" />
+				<xs:element maxOccurs="1" minOccurs="1" name="rimandareOperazioneSbustamento" type="common:boolean" />
+				<xs:element maxOccurs="unbounded" minOccurs="1" name="documentoFisico" type="common:PropertiesType" />
+				<xs:element maxOccurs="unbounded" minOccurs="1" name="contenutoFisico" type="common:PropertiesType" />
+				<xs:element maxOccurs="unbounded" minOccurs="1" name="contentStream" type="common:acarisContentStreamType" />
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="annotazione" type="common:PropertiesType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- trasformaDocumentoPlaceholderInDocumentoElettronico Operation -->
+	<xs:element name="trasformaDocumentoPlaceholderInDocumentoElettronico">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="classificazioneId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="registrazioneId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="infoRichiesta" type="service:InfoRichiestaTrasformazione" />
+				<xs:element maxOccurs="unbounded" minOccurs="1" name="documentoFisico" type="service:DocumentoFisicoIRC" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="trasformaDocumentoPlaceholderInDocumentoElettronicoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="trasformazione" type="service:IdentificazioneTrasformazione" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- getVerifyReportInfo operation 
+	<xs:element name="getVerifyReportInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="verifyReportId" type="common:ObjectIdType" 
+					minOccurs="1" maxOccurs="unbounded" />
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getVerifyReportInfoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="info" type="tns:VerifyReportInfo"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	-->
+
+	<xs:element name="creaDocumentoFisicoInDocumentRoot">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="typeId" type="archive:enumDocumentObjectType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="associativeObjectTypeId" type="archive:enumFolderObjectType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<!-- must match the type attribute value of the properties object -->
+				<xs:element maxOccurs="1" minOccurs="1" name="properties" type="common:PropertiesType" />
+				<!-- must match the type attribute value of the properties associative object -->
+				<xs:element maxOccurs="1" minOccurs="1" name="associativeObjectProperties" type="common:PropertiesType" />
+				<xs:element maxOccurs="1" minOccurs="0" name="folderId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="0" name="contentStream" type="common:acarisContentStreamType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="creaDocumentoFisicoInDocumentRootResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="objectId" type="common:ObjectIdType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- uploadContenutoFisico operation -->
+	<xs:element name="uploadContenutoFisico">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="repositoryId" type="common:ObjectIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="principalId" type="common:PrincipalIdType" />
+				<xs:element maxOccurs="1" minOccurs="1" name="contFisico" type="common:acarisContentStreamType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="uploadContenutoFisicoResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="1" minOccurs="1" name="objectId" type="common:ObjectIdType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

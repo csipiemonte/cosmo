@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewUD>
+	<RegistrazioneDaDare>
+		<CategoriaReg>I</CategoriaReg>
+		<SiglaReg>COSMO</SiglaReg>
+	</RegistrazioneDaDare>
+	<OggettoUD>OGGETTO proposta iter XXYYZZZ</OggettoUD>
+	<TipoDoc>
+		<Decodifica_Nome>Comunicazione alla Giunta Comunale</Decodifica_Nome>
+	</TipoDoc>
+	<TipoProvenienza>I</TipoProvenienza>
+	<NroAllegati>0</NroAllegati>
+	<NoteUD>in questa campo di annotazioni mettere turte le informazioni
+		accessorie. Avviare entro il 15/12. Assegnare a ...</NoteUD>
+	<AttributoAddUD>
+		<Nome>CHIAVE_COSMO</Nome>
+		<ValoreSemplice>AAABBB111</ValoreSemplice>
+	</AttributoAddUD>
+</NewUD>
+

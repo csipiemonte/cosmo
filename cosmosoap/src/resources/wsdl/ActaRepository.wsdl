@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="RepositoryService"
+	targetNamespace="repositoryservice.acaris.acta.doqui.it"
+	xmlns:archive="archive.acaris.acta.doqui.it"
+	xmlns:common="common.acaris.acta.doqui.it"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="repositoryservice.acaris.acta.doqui.it"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xsd:schema targetNamespace="common.acaris.acta.doqui.it"
+			xmlns:archive="archive.acaris.acta.doqui.it"
+			xmlns:common="common.acaris.acta.doqui.it"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:tns="repositoryservice.acaris.acta.doqui.it"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Common.xsd" />
+		</xsd:schema>
+		<xsd:schema 
+			targetNamespace="archive.acaris.acta.doqui.it"
+			xmlns:archive="archive.acaris.acta.doqui.it"
+			xmlns:common="common.acaris.acta.doqui.it"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:tns="repositoryservice.acaris.acta.doqui.it"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Archive.xsd" />
+			<xsd:include schemaLocation="ACARIS-ArchiveMessaging.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="getRepositoriesResponse">
+		<wsdl:part element="archive:getRepositoriesResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="acarisException">
+		<wsdl:part element="common:acarisFault" name="fault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRepositoryInfoRequest">
+		<wsdl:part element="archive:getRepositoryInfo" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRepositoriesRequest">
+		<wsdl:part element="archive:getRepositories" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRepositoryInfoResponse">
+		<wsdl:part element="archive:getRepositoryInfoResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="RepositoryServicePort">
+		<wsdl:operation name="getRepositories">
+			<wsdl:input message="tns:getRepositoriesRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getRepositoriesResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getRepositoriesFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getRepositoryInfo">
+			<wsdl:input message="tns:getRepositoryInfoRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getRepositoryInfoResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getRepositoryInfoFault">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="RepositoryServiceBinding"
+		type="tns:RepositoryServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getRepositories">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getRepositoriesFault">
+				<soap:fault name="getRepositoriesFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getRepositoryInfo">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getRepositoryInfoFault">
+				<soap:fault name="getRepositoryInfoFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="RepositoryService">
+		<wsdl:port binding="tns:RepositoryServiceBinding"
+			name="RepositoryServicePort">
+			<soap:address
+				location="http://tst-applogic.reteunitaria.piemonte.it/actasrv/repositoryWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

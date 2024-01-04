@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Andrea Campello 
+	(Engineering) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Common.xsd" />
+	<xs:element name="Output_UD">
+		<xs:annotation>
+			<xs:documentation>ROOT element dello schema. Contiene l'output
+				specifico dei Web Service di creazione e aggiornamento di unità
+				documentaria (non l'esito del processo di creazione/aggiornamento
+				dell'unità documentaria e l'eventuale messaggio di errore)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="IdUD" type="xs:integer">
+					<xs:annotation>
+						<xs:documentation>Identificativo univoco assegnato all'unità
+							documentaria nel sistema documentale</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RegistrazioneDataUD"
+					type="EstremiRegNumType" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Sigla, anno e numero delle nuove
+							registrazioni/numerazioni assegnate dal sistema documentale
+							all'unità creata/aggiornata (se il WS ha avuto successo e se
+							nell'xml in input ad esso era valorizzato l'elemento
+							RegistrazioneDaDare)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="VersioneElettronicaNonCaricata"
+					minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Documenti elettronici (passati come attach del
+							messaggio SOAP) che non è stato possibile caricare nella
+							repository</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="NroAttachmentAssociato"
+								type="xs:positiveInteger">
+								<xs:annotation>
+									<xs:documentation>Indica quale degli attach in input al Web
+										Service non è stato caricato</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NomeFile" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Nome con cui doveva essere salvato il file
+										attach che non è stato caricato</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

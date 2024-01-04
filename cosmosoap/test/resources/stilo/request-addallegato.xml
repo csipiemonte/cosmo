@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UDDaAgg>
+	<EstremiXIdentificazioneUD>
+		<IdUD>2967700</IdUD>
+	</EstremiXIdentificazioneUD>
+	<NuovoAllegatoUD>
+		<DesAllegato>Allegato 1</DesAllegato>
+		<VersioneElettronica>
+			<NroAttachmentAssociato>1</NroAttachmentAssociato>
+			<NomeFile>Allegato1.pdf</NomeFile>
+		</VersioneElettronica>
+	</NuovoAllegatoUD>
+</UDDaAgg>

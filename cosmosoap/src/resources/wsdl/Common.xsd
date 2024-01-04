@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Andrea Campello (Engineering) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" >
+	<xs:simpleType name="SiglaRegNumType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AnnoType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1900"/>
+			<xs:maxInclusive value="2100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumRegType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="9999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="EstremiRegNumType">
+		<xs:all>
+			<xs:element name="CategoriaReg" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Categoria di registrazione / numerazione; valori ammessi PG=Protocollo Generale; PP=Protocollo Particolare; R=Repertorio; I=Numerazione data internamente al sistema documentale</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="PG"/>
+						<xs:enumeration value="PP"/>
+						<xs:enumeration value="R"/>
+						<xs:enumeration value="E"/>
+						<xs:enumeration value="A"/>
+						<xs:enumeration value="I"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SiglaReg" type="SiglaRegNumType">
+				<xs:annotation>
+					<xs:documentation>Sigla che identifica il registro/tipo della numerazione</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AnnoReg" type="AnnoType"/>
+			<xs:element name="NumReg" type="NumRegType"/>
+			<xs:element name="DataOraReg" type="xs:dateTime" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+</xs:schema>

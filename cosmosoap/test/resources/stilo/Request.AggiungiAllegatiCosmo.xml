@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UDDaAgg>
+	<EstremiXIdentificazioneUD>
+		<IdUD>711363</IdUD>
+	</EstremiXIdentificazioneUD>
+	<NuovoAllegatoUD>
+		<TipoDocAllegato>
+			<Decodifica_Nome>Verbale di spontanea dichiarazione</Decodifica_Nome>
+		</TipoDocAllegato>
+		<DesAllegato>Verbale di spontanea dichiarazione</DesAllegato>
+		<VersioneElettronica>
+			<NroAttachmentAssociato>1</NroAttachmentAssociato>
+			<NomeFile>DICHIARAZIONI_-_Stampa_ROSSI_ACHILLE.pdf</NomeFile>
+		</VersioneElettronica>
+	</NuovoAllegatoUD>
+</UDDaAgg>

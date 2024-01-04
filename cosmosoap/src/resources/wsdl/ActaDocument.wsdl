@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="DocumentService" targetNamespace="documentservice.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:document="document.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="documentservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xsd:schema targetNamespace="common.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:document="document.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="documentservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Common.xsd" />
+			<xsd:import namespace="archive.acaris.acta.doqui.it" schemaLocation="ACARIS-Archive.xsd" />
+		</xsd:schema>
+<xsd:schema targetNamespace="document.acaris.acta.doqui.it" xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:document="document.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="documentservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="documentservice.acaris.acta.doqui.it" schemaLocation="ACARIS-Document.xsd" />
+			<xsd:include schemaLocation="ACARIS-DocumentMessaging.xsd" />
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="uploadContenutoFisicoRequest">
+    <wsdl:part element="document:uploadContenutoFisico" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="acarisException">
+    <wsdl:part element="common:acarisFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="creaDocumentoFisicoInDocumentRootRequest">
+    <wsdl:part element="document:creaDocumentoFisicoInDocumentRoot" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="creaDocumentoResponse">
+    <wsdl:part element="document:creaDocumentoResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPropertiesMassiveRequest">
+    <wsdl:part element="common:getPropertiesMassive" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="trasformaDocumentoPlaceholderInDocumentoElettronicoRequest">
+    <wsdl:part element="document:trasformaDocumentoPlaceholderInDocumentoElettronico" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="creaDocumentoFisicoInDocumentRootResponse">
+    <wsdl:part element="document:creaDocumentoFisicoInDocumentRootResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="creaDocumentoRequest">
+    <wsdl:part element="document:creaDocumento" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRappresentazioneDocumentoRequest">
+    <wsdl:part element="document:getRappresentazioneDocumento" name="input">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="trasformaDocumentoPlaceholderInDocumentoElettronicoResponse">
+    <wsdl:part element="document:trasformaDocumentoPlaceholderInDocumentoElettronicoResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPropertiesMassiveResponse">
+    <wsdl:part element="common:getPropertiesMassiveResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadContenutoFisicoResponse">
+    <wsdl:part element="document:uploadContenutoFisicoResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRappresentazioneDocumentoResponse">
+    <wsdl:part element="document:getRappresentazioneDocumentoResponse" name="output">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DocumentServicePort">
+    <wsdl:operation name="creaDocumento">
+      <wsdl:input message="tns:creaDocumentoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:creaDocumentoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="creaDocumentoFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRappresentazioneDocumento">
+      <wsdl:input message="tns:getRappresentazioneDocumentoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getRappresentazioneDocumentoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="getRappresentazioneDocumentoFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPropertiesMassive">
+      <wsdl:input message="tns:getPropertiesMassiveRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getPropertiesMassiveResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="getPropertiesMassiveFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="trasformaDocumentoPlaceholderInDocumentoElettronico">
+      <wsdl:input message="tns:trasformaDocumentoPlaceholderInDocumentoElettronicoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:trasformaDocumentoPlaceholderInDocumentoElettronicoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="trasformaDocumentoPlaceholderInDocumentoElettronicoFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="creaDocumentoFisicoInDocumentRoot">
+      <wsdl:input message="tns:creaDocumentoFisicoInDocumentRootRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:creaDocumentoFisicoInDocumentRootResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="creaDocumentoFisicoInDocumentRootFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="uploadContenutoFisico">
+      <wsdl:input message="tns:uploadContenutoFisicoRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:uploadContenutoFisicoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:acarisException" name="uploadContenutoFisicoFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DocumentServiceBinding" type="tns:DocumentServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="creaDocumento">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="creaDocumentoFault">
+        <soap:fault name="creaDocumentoFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRappresentazioneDocumento">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="getRappresentazioneDocumentoFault">
+        <soap:fault name="getRappresentazioneDocumentoFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="trasformaDocumentoPlaceholderInDocumentoElettronico">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="trasformaDocumentoPlaceholderInDocumentoElettronicoFault">
+        <soap:fault name="trasformaDocumentoPlaceholderInDocumentoElettronicoFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPropertiesMassive">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="getPropertiesMassiveFault">
+        <soap:fault name="getPropertiesMassiveFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="creaDocumentoFisicoInDocumentRoot">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="creaDocumentoFisicoInDocumentRootFault">
+        <soap:fault name="creaDocumentoFisicoInDocumentRootFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="uploadContenutoFisico">
+      <soap:operation />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="uploadContenutoFisicoFault">
+        <soap:fault name="uploadContenutoFisicoFault" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DocumentService">
+    <wsdl:port binding="tns:DocumentServiceBinding" name="DocumentServicePort">
+      <soap:address location="http://tst-applogic.reteunitaria.piemonte.it/actasrv/documentWS" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

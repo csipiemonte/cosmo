@@ -1,0 +1,1751 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2010 rel. 3 (http://www.altova.com) by Valentina 
+	Martinucci (Engineering Ingegneria Informatica spa) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Common.xsd" />
+	<xs:simpleType name="FlagSiNoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="0|1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlagConsentiNegaType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="C|N" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AttributoAddizionaleType">
+		<xs:sequence>
+			<xs:element name="Nome" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Nome identificativo dell'attributo
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="ValoreSemplice" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Valore dell'attributo se di tipo semplice e
+							monovalore</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Lista">
+					<xs:annotation>
+						<xs:documentation>Valore/i dell'attributo (come lista di record)
+							se multivalore e/o strutturato</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Riga" minOccurs="0"
+								maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Rappresenta un record-valore
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Colonna" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Colonna / elemento del record-valore (sono
+													tante colonne quante i sotto-attributi che compongono
+													l'attributo nel caso sia strutturato)</xs:documentation>
+											</xs:annotation>
+											<xs:complexType mixed="true">
+												<xs:attribute name="Nro"
+													type="xs:positiveInteger" use="required">
+													<xs:annotation>
+														<xs:documentation>Identifica la colonna</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="FlagAggiungiSostituisciType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="A|S" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LibreriaType">
+		<xs:annotation>
+			<xs:documentation>Nome che identifica una libreria contenente unità
+				documentarie e fascicoli</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NomeUDType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OggettoUDType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OggettoFascType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdInSistemaEsternoType">
+		<xs:annotation>
+			<xs:documentation>Codice che identifica un oggetto in un sistema
+				esterno</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TipoCartaceoType">
+		<xs:annotation>
+			<xs:documentation>Tipo di cartaceo; valori possibili: OU=Originale
+				unico; ONU=Originale non unico; C=Copia</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="OU|ONU|C" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="OggDiTabDiSistemaType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta un oggetto censito in una tabella di
+				sistema del sistema documentale</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="CodId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Identificativo del dato di sistema nella banca
+						dati del sistema documentale</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Decodifica_Nome" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="NroLivelloGerarchiaType">
+		<xs:annotation>
+			<xs:documentation>Nro di un livello di una struttura gerarchica come
+				la struttura organizzativa o il titolario di classificazione: 1 è il
+				livello più alto (ad esempio il settore o il titolo), 2 il
+				successivo (ad esempio il servizio o la classe) e così via
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1" />
+			<xs:maxInclusive value="10" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodLivelloGerarchiaType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	<xs:complexType name="LivelloGerarchiaType">
+		<xs:attribute name="Nro" type="NroLivelloGerarchiaType"
+			use="required" />
+		<xs:attribute name="Codice"
+			type="CodLivelloGerarchiaType" use="required" />
+	</xs:complexType>
+	<xs:complexType name="UOType">
+		<xs:annotation>
+			<xs:documentation>
+				Indica una UO attraverso il suo identificativo o attarverso i suoi
+				livelli o attraverso la sua denominazione. <!-- Ad esempio il "Servizio 
+					10 del Settore 2" si può indicare come <my_element> <LivelloUO Nro=1 Cod=2> 
+					</LivelloUO> <LivelloUO Nro=2 Cod=10> </LivelloUO> <my_element> -->
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IdUO" type="xs:integer" minOccurs="0" />
+			<xs:element name="LivelloUO" type="LivelloGerarchiaType"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="DenominazioneUO" type="xs:string"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Può essere la denominazione semplice della UO o
+						quest'ultima preceduta dalle denominazioni delle UO di livello
+						superiore (separate da " | "). Es: "Ufficio Rilasci" o "Settore
+						Edilizia | Ufficio Rilasci"</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UserType">
+		<xs:choice>
+			<xs:element name="IdInSistemaEsterno"
+				type="IdInSistemaEsternoType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id. dell'utente nell'applicazione che invoca il
+						WS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdInterno" type="xs:integer"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id. dell'utente all'interno del sistema
+						documentale</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UsernameInterna" type="xs:string"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Username con cui l'utente si autentica al sistema
+						documentale</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Descrizione" type="xs:string"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Descrizione dell'utente</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroMatricola" type="xs:string"
+				minOccurs="0" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ScrivaniaVirtualeType">
+		<xs:annotation>
+			<xs:documentation>La scrivania virtuale rappresenta un utente non
+				come persona fisica, ma nella funzione che svolge presso una certa
+				UO. Può essere indicata univocamente indicando UO e utente; oppure
+				il sistema può cercare di identificarla anche o solo a partire dalla
+				sua descrizione</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="UO" type="UOType" minOccurs="0" />
+			<xs:element name="Utente" type="UserType" minOccurs="0" />
+			<xs:element name="IdScrivaniaVirt" type="xs:integer"
+				minOccurs="0" />
+			<xs:element name="DesScrivaniaVirt" type="xs:string"
+				minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="RuoloAmmContestualizzatoType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta un ruolo amministrativo eventualmente
+				circoscritto ad un certo livello della struttura organizzativa
+				piuttosto che ad una specifica UO (es: Dirigente, Dirigente di
+				Settore, Dirigente del settore X, Dirigenti dei Servizi del Settore
+				X)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RuoloAmm" type="OggDiTabDiSistemaType" />
+			<xs:choice>
+				<xs:element name="VsLivelloUO"
+					type="NroLivelloGerarchiaType" minOccurs="0" />
+				<xs:element name="VsTipoUO" type="OggDiTabDiSistemaType"
+					minOccurs="0" />
+			</xs:choice>
+			<xs:element name="VsUO" type="UOEstesaType" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrazioneNumerazioneType">
+		<xs:all>
+			<xs:element name="CategoriaReg">
+				<xs:annotation>
+					<xs:documentation>Categoria di registrazione / numerazione; valori
+						ammessi PG=Protocollo Generale; PP=Protocollo Particolare;
+						R=Repertorio; E=Registrazione d'emergenza; A=Altro
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="PG" />
+						<xs:enumeration value="PP" />
+						<xs:enumeration value="R" />
+						<xs:enumeration value="E" />
+						<xs:enumeration value="A" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SiglaReg" type="SiglaRegNumType"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Sigla che identifica il registro/tipo di
+						numerazione</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AnnoReg" type="AnnoType" minOccurs="0" />
+			<xs:element name="NumReg" type="NumRegType" />
+			<xs:element name="DataOraReg" type="xs:dateTime"
+				minOccurs="0" />
+			<xs:element name="UOReg" type="UOType" minOccurs="0" />
+			<xs:element name="UserReg" type="UserType" minOccurs="0" />
+			<xs:element name="FlagRegAnnullata" type="FlagSiNoType"
+				minOccurs="0" />
+		</xs:all>
+		<xs:attribute name="IdRegNum"
+			type="IdInSistemaEsternoType" />
+	</xs:complexType>
+	<xs:complexType name="EstremiXIdentificazioneUDType">
+		<xs:annotation>
+			<xs:documentation>Contiene i dati attraverso cui identificare
+				univocamente un'unità documentaria</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="IdUD" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Identificativo univoco dell'unità documentaria
+						all'interno del sistema documentale</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EstremiRegNum" type="EstremiRegNumType">
+				<xs:annotation>
+					<xs:documentation>Estremi di registrazione/numerazione attraverso
+						cui identificare un'unità documentaria</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ComuneItalianoType">
+		<xs:choice>
+			<xs:element name="CodISTATComune">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9]{6}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NomeComune" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="StatoNazionaleType">
+		<xs:choice>
+			<xs:element name="CodISTATStato">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9]{3}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NomeStato" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="SoggettoEsternoType">
+		<xs:annotation>
+			<xs:documentation>Soggetto (persona fisica o giuridica) esterno
+				all'AOO</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CodIdInAnagrafe"
+				type="IdInSistemaEsternoType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Codice identificativo del soggetto nell'anagrafe
+						residenti/ditte.
+						Sul documento il soggetto viene riportato con i dati di seguito
+						riportati, non con quelli eventuali presenti in anagrafe.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagFisica" type="FlagSiNoType">
+				<xs:annotation>
+					<xs:documentation>Indica se persona fisica (1) o giuridica (0)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Denominazione_Cognome" type="xs:string" />
+			<xs:element name="Nome" type="xs:string" minOccurs="0" />
+			<xs:element name="CodiceFiscale" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="16" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PartitaIva" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="11" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Sesso" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="M|F|-" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="DataNascitaIstituzione" type="xs:date"
+				minOccurs="0" />
+			<xs:element name="ComuneNascita" type="ComuneItalianoType"
+				minOccurs="0" />
+			<xs:element name="StatoNascita" type="StatoNazionaleType"
+				minOccurs="0" />
+			<xs:element name="StatoCittadinanza"
+				type="StatoNazionaleType" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ToponimoType">
+		<xs:choice>
+			<xs:element name="CodToponomastico" type="xs:string"
+				minOccurs="0" />
+			<xs:element name="DescrizioneToponimo" type="xs:string"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Descrizione del toponimo (incluso il tipo: Via,
+						Vicolo, Piazza ecc)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="IndirizzoType">
+		<xs:all>
+			<xs:element name="Toponimo" type="ToponimoType"
+				minOccurs="0" />
+			<xs:element name="Civico" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N.ro civico ed eventuale esponente
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Interno" type="xs:string" minOccurs="0" />
+			<xs:element name="Scala" type="xs:string" minOccurs="0" />
+			<xs:element name="Piano" type="xs:integer" minOccurs="0" />
+			<xs:element name="Localita" type="xs:string" minOccurs="0" />
+			<xs:element name="CAP" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9]{5}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ComuneIndirizzo"
+				type="ComuneItalianoType" minOccurs="0" />
+			<xs:element name="NomeCittaEstera" type="xs:string"
+				minOccurs="0" />
+			<xs:element name="StatoIndirizzo"
+				type="StatoNazionaleType" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="EmailType">
+		<xs:all>
+			<xs:element name="IndirizzoEmail" type="xs:string" />
+			<xs:element name="FlagPEC" type="FlagSiNoType"
+				minOccurs="0" />
+			<xs:element name="FlagCasellaIstituzionaleAOO"
+				type="FlagSiNoType" minOccurs="0" />
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="DestinatarioEsternoType">
+		<xs:complexContent>
+			<xs:extension base="SoggettoEsternoType">
+				<xs:sequence>
+					<xs:element name="PerConoscenza" fixed="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Se presente indica che è destinatario per
+								conoscenza</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IndirizzoDest" type="IndirizzoType"
+						minOccurs="0" />
+					<xs:element name="IndirizzoEmailDest" type="EmailType"
+						minOccurs="0" />
+					<xs:element name="DataOraSpedAlDest" type="xs:dateTime"
+						minOccurs="0" />
+					<xs:element name="MezzoTrasmissioneAlDest"
+						type="OggDiTabDiSistemaType" minOccurs="0" />
+					<xs:element name="DataRaccomandataAlDest" type="xs:date"
+						minOccurs="0" />
+					<xs:element name="NroRaccomandataAlDest"
+						type="xs:string" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SoggettoEstEstesoType">
+		<xs:annotation>
+			<xs:documentation>Soggetto esterno che ha una relazione con un
+				documento, fascicolo, proced. ecc. diversa da quella di
+				mittente/destinatario</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="SoggettoEsternoType">
+				<xs:sequence>
+					<xs:element name="DettNaturaRelazioneConUD"
+						type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Dettaglio della natura della relazione
+								soggetto-UD</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SoggettoInternoType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta un soggetto interno all'AOO che può
+				essere: una UO, un utente, una scrivania virtuale (che rappresenta
+				l'utente non come persona, ma nella funzione che svolge presso una
+				certa UO), un gruppo (di utenti o UO o scrivanie virtuali) o un
+				ruolo amministrativo (es: Dirigente, Direttore Generale ecc). Quando
+				si assegna ad un gruppo o un ruolo il sistema assegna a tutti gli
+				utenti, UO e scrivanie del gruppo o aventi il ruolo
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="UO" type="UOType" />
+			<xs:element name="Utente" type="UserType" />
+			<xs:element name="ScrivaniaVirtuale"
+				type="ScrivaniaVirtualeType" />
+			<xs:element name="Gruppo" type="OggDiTabDiSistemaType" />
+			<xs:element name="RuoloAmmContestualizzato"
+				type="RuoloAmmContestualizzatoType" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="AssegnatarioEffType">
+		<xs:choice>
+			<xs:element name="UO" type="UOType" />
+			<xs:element name="Utente" type="UserType" />
+			<xs:element name="ScrivaniaVirtuale"
+				type="ScrivaniaVirtualeType" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="UOUserType">
+		<xs:choice>
+			<xs:element name="UO" type="UOType" />
+			<xs:element name="Utente" type="UserType" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="UOEstesaType">
+		<xs:complexContent>
+			<xs:extension base="UOType">
+				<xs:sequence>
+					<xs:element name="FlagIncluseSottoUO"
+						type="FlagSiNoType" default="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SoggettoInternoInACLType">
+		<xs:choice>
+			<xs:element name="InteroEnte" fixed="1" />
+			<xs:element name="InteraAOO" fixed="1" />
+			<xs:element name="ScrivanieDiUO" type="UOEstesaType" />
+			<xs:element name="Utente" type="UserType" />
+			<xs:element name="ScrivaniaVirtuale"
+				type="ScrivaniaVirtualeType" />
+			<xs:element name="Gruppo" type="OggDiTabDiSistemaType" />
+			<xs:element name="RuoloAmmContestualizzato"
+				type="RuoloAmmContestualizzatoType" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="FileUDxPrivilegioType">
+		<xs:choice>
+			<xs:element name="AllFiles" fixed="1">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare che il privilegio è su tutti i
+						file dell'unità documentaria</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SuFile" type="xs:positiveInteger"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Serve a listare i file su cui agisce il
+						privilegio: 0=indica il file primario; n=indica il file associato
+						all'n-esimo allegato (allegati da 1 in su)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="PrivilegioSuFileType">
+		<xs:sequence>
+			<xs:element name="Files" type="FileUDxPrivilegioType" />
+		</xs:sequence>
+		<xs:attribute name="ConsentiNega"
+			type="FlagConsentiNegaType" use="required" />
+	</xs:complexType>
+	<xs:complexType name="ACLRecordType">
+		<xs:complexContent>
+			<xs:extension base="SoggettoInternoInACLType">
+				<xs:sequence>
+					<!-- segue la lista dei possibili privilegi sull'unità documentaria -->
+					<xs:element name="VisualizzazioneDati"
+						type="FlagConsentiNegaType" minOccurs="0" />
+					<xs:element name="VisualizzazioneFile"
+						type="PrivilegioSuFileType" minOccurs="0" />
+					<xs:element name="ModificaDati"
+						type="FlagConsentiNegaType" minOccurs="0" />
+					<xs:element name="ModificaFile"
+						type="PrivilegioSuFileType" minOccurs="0" />
+					<xs:element name="ModificaPermessi"
+						type="FlagConsentiNegaType" minOccurs="0" />
+					<xs:element name="Copia" type="FlagConsentiNegaType"
+						minOccurs="0" />
+					<xs:element name="Eliminazione"
+						type="FlagConsentiNegaType" minOccurs="0" />
+					<xs:element name="Recupero" type="FlagConsentiNegaType"
+						minOccurs="0" />
+					<xs:element name="AccessoLimitatoVerFilePubblicate"
+						type="FileUDxPrivilegioType" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AssegnazioneInternaType">
+		<xs:complexContent>
+			<xs:extension base="SoggettoInternoType">
+				<xs:sequence>
+					<xs:element name="FlagPerConoscenza" type="FlagSiNoType"
+						default="0" />
+					<xs:element name="LivelloPriorita" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="ALTA|MEDIA|BASSA" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="MotivoAssegnazione"
+						type="OggDiTabDiSistemaType" minOccurs="0" />
+					<xs:element name="MessaggioAssegnazione"
+						type="xs:string" minOccurs="0" />
+					<xs:element name="DecorrenzaAssegnazione" type="xs:date"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Data futura da cui decorrerà l'assegnazione
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<!-- i due elementi successivi servono per avere evidenze di scadenze 
+						se i tempi richiesti in questi elementi sono scaduti o prossimi alla scadenza -->
+					<xs:element name="RichiestaPresaInCaricoEntroGiorniNro"
+						type="xs:positiveInteger" minOccurs="0" />
+					<xs:element name="RichiestaRispostaEntroGiorniNro"
+						type="xs:positiveInteger" minOccurs="0" />
+					<xs:element name="RichiestaNotificaMail" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Serve per richiedere notifica mail della presa
+								in carico o presa visione del documento da parte
+								dell'assegnatario</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="IndirizzoEmailNotifica"
+									type="xs:string" maxOccurs="unbounded" />
+								<xs:element name="NotificaPer">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:pattern
+												value="PresaInCarico|PresaVisione|Entrambe" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="FlagPrimaUltima" default="P">
+									<xs:annotation>
+										<xs:documentation>Indica se la notifica deve essere data alla
+											prima (P) o all'ultima (U) presa in carico e/o presa visione.
+											Serve solo se l'assegnatario corrisponde a più utenti (il che
+											può accadere se si tratta di una UO, un gruppo o un ruolo).
+										</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:pattern value="P|U" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ClassifUAType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta una classificazione e/o un'unità
+				archivistica (UA), vale a dire un fascicolo basato sul titolario di
+				calssificazione e identificato attraverso anno, classificazione,
+				n.ro progressivo (all'interno di anno e classificazione) ed
+				eventuali n.ro di sottofascicolo e di inserto</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AnnoAperturaUA" type="AnnoType"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Anno di apertura del fascicolo</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LivelloClassificazione"
+				type="LivelloGerarchiaType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Livelli di calssificazione (n.ro d'ordine
+						gerarchico e codice identificativo di caiscuno)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroProgrUA" type="xs:positiveInteger"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Nro del fascicolo (progressivo all'interno di
+						anno e classificazione)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroSottofasc" type="xs:positiveInteger"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N.ro di sottofascicolo</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroInserto" type="xs:positiveInteger"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N.ro di inserto</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="FolderCustomType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta un folder che non sia un'unità
+				archivistica: è identificato attraverso una stringa che ne contiene
+				il nome con il percorso completo (i folder possono essere separati
+				con / o \). Es: [CFContribuente]/[Anno]/[TipoTributo]
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ClassifFascicoloType">
+		<xs:choice>
+			<xs:element name="ClassifUA" type="ClassifUAType">
+				<xs:annotation>
+					<xs:documentation>Classificazione e/o fascicolo dell'archivio
+						ufficiale basato sul titolario di classificazione (unità
+						archivistica) assegnati all'unità documentaria.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FolderCustom"
+				type="EstremiXIdentificazioneFolderNoLibType">
+				<xs:annotation>
+					<xs:documentation>Estremi di un fascicolo, che non sia un'unità
+						archivistica, in cui collocare l'unità documentaria
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="AllegatoUDType">
+		<xs:annotation>
+			<xs:documentation>Contiene i dati di un documento allegato di
+				un''unità documentaria</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!-- almeno uno dei due elementi seguenti è obbligatorio -->
+			<xs:element name="TipoDocAllegato"
+				type="OggDiTabDiSistemaType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Tipo dell'allegato (possibile solo uno dei valori
+						in apposita tabella del sistema documentale)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DesAllegato" type="xs:string"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Descrizione / oggetto dell'allegato
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OriginaleCartaceo" type="FlagSiNoType"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica se l'allegato è originariamente cartaceo
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TipoCartaceo" type="TipoCartaceoType"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica il tipo di cartaceo: originale unico o non
+						unico o copia</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AttributoAddAlleg"
+				type="AttributoAddizionaleType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Attributo addizionale (oltre quelli già previsti
+						dal tracciato) con cui caratterizzare l'allegato. ATTENZIONE: gli
+						attributi addizionali che si possono specificare sono solo quelli
+						previsti per il tipo dell'allegato.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NuovoAllegatoUDType">
+		<xs:complexContent>
+			<xs:extension base="AllegatoUDType">
+				<xs:sequence>
+					<xs:element name="VersioneElettronica"
+						type="VersioneElettronicaType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contiene le informazioni su come
+								trattare/salvare l'eventuale attach in input al Web Service che
+								corrispinde all'allegato</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OldAllegatoUDToAggType">
+		<xs:complexContent>
+			<xs:extension base="AllegatoUDType">
+				<xs:sequence>
+					<xs:element name="AggVersioneElettronica"
+						type="AggVersioneElettronicaType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contiene i dati per aggiornare/rimuovere la
+								versione elettronica dell'allegato</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType
+		name="EstremiXIdentificazioneFolderNoLibType">
+		<xs:annotation>
+			<xs:documentation>Rappresenta un folder attraverso il suo path (a
+				partire dalla libreria di appartenenza esclusa)+ nome o il suo
+				identificativo</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="IdFolder" type="xs:integer" />
+			<xs:element name="Path_Nome" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Path (escluso il nome dellla libreria di
+						appartenenza) e nome del folder. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="VersioneElettronicaType">
+		<xs:annotation>
+			<xs:documentation>Contiene le informazioni di come trattare/salvare i
+				file in attach in input al Web Service</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NroAttachmentAssociato"
+				type="xs:positiveInteger">
+				<xs:annotation>
+					<xs:documentation>Indica quali degli attach in input al Web Service
+						rappresenta la versione elettronica del documento primario o di un
+						allegato</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NomeFile" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Nome con cui salvare il file nel sistema; si
+						tenga conto che l'estensione del nome viene utilizzata per
+						ricavare il formato</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroVers" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N.ro di versione (se non specificato viene
+						assegnato in automatico)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagVersPubblicata" type="FlagSiNoType"
+				default="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione è pubblicata (=1
+						o non valorizzato) o meno (=0)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagDaScansione" type="FlagSiNoType"
+				default="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione deriva da
+						scansione (=1 o non valorizzato) o meno (=0)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Note" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Note della versione elettronica
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagOCR" type="FlagSiNoType" default="1"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione è un'immagine da
+						sottoporre ad OCR (=1 o non valorizzato) o meno (=0)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OldAllegatoUDType">
+		<xs:sequence>
+			<xs:element name="NroAllegato" type="xs:positiveInteger">
+				<xs:annotation>
+					<xs:documentation>Nro del vecchio allegato da eliminare o
+						modificare (valori da 1 a n)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="FlagElimina" fixed="1">
+					<xs:annotation>
+						<xs:documentation>Indica se il vecchio allegato deve essere
+							rimosso</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DatiAllegato"
+					type="OldAllegatoUDToAggType">
+					<xs:annotation>
+						<xs:documentation>Dati con cui aggiornare l'allegato. Quelli
+							mancanti restano invariati. In particolare per gli attributi
+							addizionali vale la regola che se un certo attributo non è
+							presente resta invariato, mentre se appare con un valore vuoto
+							viene cancellato. </xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DatiVersioneElettronicaType">
+		<xs:annotation>
+			<xs:documentation>Contiene le informazioni di come trattare/salvare i
+				file in attach in input al Web Service</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NroAttachmentAssociato"
+				type="xs:positiveInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica quali degli attach in input al Web Service
+						rappresenta la nuova versione elettronica del documento primario o
+						di un allegato</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NomeFile" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Nome con cui salvare il file nel sistema
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NroVers" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N.ro di versione (se non specificato viene
+						assegnato in automatico alle nuove versioni)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagVersPubblicata" type="FlagSiNoType"
+				default="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione è pubblicata (=1
+						o non valorizzato) o meno (=0)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagDaScansione" type="FlagSiNoType"
+				default="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione deriva da
+						scansione (=1 o non valorizzato) o meno (=0)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Note" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Note della versione elettronica
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlagOCR" type="FlagSiNoType" default="1"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Serve a indicare se la versione è un'immagine da
+						sottoporre ad OCR (=1 o non valorizzato) o meno (=0)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoConservazioneType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="Permanente" fixed="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica conservazione per tempo illimitato
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PerAnni" type="xs:positiveInteger"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica il n.ro di anni per cui si deve
+							conservare</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="Supporto" type="OggDiTabDiSistemaType"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Supporto di conservazione</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AggVersioneElettronicaType">
+		<xs:annotation>
+			<xs:documentation>Contiene i dati per aggiornare/rimuovere la
+				versione elettronica di un documento</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EliminazioneVecchiaVersione" fixed="1"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica se la versione elettronica già registrata
+						in banca dati in corrispondenza di un dato documento deve essere
+						annullata o sostituita un'eventuale nuova versione
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CtrlUltimaVers" fixed="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica se per poter caricare una nuova versione
+						ci deve essere un controllo bloccante che la versione attuale sia
+						stata scaricata - o caricata a sistema - dall'utente
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DatiVersioneElettronica"
+				type="DatiVersioneElettronicaType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Datii della versione elettronica (nuova o
+						l'ultima già registrata e che si vuole aggiornare)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="UDDaAgg">
+		<xs:annotation>
+			<xs:documentation>ROOT element dello schema. Contiene gli estremi per
+				identificare l'unità documentaria da aggiornare + tutti i dati da
+				aggiornare. ATTENZIONE: in generale le informazioni che non vengono
+				specificate (l'elemento corrispondente è assente nell'XML) si
+				ritengono da lasciare invariate; se si vuole settare a vuota
+				un'informazione nell'XML deve apparire vuoto il corrispondente
+				elemento. Per le informazioni multivalore (ad esempio i mittenti) si
+				vedano i commenti caso per caso</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="EstremiXIdentificazioneUD"
+					type="EstremiXIdentificazioneUDType">
+					<xs:annotation>
+						<xs:documentation>Estremi per identificare quale unità
+							documentaria aggiornare</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AggRegistrazioniDate" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare le
+							registrazioni/numerazioni dell'unità documentaria; se non è
+							presente tutte le registrazioni/numerazioni restano invariate. Se
+							si vogliono eliminare tutte le registrazioni/numerazioni già date
+							all'unità documentaria basta valorizzare l'elemento EliminaTutti;
+							se si vogliono cambiare basta specificare nell'elemento
+							RegistrazioneData le nuove registrazioni/numerazioni (che
+							sostituiranno o si aggiungeranno a quelle già presenti in banca
+							dati a seconda del valore dell'elemento FlagAggiungiSostituisci).
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="EliminaTutti" fixed="1" />
+							<xs:sequence>
+								<xs:element name="FlagAggiungiSostituisci"
+									type="FlagAggiungiSostituisciType" />
+								<xs:element name="RegistrazioneData"
+									type="RegistrazioneNumerazioneType" minOccurs="0"
+									maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>Estremi e altri dati relativi ad una
+											registrazione o numerazione già data all'unità documentaria
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RegistrazioneDaDare" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Registro/numerazione (ufficiali o meno) a cui si
+							richiede al sistema di registrare/numerare l'unità documentaria
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="CategoriaReg" default="I">
+								<xs:annotation>
+									<xs:documentation>Categoria di registrazione / numerazione;
+										valori ammessi PG=Protocollo Generale; PP=Protocollo
+										Particolare; R=Repertorio; I=Numerazione interna al sistema e
+										non ufficiale</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="PG" />
+										<xs:enumeration value="PP" />
+										<xs:enumeration value="R" />
+										<xs:enumeration value="I" />
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SiglaReg" type="SiglaRegNumType"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Sigla che identifica il registro/tipo di
+										numerazione</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AnnoReg" type="AnnoType"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Se l'anno non è specificato si intende l'anno
+										corrente. Un anno diverso da quello corrente può essere
+										specificato solo per tipi di registrazione/numerazione che
+										consentano numerazione in anni passati</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="NomeUD" type="NomeUDType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nome dell'unità documentaria: se l'elemento è
+							assente il nome resta invariato; se è presente e ha valore vuoto
+							viene dato errore</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OggettoUD" type="OggettoUDType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Oggetto dell'unità documentaria
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<!-- i 5 elementi seguenti sono relativi al documento primario dell'unità 
+					documentaria -->
+				<xs:element name="TipoDoc" type="OggDiTabDiSistemaType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Tipo del documento primario (possibile solo uno
+							dei valori in apposita tabella del sistema documentale)
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OriginaleCartaceo" type="FlagSiNoType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica se il documento primario è
+							originariamente cartaceo</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TipoCartaceo" type="TipoCartaceoType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica il tipo di cartaceo: originale unico o
+							non unico o copia</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AggVersioneElettronica"
+					type="AggVersioneElettronicaType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare il
+							file primario dell'unità documentaria. Se non è presente
+							significa che l'eventuale file primario già esistente resta
+							invariato</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TipoProvenienza" default="I"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica se unità documentaria in entrata (E),
+							uscita (U) o interna (I)</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="E|U|I" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="NroAllegati" type="xs:integer"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nro di allegati dell'unità documentaria. Se
+							specificato e minore del n.ro di allegati specificati
+							nell'elemento AllegatoUD viene impostato pari al nro di elementi
+							di quel tipo.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DatiProduzione" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Dati di produzione del documento; da valorizzare
+							solo se documento interno o in uscita (elemento TipoProvenienza=I
+							o U)</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DataStesura" type="xs:date"
+								minOccurs="0" />
+							<xs:element name="LuogoStesura" type="xs:string"
+								minOccurs="0" />
+							<xs:element name="AggEstensori" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare
+										gli estensori; se non è presente gli estensori restano
+										invariati. Se si vogliono eliminare tutti gli estensori già
+										registrati basta valorizzare l'elemento EliminaTutti; se si
+										vogliono cambiare basta specificare nell'elemento Estensore i
+										nuovi estensori (che sostituiranno o si aggiungeranno a quelli
+										già registrati in banca dati a seconda del valore
+										dell'elemento FlagAggiungiSostituisci).</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="FlagAggiungiSostituisci"
+												type="FlagAggiungiSostituisciType" />
+											<xs:element name="Estensore" type="UserType"
+												maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AggUffProduttori" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare
+										gli uffici produttori; se non è presente gli uffici produttori
+										restano invariati. Se si vogliono eliminare tutti gli uffici
+										produttori già registrati basta valorizzare l'elemento
+										EliminaTutti; se si vogliono cambiare basta specificare
+										nell'elemento UffProduttore i nuovi uffici produttori (che
+										sostituiranno o si aggiungeranno a quelli già registrati in
+										banca dati a seconda del valore dell'elemento
+										FlagAggiungiSostituisci).</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="FlagAggiungiSostituisci"
+												type="FlagAggiungiSostituisciType" />
+											<xs:element name="UffProduttore" type="UOType"
+												maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DatiEntrata" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Dati di acquisizione dell'unità documentaria se
+							in entrata o tra uffici (alcuni da valorizzare solo se unità
+							documentraia in entrata) </xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DataOraArrivo" type="xs:dateTime"
+								minOccurs="0" />
+							<xs:element name="DataDocRicevuto" type="xs:date"
+								minOccurs="0" />
+							<xs:element name="EstremiRegistrazioneDocRicevuto"
+								type="xs:string" minOccurs="0" />
+							<xs:element name="RiferimentiDocRicevuto"
+								type="xs:string" minOccurs="0" />
+							<xs:element name="MezzoTrasmissione"
+								type="OggDiTabDiSistemaType" minOccurs="0" />
+							<xs:element name="DataRaccomandata" type="xs:date"
+								minOccurs="0" />
+							<xs:element name="NroRaccomandata" type="xs:string"
+								minOccurs="0" />
+							<xs:element name="AggMittentiEsterni" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare i
+										mittenti esterni; se non è presente i mittenti esterni restano
+										invariati. Se si vogliono eliminare tutti i mittenti già
+										registrati basta valorizzare l'elemento EliminaTutti; se si
+										vogliono cambiare basta specificare nell'elemento
+										MittenteEsterno i nuovi mittenti (che sostituiranno o si
+										aggiungeranno a quelli già registrati in banca dati a seconda
+										del valore dell'elemento FlagAggiungiSostituisci).
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="FlagAggiungiSostituisci"
+												type="FlagAggiungiSostituisciType" />
+											<xs:element name="MittenteEsterno"
+												type="SoggettoEsternoType" maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AggFirmatariEsterni" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare i
+										firmatari esterni; se non è presente i firmatari esterni
+										restano invariati. Se si vogliono eliminare tutti i firmatari
+										già registrati basta valorizzare l'elemento EliminaTutti; se
+										si vogliono cambiare basta specificare nell'elemento
+										FirmatarioEsterno i nuovi firmatari (che sostituiranno o si
+										aggiungeranno a quelli già registrati in banca dati a seconda
+										del valore dell'elemento FlagAggiungiSostituisci).
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="FlagAggiungiSostituisci"
+												type="FlagAggiungiSostituisciType" />
+											<xs:element name="FirmatarioEsterno"
+												type="SoggettoEsternoType" maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="IndirizzoProv" type="IndirizzoType"
+								minOccurs="0" />
+							<xs:element name="IndirizzoEmailProv" type="EmailType"
+								minOccurs="0" />
+							<xs:element name="UtenteRicezione" type="UserType"
+								minOccurs="0" />
+							<xs:element name="UffRicezione" type="UOType"
+								minOccurs="0" />
+							<xs:element name="UtenteCtrlAmmissib" type="UserType"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Utente che ha eseguito il controllo di
+										ammissibilità in caso di documento pervenuto via PEC o via fax
+										server</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DatiUscita" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Dati di uscita dell'unità documentaria (da
+							valorizzare solo se elemento TipoProvenienza=U)
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DataOraSped" type="xs:dateTime"
+								minOccurs="0" />
+							<xs:element name="MezzoTrasmissione"
+								type="OggDiTabDiSistemaType" minOccurs="0" />
+							<xs:element name="DataRaccomandata" type="xs:date"
+								minOccurs="0" />
+							<xs:element name="NroRaccomandata" type="xs:string"
+								minOccurs="0" />
+							<xs:element name="AggDestinatariEsterni" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare i
+										destinatari esterni; se non è presente i destinatari esterni
+										restano invariati. Se si vogliono eliminare tutti i
+										destinatari già registrati basta valorizzare l'elemento
+										EliminaTutti; se si vogliono cambiare basta specificare
+										nell'elemento DestinatarioEsterno i nuovi destinatari (che
+										sostituiranno o si aggiungeranno a quelli già registrati in
+										banca dati a seconda del valore dell'elemento
+										FlagAggiungiSostituisci).</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="FlagAggiungiSostituisci"
+												type="FlagAggiungiSostituisciType" />
+											<xs:element name="DestinatarioEsterno"
+												type="DestinatarioEsternoType" maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="UtenteSpedizione" type="UserType"
+								minOccurs="0" />
+							<xs:element name="UffSpedizione" type="UOType"
+								minOccurs="0" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AggAltriSoggEsterni" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare i
+							soggetti esterni, diversi da mittenti e destinatari, che hanno
+							una certa relazione/ruolo rispetto all'unità documentaria; se non
+							è presente un elemento di questo tipo relativo ad un certo
+							ruolo/relazione significa che i soggetti esterni con quel
+							ruolo/relazione vs l'UD restano invariati. Se si vogliono
+							eliminare tutti i soggetti esterni con un certo ruolo/relazione
+							rispetto all'UD basta valorizzare l'elemento EliminaTutti; se si
+							vogliono cambiare basta specificare nell'elemento
+							AltroSoggettoEsterno i nuovi soggetti esterni che hanno quel
+							ruolo/relazione rispetto all'unità documentaria (che
+							sostituiranno o si aggiungeranno a quelli già registrati in banca
+							dati a seconda del valore dell'elemento FlagAggiungiSostituisci).
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="NaturaRelazioneConUD"
+								type="OggDiTabDiSistemaType" />
+							<xs:choice>
+								<xs:element name="EliminaTutti" fixed="1" />
+								<xs:sequence>
+									<xs:element name="FlagAggiungiSostituisci"
+										type="FlagAggiungiSostituisciType" />
+									<xs:element name="AltroSoggettoEsterno"
+										type="SoggettoEstEstesoType" maxOccurs="unbounded" />
+								</xs:sequence>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AggAssegnazioniInterne" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare gli
+							assegnatari interni dell'unità documentaria e i dettagli sulle
+							assegnazioni ad essi; se non è presente gli assegnatari interni
+							restano invariati. Se si vogliono eliminare tutti gli assegnatari
+							già registrati basta valorizzare l'elemento EliminaTutti; se si
+							vogliono cambiare basta specificare nell'elemento
+							AssegnazioneInternaDaAggMod i nuovi assegnatari o quelli da
+							aggiornare e nell'elemento AssegnazioneInternaDaEliminare gli
+							assegnatari da eliminare. ATTENZIONE: se un assegnatario ha già
+							preso in carico o visionato o movimentato la sua copia la sua
+							cancellazione darà errore.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="EliminaTutti" fixed="1" />
+							<xs:sequence>
+								<xs:element name="AssegnazioneInternaDaEliminare"
+									type="SoggettoInternoType" minOccurs="0" maxOccurs="unbounded" />
+								<xs:element name="AssegnazioneInternaDaAggMod"
+									type="AssegnazioneInternaType" minOccurs="0"
+									maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AggCopieDaTenere" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare i
+							soggetti interni, non assegnatari, a cui deve restare copia del
+							documento; se non è presente le copie da tenere restano
+							invariate. Se si vogliono eliminare tutte le copie da tenere già
+							registrate basta valorizzare l'elemento EliminaTutti; se si
+							vogliono cambiare basta specificare nell'elemento CopiaDaTenereA
+							i nuovi soggetti interni a cui deve restare copia dell'unità
+							documentaria e nell'elemento CopiaDaTenereTogliA i soggetti a cui
+							togliere la copia da tenere. ATTENZIONE: se un soggetto che aveva
+							copia da tenere ha già preso in carico o visionato o movimentato
+							la sua copia la sua cancellazione darà errore.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="EliminaTutti" fixed="1" />
+							<xs:sequence>
+								<xs:element name="CopiaDaTenereTogliA"
+									type="SoggettoInternoType" minOccurs="0" maxOccurs="unbounded" />
+								<xs:element name="CopiaDaTenereA"
+									type="SoggettoInternoType" minOccurs="0" maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AggAltriSoggettiInterni" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare i
+							soggetti interni che hanno una certa relazione/ruolo rispetto
+							all'unità documentaria; se non è presente un elemento di questo
+							tipo relativo ad un certo ruolo/relazione significa che i
+							soggetti interni con quel ruolo/relazione vs l'UD restano
+							invariati. Se si vogliono eliminare tutti i soggetti interni con
+							un certo ruolo/relazione rispetto all'UD basta valorizzare
+							l'elemento EliminaTutti; se si vogliono cambiare basta
+							specificare nell'elemento AltroSoggettoInterno i nuovi soggetti
+							interni che hanno quel ruolo/relazione rispetto all'unità
+							documentaria (che sostituiranno o si aggiungeranno a quelli già
+							registrati in banca dati a seconda del valore dell'elemento
+							FlagAggiungiSostituisci).</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="NaturaRelazioneConUD"
+								type="OggDiTabDiSistemaType" />
+							<xs:choice>
+								<xs:element name="EliminaTutti" fixed="1" />
+								<xs:sequence>
+									<xs:element name="FlagAggiungiSostituisci"
+										type="FlagAggiungiSostituisciType" />
+									<xs:element name="AltroSoggettoInterno"
+										type="SoggettoInternoType" maxOccurs="unbounded" />
+								</xs:sequence>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AggCollocazioneClassificazioneUD"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene gli aggiornamenti delle classificazioni
+							dell'unità documentaria e delle informazioni di dove collocare
+							l'unità documentaria stessa (libreria, folder-fascicolo,
+							workspace): se questo elemento manca significa che tutti questi
+							dati restano invariati</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="LibreriaUD" type="LibreriaType"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Libreria in cui collocare l'unità
+										documentaria: se non è presente questo elemento la libreria
+										resta quella già registrata in precedenza. La libreria deve
+										essere valorizzata se si specificano fascicoli-folder (non
+										tramite id.) o se ce ne erano già e non vengono tolti.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AggClassifFascicoli" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare
+										le classificazione dell'unità documentaria e/o i fascicoli
+										(già esistenti) in cui collocare l'unità documentaria; se non
+										è presente classificazioni e fascicoli restano invariati. Se
+										si vogliono eliminare tutte le classificazioni e/o
+										fascicolazioni già registrate basta valorizzare l'elemento
+										EliminaTutti (si noti che si elimina la relazione
+										UD-fascicolo, NON il fascicolo); se si vogliono cambiare basta
+										specificare nell'elemento ClassifFascicolo DaAggiungere le
+										nuove classificazioni e/o fascicolazioni e nell'elemento
+										ClassifFascicoloDaEliminare quelle da eliminare (si noti che
+										modificarne una equivale a togliere la vecchia e mettere la
+										nuova). </xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="ClassifFascicoloDaEliminare"
+												type="ClassifFascicoloType" minOccurs="0"
+												maxOccurs="unbounded" />
+											<xs:element name="ClassifFascicoloDaAggiungere"
+												type="ClassifFascicoloType" minOccurs="0"
+												maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AggWorkspaces" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Contiene le informazioni su come aggiornare i
+										workspace in cui collocare l'unità documentaria; se non è
+										presente i workspace in cui si trova l'unità documentaria
+										restano invariati. Se si vuole eliminare l'unità documentaria
+										da tutti i workspace già indicati basta valorizzare l'elemento
+										EliminaTutti; se si vogliono cambiare i workspace basta
+										specificare nell'elemento WorkspaceDaAggiungere i nuovi
+										workspace e nell'elemento WorkspaceDaEliminare i workspace da
+										cui togliere l'UD. Si noti che se il workspace non esiste non
+										viene creato e viene dato errore</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EliminaTutti" fixed="1" />
+										<xs:sequence>
+											<xs:element name="WorkspaceDaEliminare"
+												type="OggDiTabDiSistemaType" minOccurs="0"
+												maxOccurs="unbounded" />
+											<xs:element name="WorkspaceDaAggiungere"
+												type="OggDiTabDiSistemaType" minOccurs="0"
+												maxOccurs="unbounded" />
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<!-- documenti allegati (con o senza file associato) -->
+				<xs:element name="NuovoAllegatoUD"
+					type="NuovoAllegatoUDType" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Dati di un nuovo allegato dell'unità
+							documentaria (da aggiungere a quelli eventualmente già
+							registrati)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<!-- l'emento successivo serve ad indicare qual è l'unità documentaria 
+					precedente a quella da caricare (ad esempio quella di cui quella da caricare 
+					è la risposta) -->
+				<xs:element name="OldAllegatoUD" type="OldAllegatoUDType"
+					minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Allegati del documento da aggiornare o
+							eliminare. Gli allegati non specificati in questo elemento e già
+							registrati in DB si intendono restare invariati.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="InRispostaAUD" type="EstremiRegNumType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Estremi di registrazione/numerazione per
+							identificare l'unità documentaria di cui quella corrente
+							rappresenta una risposta/il successivo.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LivelloRiservatezzaInterno"
+					type="xs:positiveInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Livello di riservatezza per i soggetti interni
+							all'AOO (valori interi da 1 in su)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FlagVietatoAccessoEsterno"
+					type="FlagSiNoType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica se soggetti esterni possono consultare o
+							meno l'unità documentaria</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="VietatoAccessoEsternoFinoAl"
+					type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica la data fino a cui l'accesso al documento
+							è precluso ai soggetti esterni</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AggPermessi" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contiene le informazioni su come aggiornare i
+							permessi di accesso all'unità documentaria; se non è presente i
+							permessi restano invariati. Se si vogliono cambiare basta
+							specificare nell'elemento PermessoVsSoggInterno le nuove entry
+							dell'ACL (che sostituiranno o si aggiungeranno a quelle già
+							presenti in banca dati a seconda del valore dell'elemento
+							FlagAggiungiSostituisci).</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="FlagAggiungiSostituisci"
+								type="FlagAggiungiSostituisciType" />
+							<xs:element name="PermessoVsSoggInterno"
+								type="ACLRecordType" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Privilegi sull'unità documentaria assentiti o
+										negati ad un soggetto interno. Dunque attraverso questo
+										elemento si costruisce l'ACL (Access Control List) dell'unità
+										documentaria. </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FlagEreditaPermessi"
+					type="FlagSiNoType" default="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indica se l'unità documentaria erdita o meno i
+							permessi dal/da un folder o workspace di appartenenza
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="EreditaPermessiDa" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Va obbligatoriamente specificato se vi sono più
+							folder o workspace di appartenenza e se si è indicata
+							l'ereditarietà dei permessi</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="FolderPath" type="FolderCustomType">
+								<xs:annotation>
+									<xs:documentation>Percorso e nome del folder di appartenenza da
+										cui eredita i permessi</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NomeWorkspace">
+								<xs:annotation>
+									<xs:documentation>Nome del workspace di appartenenza da cui
+										eredita i permessi</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="LivelloEvidenza"
+					type="xs:positiveInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Livello di evidenza/priorità dell'unità
+							documentaria (valori interi da 1 in su)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Conservazione"
+					type="InfoConservazioneType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Dati sulla conservazione dell'unità documentaria
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Stato" type="OggDiTabDiSistemaType"
+					minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Stato dell'unità documentaria (valore preso
+							dalla dictionary entry degli stati principali)  </xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="StatoDettaglio"
+					type="OggDiTabDiSistemaType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Stato di dettaglio dell'unità documentaria
+							(valore preso dalla dictionary entry degli stati principali)
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NoteUD" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Note dell'unità documentaria</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AttributoAddUD"
+					type="AttributoAddizionaleType" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Attributo addizionale (oltre quelli già previsti
+							dal tracciato) con cui caratterizzare l'unità documentaria.
+							ATTENZIONE: se un attributo già valorizzato in banca dati per
+							l'UD non appare in questo elemento significa che resta invariato
+							(se si vuole cancelllarlo bisogna passarlo con un valore vuoto).
+							ATTENZIONE: gli attributi addizionali che si possono specificare
+							includoni quelli specifici del il tipo dell'unità documentaria
+							(elemento TipoDoc del ROOT element) e dei tipi di
+							registrazione/numerazione assegnati/da assegnare all'unità doc.
+							stessa</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

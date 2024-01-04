@@ -548,11 +548,6 @@
 		<echo message="Skipping ivy dependencies resolution." />
 	</target>
 
-
-
-
-
-
 	<target name="load-ivy">
 		<condition property="target.ivy.task" value="load-dependencies-false" else="load-dependencies">
 			<equals arg1="${target.enable.ivy}" arg2="false" />

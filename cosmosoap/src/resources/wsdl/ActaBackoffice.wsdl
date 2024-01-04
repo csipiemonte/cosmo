@@ -1,0 +1,421 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="BackOfficeService"
+	targetNamespace="backofficeservice.acaris.acta.doqui.it"
+	xmlns:backoffice="backoffice.acaris.acta.doqui.it"
+	xmlns:common="common.acaris.acta.doqui.it"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="backofficeservice.acaris.acta.doqui.it"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xsd:schema targetNamespace="common.acaris.acta.doqui.it"
+			xmlns:backoffice="backoffice.acaris.acta.doqui.it"
+			xmlns:common="common.acaris.acta.doqui.it"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:tns="backofficeservice.acaris.acta.doqui.it"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-Common.xsd" />
+		</xsd:schema>
+		<xsd:schema
+			targetNamespace="backoffice.acaris.acta.doqui.it"
+			xmlns:backoffice="backoffice.acaris.acta.doqui.it"
+			xmlns:common="common.acaris.acta.doqui.it"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:tns="backofficeservice.acaris.acta.doqui.it"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:include schemaLocation="ACARIS-BackOffice.xsd" />
+			<xsd:include schemaLocation="ACARIS-BackOfficeMessaging.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="getPropertiesRequest">
+		<wsdl:part element="backoffice:getProperties" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDettaglioAOORequest">
+		<wsdl:part element="backoffice:getDettaglioAOO" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="queryRequest">
+		<wsdl:part element="common:query" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQueryableObjectsResponse">
+		<wsdl:part element="backoffice:getQueryableObjectsResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="acarisException">
+		<wsdl:part element="common:acarisFault" name="fault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQueryableObjectsRequest">
+		<wsdl:part element="backoffice:getQueryableObjects"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDettaglioAOOResponse">
+		<wsdl:part element="backoffice:getDettaglioAOOResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="queryResponse">
+		<wsdl:part element="common:queryResponse" name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrincipalExtRequest">
+		<wsdl:part element="backoffice:getPrincipalExt" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getObjectParentsRequest">
+		<wsdl:part element="backoffice:getObjectParents"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQueryableObjectMetadataRequest">
+		<wsdl:part element="backoffice:getQueryableObjectMetadata"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPropertiesMassiveRequest">
+		<wsdl:part element="common:getPropertiesMassive"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDettaglioStrutturaRequest">
+		<wsdl:part element="backoffice:getDettaglioStruttura"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRelazioniStrutturaRequest">
+		<wsdl:part element="backoffice:getRelazioniStruttura"
+			name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDescendantsResponse">
+		<wsdl:part element="backoffice:getDescendantsResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrincipalExtResponse">
+		<wsdl:part element="backoffice:getPrincipalExtResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrincipalRequest">
+		<wsdl:part element="backoffice:getPrincipal" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getObjectParentsResponse">
+		<wsdl:part element="backoffice:getObjectParentsResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getRelazioniStrutturaResponse">
+		<wsdl:part
+			element="backoffice:getRelazioniStrutturaResponse" name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPropertiesResponse">
+		<wsdl:part element="backoffice:getPropertiesResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPropertiesMassiveResponse">
+		<wsdl:part element="common:getPropertiesMassiveResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPrincipalResponse">
+		<wsdl:part element="backoffice:getPrincipalResponse"
+			name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDettaglioStrutturaResponse">
+		<wsdl:part
+			element="backoffice:getDettaglioStrutturaResponse" name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQueryableObjectMetadataResponse">
+		<wsdl:part
+			element="backoffice:getQueryableObjectMetadataResponse" name="output">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getDescendantsRequest">
+		<wsdl:part element="backoffice:getDescendants" name="input">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="BackOfficeServicePort">
+		<wsdl:operation name="getPrincipal">
+			<wsdl:input message="tns:getPrincipalRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getPrincipalResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getPrincipalFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPrincipalExt">
+			<wsdl:input message="tns:getPrincipalExtRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getPrincipalExtResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getPrincipalExtFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDescendants">
+			<wsdl:input message="tns:getDescendantsRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getDescendantsResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getDescendantsFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getObjectParents">
+			<wsdl:input message="tns:getObjectParentsRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getObjectParentsResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getObjectParentsFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getRelazioniStruttura">
+			<wsdl:input message="tns:getRelazioniStrutturaRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getRelazioniStrutturaResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getRelazioniStrutturaFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getProperties">
+			<wsdl:input message="tns:getPropertiesRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getPropertiesResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getPropertiesFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPropertiesMassive">
+			<wsdl:input message="tns:getPropertiesMassiveRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getPropertiesMassiveResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getPropertiesMassiveFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDettaglioAOO">
+			<wsdl:input message="tns:getDettaglioAOORequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getDettaglioAOOResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getDettaglioAOOFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDettaglioStruttura">
+			<wsdl:input message="tns:getDettaglioStrutturaRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getDettaglioStrutturaResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getDettaglioStrutturaFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQueryableObjects">
+			<wsdl:input message="tns:getQueryableObjectsRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:getQueryableObjectsResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getQueryableObjectsFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQueryableObjectMetadata">
+			<wsdl:input
+				message="tns:getQueryableObjectMetadataRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:getQueryableObjectMetadataResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="getQueryableObjectMetadataFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="query">
+			<wsdl:input message="tns:queryRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:queryResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:acarisException"
+				name="queryFault">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BackOfficeServiceBinding"
+		type="tns:BackOfficeServicePort">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getPrincipal">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getPrincipalFault">
+				<soap:fault name="getPrincipalFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPrincipalExt">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getPrincipalExtFault">
+				<soap:fault name="getPrincipalExtFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDescendants">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getDescendantsFault">
+				<soap:fault name="getDescendantsFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getObjectParents">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getObjectParentsFault">
+				<soap:fault name="getObjectParentsFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getRelazioniStruttura">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getRelazioniStrutturaFault">
+				<soap:fault name="getRelazioniStrutturaFault"
+					use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getProperties">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getPropertiesFault">
+				<soap:fault name="getPropertiesFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPropertiesMassive">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getPropertiesMassiveFault">
+				<soap:fault name="getPropertiesMassiveFault"
+					use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDettaglioAOO">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getDettaglioAOOFault">
+				<soap:fault name="getDettaglioAOOFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getDettaglioStruttura">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getDettaglioStrutturaFault">
+				<soap:fault name="getDettaglioStrutturaFault"
+					use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQueryableObjects">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getQueryableObjectsFault">
+				<soap:fault name="getQueryableObjectsFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQueryableObjectMetadata">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getQueryableObjectMetadataFault">
+				<soap:fault name="getQueryableObjectMetadataFault"
+					use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="query">
+			<soap:operation />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="queryFault">
+				<soap:fault name="queryFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BackOfficeService">
+		<wsdl:port binding="tns:BackOfficeServiceBinding"
+			name="BackOfficeServicePort">
+			<soap:address
+				location="http://tst-applogic.reteunitaria.piemonte.it/actasrv/backofficeWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewUD>
+	<NumerazioneDaDare>
+		<SiglaNum>COS</SiglaNum>
+	</NumerazioneDaDare>
+	<TipoDoc>
+		<Decodifica_Nome>Nome ITER su STILO</Decodifica_Nome>
+	</TipoDoc>
+	<OggettoUD>OGGETTO proposta iter</OggettoUD>
+	<VersioneElettronica>
+		<NroAttachmentAssociato>1</NroAttachmentAssociato>
+		<NomeFile>nome_file_primario_conestensione</NomeFile>
+	</VersioneElettronica>
+	<AllegatoUD>
+		<DesAllegato>Descrizione Del file allegato 1</DesAllegato>
+		<OriginaleCartaceo>0</OriginaleCartaceo>
+		<TipoCartaceo>OU</TipoCartaceo>
+		<VersioneElettronica>
+			<NroAttachmentAssociato>2</NroAttachmentAssociato>
+			<NomeFile>nome_file_allegato1_conestensione</NomeFile>
+		</VersioneElettronica>
+	</AllegatoUD>
+	<AllegatoUD>
+		<DesAllegato>Descrizione Del file allegato 2</DesAllegato>
+		<OriginaleCartaceo>0</OriginaleCartaceo>
+		<TipoCartaceo>OU</TipoCartaceo>
+		<VersioneElettronica>
+			<NroAttachmentAssociato>3</NroAttachmentAssociato>
+			<NomeFile>nome_file_allegato2_conestensione</NomeFile>
+		</VersioneElettronica>
+	</AllegatoUD>
+	<NoteUD>
+		in questa campo di annotazioni mettere turte le informazioni accessorie
+		es.
+		TIPOLOGIA DI PROCEDIMENTO: determina
+		SOGGETTI INTERESSATI:
+		dott. pinco palla - CF:ABGCF... dirigente adottante
+		ufficio GARE, ufficio interessato
+		....
+		limite 4000 caratteri
+	</NoteUD>
+</NewUD>

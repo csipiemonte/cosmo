@@ -1,0 +1,300 @@
+<ivy-module version="1.0">
+	<info organisation="csipiemonte" module="cosmosoap" />
+	<configurations>
+		<conf name="collections-3" description="Commons collections 3" />
+		<conf name="collections-4" description="Commons collections 4" />
+	</configurations>
+	<dependencies>
+
+		<!-- librerie per il logging applicativo e la misurazione delle performance. 
+			Nota: la piattaforma jboss impone l'utilizzo della versione 1.2.14. -->
+		<dependency org="apache" name="log4j" rev="1.2.14">
+			<artifact name="log4j-1.2.14" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-beanutils"
+			rev="1.9.1">
+			<artifact name="commons-beanutils-1.9.1" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-lang3" rev="3.9">
+			<artifact name="commons-lang3-3.9" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-io" rev="2.5">
+			<artifact name="commons-io-2.5" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-collections" rev="3.2.2" conf="collections-3->default">
+			<artifact name="commons-collections-3.2.2" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-collections" rev="4.4.1" conf="collections-4->default">
+			<artifact name="commons-collections4-4.1" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-logging" rev="1.1.1">
+			<artifact name="commons-logging-1.1.1" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="aopalliance" rev="1.0.0">
+			<artifact name="aopalliance-1.0.0" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="cglib" rev="2.2.2">
+			<artifact name="cglib-2.2.2" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="asm" rev="3.3.1">
+			<artifact name="asm-3.3.1" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="slf4j" rev="1.7.9">
+			<artifact name="slf4j-api-1.7.9" type="jar" />
+			<artifact name="slf4j-log4j12-1.7.9" type="jar" />
+		</dependency>
+
+		<!-- ############################################################## -->
+		<!-- # SPRING # -->
+		<!-- ############################################################## -->
+		<!-- -->
+		<dependency org="others" name="spring" rev="4.3.24.RELEASE"
+			transitive="false">
+			<artifact name="spring-aop-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-instrument-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-beans-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-context-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-context-support-4.3.24.RELEASE"
+				type="jar" />
+			<artifact name="spring-core-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-expression-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-jdbc-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-orm-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-tx-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-test-4.3.24.RELEASE" type="jar" />
+			<artifact name="spring-web-4.3.24.RELEASE" type="jar" />
+		</dependency>
+
+		<!-- librerie per JAX-RS -->
+		<dependency org="codehaus" name="jettison" rev="1.4.0">
+			<artifact name="jettison-1.4.0" type="jar"/>
+		</dependency>
+
+		<dependency org="sun" name="servlet-api" rev="2.5">
+		</dependency>
+
+		<!-- Cooperative Systems Infrastructure -->
+		<dependency org="csipiemonte" name="csi" rev="1.4.6">
+			<artifact name="csi-core-1.4.6" type="jar" />
+			<artifact name="csi-rmi-1.4.6" type="jar" />
+			<artifact name="csi-ejb-1.4.6" type="jar" />
+			<artifact name="csi-apachesoap-1.4.6" type="jar" />
+			<artifact name="csi-stadapter-1.4.6" type="jar" />
+			<exclude org="csipiemonte" module="weblogic-client" />
+		</dependency>
+
+		<dependency org="csipiemonte" name="util-perf" rev="1.0.0">
+			<artifact name="util-perf-1.0.0" type="jar" />
+		</dependency>
+
+		<!-- Inserire qui le dipendenze aggiuntive -->
+		<dependency org="redhat" name="jboss-jaxrs-api_2.1_spec"
+			rev="1.0.2.Final">
+			<artifact name="jboss-jaxrs-api_2.1_spec-1.0.2.Final"
+				type="jar" />
+		</dependency>
+
+		<dependency org="redhat"
+			name="jboss-annotations-api_1.3_spec" rev="1.0.1.Final">
+			<artifact name="jboss-annotations-api_1.3_spec-1.0.1.Final"
+				type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="jboss-jaxb-api_2.3_spec"
+			rev="1.0.1.Final">
+			<artifact name="jboss-jaxb-api_2.3_spec-1.0.1.Final"
+				type="jar" />
+		</dependency>
+
+		<dependency org="sun" name="servlet-api" rev="2.5">
+		</dependency>
+
+		<!-- la versione corretta sarebbe la 3.4.0 -->
+		<dependency org="jboss" name="jboss-logging" rev="3.1.2.GA">
+			<artifact name="jboss-logging-3.1.2.GA" type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="javax.persistence-api"
+			rev="2.2">
+			<artifact name="javax.persistence-api-2.2" type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="resteasy-jaxrs"
+			rev="3.7.0.Final">
+			<artifact name="resteasy-jaxrs-3.7.0.Final" type="jar" />
+			<artifact name="resteasy-client-3.7.0.Final" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="resteasy-spring"
+			rev="3.0.7.Final">
+			<artifact name="resteasy-spring-3.0.7.Final" type="jar" />
+		</dependency>
+
+		<!-- per upload -->
+		<dependency org="redhat" name="resteasy-multipart-provider"
+			rev="2.3.10.Final-redhat-1">
+			<artifact
+				name="resteasy-multipart-provider-2.3.10.Final-redhat-1" type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="resteasy-jackson2-provider"
+			rev="3.7.0.Final">
+			<artifact name="resteasy-jackson2-provider-3.7.0.Final"
+				type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="validation-api"
+			rev="1.0.0.GA-redhat-3">
+			<artifact name="validation-api-1.0.0.GA-redhat-3" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="swagger-annotations"
+			rev="1.5.18">
+			<artifact name="swagger-annotations-1.5.18" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="swagger-jaxrs" rev="1.5.18">
+			<artifact name="swagger-jaxrs-1.5.18" type="jar" />
+		</dependency>
+		<!--PROTECTED REGION END -->
+
+		<!-- dipendenze per client -->
+		<dependency org="fasterxml" name="jackson-core" rev="2.12.1">
+			<artifact name="jackson-core-2.12.1" type="jar" />
+		</dependency>
+		<dependency org="fasterxml" name="jackson-annotations" rev="2.12.1">
+			<artifact name="jackson-annotations-2.12.1" type="jar" />
+		</dependency>
+		<dependency org="csipiemonte" name="jutil" rev="1.0.0-dsrest">
+			<artifact name="jackson-databind-2.13.3" type="jar" />
+		</dependency>
+		<dependency org="fasterxml" name="jackson-jaxrs-json-provider" rev="2.12.1">
+			<artifact name="jackson-jaxrs-json-provider-2.12.1" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="httpclient" rev="4.5.13">
+			<artifact name="httpclient-4.5.13" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="httpcore" rev="4.4.5">
+			<artifact name="httpcore-4.4.5" type="jar" />
+		</dependency>
+
+		<dependency org="reactivestreams" name="reactive-streams"
+			rev="1.0.2">
+			<artifact name="reactive-streams-1.0.2" type="jar" />
+		</dependency>
+
+		<!-- AOP - AspectJ support -->
+		<dependency org="others" name="aspectj" rev="1.7.2">
+			<artifact name="aspectjweaver-1.7.2" type="jar" />
+		</dependency>
+
+		<!-- DEPENDENCY PER TEST -->
+		<dependency org="apache" name="commons-pool" rev="1.5.4" transitive="true"  />
+		<dependency org="apache" name="commons-dbcp" rev="1.4"
+			transitive="true" />
+		<dependency org="others" name="junit" rev="4.12"
+			transitive="true" />
+		<dependency org="others" name="mockito" rev="1.9.0"
+			transitive="true" />
+		<dependency org="others" name="javassist" rev="3.18.1-GA"
+			transitive="true" />
+
+		<dependency org="others" name="jboss" rev="eap-6.0" transitive="false">
+<!-- 	    	<artifact name="hibernate-commons-annotations-4.0.1.Final-redhat-1" type="jar" /> -->
+<!-- 	    	<artifact name="hibernate-core-4.1.3.Final-redhat-1" type="jar" /> -->
+<!-- 	    	<artifact name="hibernate-entitymanager-4.1.3.Final-redhat-1" type="jar" /> -->
+<!-- 	    	<artifact name="hibernate-validator-4.2.0.Final-redhat-1" type="jar" /> -->
+	    	<artifact name="antlr-2.7.7-redhat-1" type="jar" />
+		</dependency>
+		
+		<!-- java/csipiemonte/celiachia-dependencies/1.0.0/lib/hibernate-core-4.3.1.Final.jar -->
+		<dependency org="csipiemonte" name="celiachia-dependencies/1.0.0" transitive="false" rev="4.3.1.Final">
+			<artifact name="hibernate-core-4.3.1.Final" type="jar" />
+			<artifact name="hibernate-entitymanager-4.3.1.Final" type="jar" />
+		</dependency>
+		
+		<!-- java/others/hibernate/4.3.1.Final/lib/hibernate-validator-4.3.1.Final.jar  -->
+		<dependency org="others" name="hibernate/4.3.1.Final" transitive="false" rev="4.3.1.Final">
+			<artifact name="hibernate-validator-4.3.1.Final" type="jar" />
+		</dependency>
+		
+		<!-- java/others/hibernate-commons/4.0.4.Final/lib/hibernate-commons-annotations-4.0.4.Final.jar -->
+		<dependency org="others" name="hibernate-commons/4.0.4.Final" transitive="false" rev="4.0.4.Final">
+			<artifact name="hibernate-commons-annotations-4.0.4.Final" type="jar" />
+		</dependency>
+		
+		<dependency org="others" name="dom4j" rev="1.6.1"
+			transitive="false">
+			<artifact name="dom4j-1.6.1" type="jar" />
+		</dependency>
+
+		<!-- EHCache -->
+		<dependency org="others" name="ehcache" rev="1.5.0">
+			<artifact name="ehcache-1.5.0" type="jar" />
+		</dependency>
+		<dependency org="others" name="backport-util-concurrent"
+			rev="3.1">
+			<artifact name="backport-util-concurrent-3.1" type="jar" />
+		</dependency>
+		<dependency org="sun" name="jsr" rev="1.0">
+			<artifact name="jsr107cache-1.0" type="jar" />
+		</dependency>
+
+		<!-- ECMEngine (INDEX) service -->
+		<dependency org="apache" name="axis" rev="1.4">
+			<artifact name="axis-jaxrpc-1.4" type="jar" />
+		</dependency>
+		<dependency org="csipiemonte" name="axiscsi" rev="1.0.0">
+			<artifact name="axis-1.4.csi-1.0.0" type="jar" />
+		</dependency>
+		<dependency org="archibus" name="archibus" rev="23.2">
+			<artifact name="jaxrpc-api-1.1" type="jar" />
+		</dependency>
+		
+		<dependency org="doqui" name="ecmengine-ws-client"
+			rev="13.5.0">
+			<artifact name="ecmengine-ws-client-13.5.0" type="jar" />
+		</dependency>
+		<dependency org="doqui" name="ecmengine-mtom-client"
+			rev="13.5.1">
+			<artifact name="ecmengine-mtom-client-13.5.1" type="jar" />
+		</dependency>
+
+		<dependency org="postgresql" name="postgresql-jdbc"
+			rev="42.2.6" transitive="true" />
+			
+		<!-- JAXB (wsimport) -->
+	    <dependency org="sun" name="jaxb" rev="2.1">
+		  <artifact name="jaxb-api-2.1" type="jar" />
+		</dependency>
+		<dependency org="sun" name="jaxb/2.1.12" rev="2.1.12">
+		  <artifact name="jaxb-impl-2.1.12" type="jar" />
+		</dependency>
+		<dependency org="sun" name="jaxb/2.2.5.1" rev="2.2.5.1">
+		  <artifact name="jaxb-xjc-2.2.5.1" type="jar" />
+		</dependency>
+		
+		<!-- ACTA -->
+<!-- 		<dependency org="doqui" name="actasrv-client" rev="4.0.0"/> -->
+		<dependency org="csipiemonte" name="tokenretry" rev="2.2.0">
+			<artifact name="token-retry-2.2.0" type="jar" />
+			<artifact name="token-retry-plugin-cxf-2.2.0" type="jar" />
+			<exclude org="apache" module="commons-codec*" />
+		</dependency>
+		
+	</dependencies>
+
+</ivy-module>
+

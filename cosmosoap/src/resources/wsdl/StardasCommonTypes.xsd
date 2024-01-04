@@ -1,0 +1,217 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	xmlns:tns="http://www.csi.it/stardas/services/StardasCommonTypes"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.csi.it/stardas/services/StardasCommonTypes">
+	<complexType name="ResponseType">
+		<sequence>
+			<element name="Result" type="tns:ResultType" />
+		</sequence>
+	</complexType>
+	<complexType name="ResultType">
+		<sequence>
+			<element name="Codice" type="tns:CodiceEsitoType" />
+			<element minOccurs="0" name="Messaggio"
+				type="tns:String400Type" />
+		</sequence>
+	</complexType>
+	<simpleType name="CodiceEsitoType">
+		<restriction base="string">
+			<pattern value="[012][0-9]{2}" />
+		</restriction>
+	</simpleType>
+	<simpleType name="CodiceFiscaleType">
+		<restriction base="string">
+			<pattern
+				value="[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][A-Z0-9]{3}[A-Z]" />
+		</restriction>
+	</simpleType>
+	<simpleType name="StatoRichiestaType">
+		<restriction base="string">
+			<enumeration value="IN_CORSO_DI_ACQUISIZIONE" />
+			<enumeration value="DA_TRATTARE" />
+			<enumeration value="TRATTAMENTO_IN_ESECUZIONE" />
+			<enumeration value="ESEGUITA" />
+			<enumeration value="ERRORE_IN_FASE_DI_TRATTAMENTO" />
+			<enumeration value="NON_TRATTATA" />
+			<enumeration value="ERRORE_IN_FASE_DI_ACQUISIZIONE" />
+			<enumeration value="PRESA_IN_CARICO_ASSISTENZA" />
+			<enumeration value="ATTESA_TRATTAMENTO_ALLEGATI" />
+			<enumeration value="ATTESA_ARCHIVIAZIONE_PRINCIPALE" />
+			<enumeration value="ATTESA_ESITO_SEGNATURA" />
+			<enumeration value="TENTATIVI_RETRY_CALLBACK_SOSPESI" />
+		</restriction>
+	</simpleType>
+	<complexType name="InformazioniAggiuntiveType">
+		<sequence>
+			<element maxOccurs="unbounded" name="Informazione"
+				type="tns:InformazioneType" />
+		</sequence>
+	</complexType>
+	<complexType name="InformazioneType">
+		<sequence>
+			<element name="Nome" type="tns:String50Type" />
+			<element name="Valore" type="tns:String1500Type" />
+		</sequence>
+	</complexType>
+	<complexType name="DatiSmistaDocumentoType">
+		<sequence>
+			<element name="ResponsabileTrattamento"
+				type="tns:CodiceFiscaleType" />
+			<element name="IdDocumentoFruitore" type="tns:String200Type" />
+			<element name="DocumentoElettronico"
+				type="tns:DocumentoElettronicoType" />
+			<choice minOccurs="0">
+				<element name="DatiDocumentoXML" type="tns:EmbeddedXMLType" />
+				<element name="DatiDocumentoJSON"
+					type="tns:EmbeddedJSONType" />
+			</choice>
+			<element minOccurs="0" name="Metadati"
+				type="tns:MetadatiType" />
+			<element minOccurs="0" name="MessageUUIDPrincipale"
+				type="tns:String50Type" />
+			<element minOccurs="0" name="NumAllegati" type="int" />
+			<element minOccurs="0" name="NumCopieMulticlassificazione"
+				type="int" />
+			<choice>
+				<element minOccurs="0" name="IndiceClassificazioneEsteso"
+					type="string" />
+				<element minOccurs="0" name="NodoArchiviazione"
+					type="string" />
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="ConfigurazioneChiamanteType">
+		<sequence>
+			<element name="CodiceFiscaleEnte" type="tns:String50Type" />
+			<element name="CodiceFruitore" type="tns:String50Type" />
+			<element name="CodiceApplicazione" type="tns:String50Type" />
+			<element name="CodiceTipoDocumento" type="tns:String50Type" />
+		</sequence>
+	</complexType>
+	<complexType name="MetadatiType">
+		<sequence>
+			<element maxOccurs="unbounded" name="Metadato"
+				type="tns:MetadatoType" />
+		</sequence>
+	</complexType>
+	<complexType name="MetadatoType">
+		<sequence>
+			<element name="Nome" type="tns:String200Type" />
+			<choice>
+				<element name="Valore" type="tns:String1000Type" />
+				<element name="Valori" type="tns:ValoriType" />
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="EmbeddedXMLType">
+		<sequence>
+			<element name="Content" type="base64Binary"
+				xmime:expectedContentTypes="text/xml" />
+		</sequence>
+	</complexType>
+	<complexType name="EmbeddedJSONType">
+		<sequence>
+			<element name="Content" type="string" />
+		</sequence>
+	</complexType>
+	<complexType name="EmbeddedBinaryType">
+		<sequence>
+			<element name="Content" type="base64Binary" />
+		</sequence>
+	</complexType>
+	<complexType name="DocumentoElettronicoType">
+		<sequence>
+			<element name="NomeFile" type="tns:String1000Type" />
+			<choice>
+				<element name="ContenutoBinario"
+					type="tns:EmbeddedBinaryType" />
+				<element name="RiferimentoECM" type="tns:RiferimentoECMType" />
+			</choice>
+			<element name="DocumentoFirmato" type="boolean" />
+			<element name="MimeType" type="string" />
+		</sequence>
+	</complexType>
+	<complexType name="RiferimentoECMType">
+		<sequence>
+			<element name="EcmUuid" type="tns:String400Type" />
+		</sequence>
+	</complexType>
+	<complexType name="ValoriType">
+		<sequence>
+			<element maxOccurs="unbounded" name="Valore"
+				type="tns:String400Type" />
+		</sequence>
+	</complexType>
+	<complexType name="DettaglioCompletoRichiestaType">
+		<sequence>
+			<element name="CodEnte" type="string" />
+			<element name="StatoRichiesta" type="tns:StatoRichiestaType" />
+			<element name="CodTipoApplicazione" type="string" />
+			<element name="MessageUuid" type="string" />
+			<element name="CodTipoDocumento" type="string" />
+			<element name="IdDocFruitore" type="string" />
+			<element name="NomeFile" type="string" />
+			<element name="IdMymeType" type="string" />
+			<element name="TipoTrattamento"
+				type="tns:TipoTrattamentoType" />
+			<element name="MessageStore" type="string" />
+			<element name="DataInserimento" type="dateTime" />
+			<element name="DataUltimaVariazione" type="dateTime" />
+			<element name="DataCallback" type="dateTime" />
+			<element name="DocumentoFirmato" type="boolean" />
+			<element name="CodiceEsito" type="string" />
+			<element name="DettaglioEsito" type="string" />
+			<element name="CodFruitore" type="string" />
+			<element maxOccurs="unbounded" minOccurs="0"
+				name="ElencoAllSteps" type="tns:EsecuzioneStepType" />
+			<element maxOccurs="unbounded" minOccurs="0"
+				name="ElencoSoloUltimiStep" type="tns:EsecuzioneStepType" />
+		</sequence>
+	</complexType>
+	<simpleType name="TipoTrattamentoType">
+		<restriction base="string">
+			<enumeration value="INESISTENTE" />
+			<enumeration value="TrattamentoACTA" />
+		</restriction>
+	</simpleType>
+	<complexType name="EsecuzioneStepType">
+		<sequence>
+			<element name="IdEsecuzioneStep" type="long" />
+			<element name="CodiceEsito" type="string" />
+			<element name="DettaglioEsito" type="string" />
+			<element minOccurs="0" name="InformazioniAggiuntive"
+				type="tns:InformazioniAggiuntiveType" />
+		</sequence>
+	</complexType>
+	<simpleType name="String50Type">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="50" />
+		</restriction>
+	</simpleType>
+	<simpleType name="String200Type">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="200" />
+		</restriction>
+	</simpleType>
+	<simpleType name="String400Type">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="400" />
+		</restriction>
+	</simpleType>
+	<simpleType name="String1000Type">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="1000" />
+		</restriction>
+	</simpleType>
+	<simpleType name="String1500Type">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="1500" />
+		</restriction>
+	</simpleType>
+</schema>

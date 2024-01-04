@@ -64,7 +64,7 @@ Per le persone persone che hanno partecipato alla realizzazione del software si 
 # License
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
-Vedere il file [license.md](/license.md) per i dettagli.
+Vedere il file [license.md](/LICENSE.md) per i dettagli.
 
 # Community site
 Per l'uso di Flowable far riferimento al [sito ufficiale](https://www.flowable.com/open-source/docs/)

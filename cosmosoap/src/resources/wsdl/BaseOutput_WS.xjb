@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+	version="2.1">
+	<bindings schemaLocation="BaseOutput_WS.xsd">
+		<schemaBindings>
+			<package name="it.eng.auriga.repository2.webservices.dto" />
+		</schemaBindings>
+	</bindings>
+</bindings>

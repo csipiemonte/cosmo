@@ -1,0 +1,323 @@
+<wsdl:definitions xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="objectservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ObjectService" targetNamespace="objectservice.acaris.acta.doqui.it">
+<wsdl:types>
+<xsd:schema xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="objectservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="common.acaris.acta.doqui.it">
+<xsd:include schemaLocation="http://tst-applogic.reteunitaria.piemonte.it/actasrv/objectWS?xsd=ACARIS-Common.xsd"/>
+</xsd:schema>
+<xsd:schema xmlns:archive="archive.acaris.acta.doqui.it" xmlns:common="common.acaris.acta.doqui.it" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="objectservice.acaris.acta.doqui.it" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="archive.acaris.acta.doqui.it">
+<xsd:include schemaLocation="http://tst-applogic.reteunitaria.piemonte.it/actasrv/objectWS?xsd=ACARIS-Archive.xsd"/>
+<xsd:include schemaLocation="http://tst-applogic.reteunitaria.piemonte.it/actasrv/objectWS?xsd=ACARIS-ArchiveMessaging.xsd"/>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="createDocumentResponse">
+<wsdl:part element="archive:createDocumentResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPropertiesResponse">
+<wsdl:part element="archive:getPropertiesResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPropertiesMassiveResponse">
+<wsdl:part element="common:getPropertiesMassiveResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getContentStreamResponse">
+<wsdl:part element="archive:getContentStreamResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getContentStreamRequest">
+<wsdl:part element="archive:getContentStream" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="setContentStreamResponse">
+<wsdl:part element="archive:setContentStreamResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="addRenditionStreamResponse">
+<wsdl:part element="archive:addRenditionStreamResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createDocumentRequest">
+<wsdl:part element="archive:createDocument" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="moveDocumentRequest">
+<wsdl:part element="archive:moveDocument" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="queryResponse">
+<wsdl:part element="common:queryResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="updatePropertiesResponse">
+<wsdl:part element="archive:updatePropertiesResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createFolderResponse">
+<wsdl:part element="archive:createFolderResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="updatePropertiesRequest">
+<wsdl:part element="archive:updateProperties" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createAssociativeDocumentRequest">
+<wsdl:part element="archive:createAssociativeDocument" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="closeFolderRequest">
+<wsdl:part element="archive:closeFolder" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="queryRequest">
+<wsdl:part element="common:query" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPropertiesMassiveRequest">
+<wsdl:part element="common:getPropertiesMassive" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="acarisException">
+<wsdl:part element="common:acarisFault" name="fault"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="getPropertiesRequest">
+<wsdl:part element="archive:getProperties" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="moveDocumentResponse">
+<wsdl:part element="archive:moveDocumentResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createAssociativeDocumentResponse">
+<wsdl:part element="archive:createAssociativeDocumentResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="closeFolderResponse">
+<wsdl:part element="archive:closeFolderResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createRelationshipRequest">
+<wsdl:part element="archive:createRelationship" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createFolderRequest">
+<wsdl:part element="archive:createFolder" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="createRelationshipResponse">
+<wsdl:part element="archive:createRelationshipResponse" name="output"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="addRenditionStreamRequest">
+<wsdl:part element="archive:addRenditionStream" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="setContentStreamRequest">
+<wsdl:part element="archive:setContentStream" name="input"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="ObjectServicePort">
+<wsdl:operation name="createFolder">
+<wsdl:input message="tns:createFolderRequest"> </wsdl:input>
+<wsdl:output message="tns:createFolderResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="createFolderFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getProperties">
+<wsdl:input message="tns:getPropertiesRequest"> </wsdl:input>
+<wsdl:output message="tns:getPropertiesResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="getPropertiesFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getPropertiesMassive">
+<wsdl:input message="tns:getPropertiesMassiveRequest"> </wsdl:input>
+<wsdl:output message="tns:getPropertiesMassiveResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="getPropertiesMassiveFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createDocument">
+<wsdl:input message="tns:createDocumentRequest"> </wsdl:input>
+<wsdl:output message="tns:createDocumentResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="createDocumentFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createAssociativeDocument">
+<wsdl:input message="tns:createAssociativeDocumentRequest"> </wsdl:input>
+<wsdl:output message="tns:createAssociativeDocumentResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="createAssociativeDocumentFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createRelationship">
+<wsdl:input message="tns:createRelationshipRequest"> </wsdl:input>
+<wsdl:output message="tns:createRelationshipResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="createRelationshipFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getContentStream">
+<wsdl:input message="tns:getContentStreamRequest"> </wsdl:input>
+<wsdl:output message="tns:getContentStreamResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="getContentStreamFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="addRenditionStream">
+<wsdl:input message="tns:addRenditionStreamRequest"> </wsdl:input>
+<wsdl:output message="tns:addRenditionStreamResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="addRenditionStreamFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="updateProperties">
+<wsdl:input message="tns:updatePropertiesRequest"> </wsdl:input>
+<wsdl:output message="tns:updatePropertiesResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="updatePropertiesFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="setContentStream">
+<wsdl:input message="tns:setContentStreamRequest"> </wsdl:input>
+<wsdl:output message="tns:setContentStreamResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="setContentStreamFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="query">
+<wsdl:input message="tns:queryRequest"> </wsdl:input>
+<wsdl:output message="tns:queryResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="queryFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="moveDocument">
+<wsdl:input message="tns:moveDocumentRequest"> </wsdl:input>
+<wsdl:output message="tns:moveDocumentResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="moveDocumentFault"> </wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="closeFolder">
+<wsdl:input message="tns:closeFolderRequest"> </wsdl:input>
+<wsdl:output message="tns:closeFolderResponse"> </wsdl:output>
+<wsdl:fault message="tns:acarisException" name="closeFolderFault"> </wsdl:fault>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="ObjectServiceBinding" type="tns:ObjectServicePort">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="createFolder">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="createFolderFault">
+<soap:fault name="createFolderFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getProperties">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="getPropertiesFault">
+<soap:fault name="getPropertiesFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getPropertiesMassive">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="getPropertiesMassiveFault">
+<soap:fault name="getPropertiesMassiveFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createDocument">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="createDocumentFault">
+<soap:fault name="createDocumentFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createAssociativeDocument">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="createAssociativeDocumentFault">
+<soap:fault name="createAssociativeDocumentFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="createRelationship">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="createRelationshipFault">
+<soap:fault name="createRelationshipFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="getContentStream">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="getContentStreamFault">
+<soap:fault name="getContentStreamFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="addRenditionStream">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="addRenditionStreamFault">
+<soap:fault name="addRenditionStreamFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="updateProperties">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="updatePropertiesFault">
+<soap:fault name="updatePropertiesFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="setContentStream">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="setContentStreamFault">
+<soap:fault name="setContentStreamFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="query">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="queryFault">
+<soap:fault name="queryFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="moveDocument">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="moveDocumentFault">
+<soap:fault name="moveDocumentFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+<wsdl:operation name="closeFolder">
+<soap:operation/>
+<wsdl:input>
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output>
+<soap:body use="literal"/>
+</wsdl:output>
+<wsdl:fault name="closeFolderFault">
+<soap:fault name="closeFolderFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="ObjectService">
+<wsdl:port binding="tns:ObjectServiceBinding" name="ObjectServicePort">
+<soap:address location="http://tst-applogic.reteunitaria.piemonte.it/actasrv/objectWS"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

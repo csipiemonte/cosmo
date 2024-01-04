@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<bindings
+	xmlns="http://java.sun.com/xml/ns/jaxb"
+	version="2.1">
+	<bindings schemaLocation="StardasCommonTypes.xsd">
+		<schemaBindings>
+			<package name="it.csi.cosmo.cosmosoap.facade.dto.common" />
+		</schemaBindings>
+	</bindings>
+</bindings>

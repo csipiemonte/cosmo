@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.1">
+	<bindings schemaLocation="UDDaAgg.xsd">
+		<schemaBindings>
+			<package
+				name="it.eng.auriga.repository2.webservices.updunitadoc.dto" />
+		</schemaBindings>
+	</bindings>
+
+</bindings>
