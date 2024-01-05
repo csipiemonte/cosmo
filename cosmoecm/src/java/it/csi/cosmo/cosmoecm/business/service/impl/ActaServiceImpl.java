@@ -55,7 +55,6 @@ import it.csi.cosmo.cosmoecm.config.ErrorMessages;
 import it.csi.cosmo.cosmoecm.dto.FiltroRicercaDocumentiActaDTO;
 import it.csi.cosmo.cosmoecm.dto.TransactionExecutionResult;
 import it.csi.cosmo.cosmoecm.dto.index2.RisultatoMigrazioneDocumento;
-import it.csi.cosmo.cosmoecm.dto.rest.ClassificazioneActa;
 import it.csi.cosmo.cosmoecm.dto.rest.DocumentiSempliciActaResponse;
 import it.csi.cosmo.cosmoecm.dto.rest.DocumentoFisicoActa;
 import it.csi.cosmo.cosmoecm.dto.rest.DocumentoSempliceActa;
@@ -63,7 +62,6 @@ import it.csi.cosmo.cosmoecm.dto.rest.IdentitaUtenteResponse;
 import it.csi.cosmo.cosmoecm.dto.rest.ImportaDocumentiActaDocumentoFisicoRequest;
 import it.csi.cosmo.cosmoecm.dto.rest.ImportaDocumentiActaRequest;
 import it.csi.cosmo.cosmoecm.dto.rest.PageInfo;
-import it.csi.cosmo.cosmoecm.dto.rest.ProtocolloActa;
 import it.csi.cosmo.cosmoecm.dto.rest.RiferimentoOperazioneAsincrona;
 import it.csi.cosmo.cosmoecm.dto.rest.TitolarioActa;
 import it.csi.cosmo.cosmoecm.dto.rest.VociTitolarioActa;
@@ -439,6 +437,18 @@ public class ActaServiceImpl implements ActaService {
 
       Pageable paging = SearchUtils.getPageRequest(ricercaParametrica, 999);
 
+      boolean expandDocumentiFisici =
+          (ricercaParametrica != null && ricercaParametrica.getExpand() != null
+              && ricercaParametrica.getExpand().contains("documentiFisici"));
+
+      boolean expandClassificazioni =
+          (ricercaParametrica != null && ricercaParametrica.getExpand() != null
+              && ricercaParametrica.getExpand().contains("classificazioni"));
+
+      boolean expandProtocolli =
+          (ricercaParametrica != null && ricercaParametrica.getExpand() != null
+              && ricercaParametrica.getExpand().contains("protocolli"));
+
       try {
 
         var docSemplici = actaFeignClient.getDocumentiSempliciPageable(filter, identita,
@@ -457,7 +467,46 @@ public class ActaServiceImpl implements ActaService {
       var responseItems = new LinkedList<DocumentoSempliceActa>();
       response.setItems(responseItems);
 
-      responseItems.addAll(doSearchByTerms(docs, ricercaParametrica, identita));
+      docs.forEach(d -> {
+        var mapped = d;
+        if (expandDocumentiFisici) {
+          try {
+
+            var docFisici =
+                actaFeignClient.getDocumentiFisiciByidDocumentoSemplice(d.getId(), identita);
+            var mappedDocFisici = actaMapper.toDocumentiFisiciActa(docFisici.getDocumentiFisici());
+            mapped.setDocumentiFisici(mappedDocFisici);
+          } catch (Exception e) {
+            logger.error(method,
+                "errore nella ricerca dei documenti fisici per il documento semplice " + d.getId()
+                    + ": " + e.getMessage());
+          }
+        }
+        if (expandClassificazioni) {
+          try {
+            var classificazioni =
+                actaFeignClient.getClassificazioniIdDocumentoSemplice(d.getId(), identita);
+            mapped.setClassificazioni(
+                actaMapper.acta2ClassificazioneActaDTOList(classificazioni.getClassificazioni()));
+          } catch (Exception e) {
+            logger.error(method,
+                "errore nella ricerca delle classificazioni per il documento semplice " + d.getId()
+                    + ": " + e.getMessage());
+          }
+        }
+        if (expandProtocolli && d.getIdProtocolloList() != null) {
+          try {
+            var protocolli = d.getIdProtocolloList().stream()
+                .map(idProtocollo -> actaFeignClient.getProtocolloId(idProtocollo, identita))
+                .filter(Objects::nonNull).collect(Collectors.toList());
+            mapped.setProtocolli(actaMapper.acta2ProtocolloActaDTOList(protocolli));
+          } catch (Exception e) {
+            logger.error(method, "errore nella ricerca dei protocolli per il documento semplice "
+                + d.getId() + ": " + e.getMessage());
+          }
+        }
+        responseItems.add(mapped);
+      });
 
       PageInfo pageInfo = new PageInfo();
       pageInfo.setPage(docs.getNumber());
@@ -551,80 +600,6 @@ public class ActaServiceImpl implements ActaService {
     logger.info(methodName, "Fine ricerca nell'alberatura del titolario");
 
     return ret;
-  }
-
-  private LinkedList<DocumentoSempliceActa> doSearchByTerms(Page<DocumentoSempliceActa> docs,
-      GenericRicercaParametricaDTO<FiltroRicercaDocumentiActaDTO> ricercaParametrica, String identita) {
-
-    LinkedList<DocumentoSempliceActa> ret = new LinkedList<>();
-
-    docs.forEach(d -> {
-      var mapped = d;
-      mapped = mapTerms(ricercaParametrica, d, identita);
-      ret.add(mapped);
-    });
-
-    return ret;
-  }
-
-  private boolean canExpandTerm(GenericRicercaParametricaDTO<FiltroRicercaDocumentiActaDTO> ricercaParametrica, String term) {
-    return (ricercaParametrica != null
-        && ricercaParametrica.getExpand() != null
-        && ricercaParametrica.getExpand().contains(term));
-  }
-
-  private DocumentoSempliceActa mapTerms(
-      GenericRicercaParametricaDTO<FiltroRicercaDocumentiActaDTO> ricercaParametrica,
-      DocumentoSempliceActa d, String identita) {
-
-    final var methodName = "mapTerms";
-    DocumentoSempliceActa mapped = new DocumentoSempliceActa();
-    if (canExpandTerm(ricercaParametrica, "documentiFisici")) {
-      try {
-        mapped.setDocumentiFisici(getDocumentiFisiciMapped(d, identita));
-      } catch (Exception e) {
-        logger.error(methodName,
-            "errore nella ricerca dei documenti fisici per il documento semplice " + d.getId()
-                + ": " + e.getMessage());
-      }
-    }
-    if (canExpandTerm(ricercaParametrica, "classificazioni")) {
-      try {
-        mapped.setClassificazioni(getClassificazioniIdDocumentoSempliceMapped(d, identita));
-      } catch (Exception e) {
-        logger.error(methodName,
-            "errore nella ricerca delle classificazioni per il documento semplice " + d.getId()
-                + ": " + e.getMessage());
-      }
-    }
-    if (canExpandTerm(ricercaParametrica, "protocolli") && d.getIdProtocolloList() != null) {
-      try {
-        mapped.setProtocolli(getProtocolliIdMapped(d, identita));
-      } catch (Exception e) {
-        logger.error(methodName, "errore nella ricerca dei protocolli per il documento semplice "
-            + d.getId() + ": " + e.getMessage());
-      }
-    }
-    return mapped;
-  }
-
-  private List<DocumentoFisicoActa> getDocumentiFisiciMapped(DocumentoSempliceActa doc, String identita) {
-    var docFisici = actaFeignClient.getDocumentiFisiciByidDocumentoSemplice(doc.getId(), identita);
-    return actaMapper.toDocumentiFisiciActa(docFisici.getDocumentiFisici());
-  }
-
-  private List<ClassificazioneActa> getClassificazioniIdDocumentoSempliceMapped(
-      DocumentoSempliceActa doc, String identita) {
-    var classificazioni =
-        actaFeignClient.getClassificazioniIdDocumentoSemplice(doc.getId(), identita);
-    return actaMapper.acta2ClassificazioneActaDTOList(classificazioni.getClassificazioni());
-  }
-
-  private List<ProtocolloActa> getProtocolliIdMapped(DocumentoSempliceActa doc, String identita) {
-    var protocolli = doc.getIdProtocolloList().stream()
-        .map(idProtocollo -> actaFeignClient.getProtocolloId(idProtocollo, identita))
-        .filter(Objects::nonNull).collect(Collectors.toList());
-    return actaMapper.acta2ProtocolloActaDTOList(protocolli);
   }
 
 }
