@@ -5,7 +5,7 @@ url: "https://github.com/csipiemonte/cosmo"
 softwareVersion: "2.0.0"
 releaseDate: "2024-01-01" # Mandatory
 developmentStatus: development
-softwareType: web application
+softwareType: standalone/web
 
 platforms:
     - web
