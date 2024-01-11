@@ -4,7 +4,6 @@ name: Cosmo
 url: "https://github.com/csipiemonte/cosmo"
 softwareVersion: "2.0.0"
 releaseDate: "2024-01-01" # Mandatory
-logo: "/cosmowcl/src/assets/cwwcl/i/favicon.png"
 developmentStatus: development
 softwareType: web application
 
@@ -12,10 +11,9 @@ platforms:
     - web
 
 categories:
-    - common-workspace
     - digital-citizenship
-    - enterprise-content-management
-    - case-management-model-and-notation
+    - content-management
+    - business-process-management
 
 usedBy:
     - Comune di Torino
